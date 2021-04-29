@@ -1387,7 +1387,7 @@ class __MyHomeHeaderWidgetState extends State<_MyHomeHeaderWidget> {
           child: PsTextFieldWidgetWithIcon(
               hintText: Utils.getString(context, 'home__bottom_app_bar_search'),
               textEditingController:
-                  widget.userInputItemNameTextEditingController,
+              widget.userInputItemNameTextEditingController,
               psValueHolder: widget.psValueHolder,
               clickSearchButton: () {
                 productParameterHolder.searchTerm =
@@ -1408,6 +1408,7 @@ class __MyHomeHeaderWidgetState extends State<_MyHomeHeaderWidget> {
                         productParameterHolder: productParameterHolder));
               }),
         ),
+
       ],
     );
   }

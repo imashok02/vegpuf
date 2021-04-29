@@ -23,6 +23,7 @@ import 'package:flutterbuyandsell/repository/user_unread_message_repository.dart
 import 'package:flutterbuyandsell/ui/category/list/category_list_view.dart';
 import 'package:flutterbuyandsell/ui/chat/list/chat_list_view.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/chat_noti_dialog.dart';
+import 'package:flutterbuyandsell/ui/common/ps_textfield_widget_with_icon.dart';
 // import 'package:flutterbuyandsell/ui/common/dialog/chat_noti_dialog.dart';
 import 'package:flutterbuyandsell/ui/contact/contact_us_view.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/confirm_dialog_view.dart';
@@ -51,6 +52,7 @@ import 'package:flutterbuyandsell/utils/ps_progress_dialog.dart';
 import 'package:flutterbuyandsell/viewobject/api_status.dart';
 import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/product_detail_intent_holder.dart';
+import 'package:flutterbuyandsell/viewobject/holder/intent_holder/product_list_intent_holder.dart';
 // import 'package:flutterbuyandsell/viewobject/holder/intent_holder/chat_history_intent_holder.dart';
 import 'package:flutterbuyandsell/viewobject/holder/product_parameter_holder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,6 +97,7 @@ class _HomeViewState extends State<DashboardView>
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseMessaging _fcm = FirebaseMessaging();
   bool isResumed = false;
+  final userInputTEC = TextEditingController();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -178,10 +181,13 @@ class _HomeViewState extends State<DashboardView>
     WidgetsBinding.instance.addObserver(this);
   }
 
+
+
   @override
   void dispose() {
     animationController.dispose();
     animationControllerForFab.dispose();
+    userInputTEC.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -735,7 +741,29 @@ class _HomeViewState extends State<DashboardView>
                   appBarTitle == Utils.getString(context, 'home_verify_phone'))
               ? PsColors.mainColor
               : PsColors.baseColor,
-          title: Text(
+          title: appBarTitleName== ''? PsTextFieldWidgetWithIcon(
+              hintText: Utils.getString(context, 'home__bottom_app_bar_search'),
+              textEditingController:
+              userInputTEC,
+              psValueHolder: valueHolder,
+              clickSearchButton: () {
+                productParameterHolder.searchTerm =
+                    userInputTEC.text;
+                Navigator.pushNamed(context, RoutePaths.filterProductList,
+                    arguments: ProductListIntentHolder(
+                        appBarTitle: Utils.getString(
+                            context, 'home_search__app_bar_title'),
+                        productParameterHolder: productParameterHolder));
+              },
+              clickEnterFunction: () {
+                productParameterHolder.searchTerm =
+                    userInputTEC.text;
+                Navigator.pushNamed(context, RoutePaths.filterProductList,
+                    arguments: ProductListIntentHolder(
+                        appBarTitle: Utils.getString(
+                            context, 'home_search__app_bar_title'),
+                        productParameterHolder: productParameterHolder));
+              }):Text(
             appBarTitleName == '' ? appBarTitle : appBarTitleName,
             style: Theme.of(context).textTheme.headline6.copyWith(
                   fontWeight: FontWeight.bold,
