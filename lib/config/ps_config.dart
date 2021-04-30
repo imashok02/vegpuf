@@ -24,7 +24,7 @@ class PsConfig {
   /// Change your backend url
   ///
   static const String ps_core_url =
-      'https://www.panacea-soft.com/flutter-buysell';
+      'http://www.vegpuf.com';
 
   static const String ps_app_url = ps_core_url + '/index.php/';
 

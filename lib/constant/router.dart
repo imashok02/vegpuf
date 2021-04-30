@@ -15,7 +15,6 @@ import 'package:flutterbuyandsell/ui/category/filter_list/category_filter_list_v
 import 'package:flutterbuyandsell/ui/category/list/category_list_view_container.dart';
 import 'package:flutterbuyandsell/ui/chat/detail/chat_view.dart';
 import 'package:flutterbuyandsell/ui/chat/image/chat_image_detail_view.dart';
-import 'package:flutterbuyandsell/ui/dashboard/core/dashboard_view.dart';
 import 'package:flutterbuyandsell/ui/force_update/force_update_view.dart';
 import 'package:flutterbuyandsell/ui/gallery/detail/gallery_view.dart';
 import 'package:flutterbuyandsell/ui/gallery/grid/gallery_grid_view.dart';
@@ -90,6 +89,8 @@ import 'package:flutterbuyandsell/viewobject/noti.dart';
 import 'package:flutterbuyandsell/viewobject/product.dart';
 import 'package:flutterbuyandsell/viewobject/ps_app_info.dart';
 import 'package:flutterbuyandsell/viewobject/ps_app_version.dart';
+import 'package:flutterbuyandsell/ui/dashboard_new/dashboard.dart';
+import 'package:flutterbuyandsell/ui/search/home_item_search_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -106,8 +107,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
           settings: const RouteSettings(name: RoutePaths.home),
           builder: (BuildContext context) {
-            return DashboardView();
+            return DashboardNew();
           });
+
+    case '${RoutePaths.home_item_search_view}' :
+      return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+        final List args = settings.arguments;
+        final Animation animation = args[0];
+        final AnimationController animationController = args[1];
+        final ProductParameterHolder productParameterholder = args[2];
+        return HomeItemSearchView(
+        animation: animation,
+        animationController: animationController,
+        productParameterHolder: productParameterholder,
+        );
+      });
 
     case '${RoutePaths.force_update}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {

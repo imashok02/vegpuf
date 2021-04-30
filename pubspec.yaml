@@ -88,6 +88,7 @@ dependencies:
   camera: 0.5.8+11
   flutter_linkify: ^4.0.2
   rate_my_app: 0.7.2
+  cached_network_image: any
   
 dev_dependencies:
   flutter_test:

@@ -25,7 +25,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView> {
     final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(
             parent: widget.animationController,
-            curve: const Interval(0.5 * 1, 1.0, curve: Curves.fastOutSlowIn)));
+            curve: const Interval(0.5 * 1, 1.0, curve: Curves.bounceIn)));
     widget.animationController.forward();
     return ChangeNotifierProvider<AboutUsProvider>(
         lazy: false,

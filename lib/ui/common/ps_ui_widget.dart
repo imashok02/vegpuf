@@ -40,7 +40,8 @@ class PsNetworkImage extends StatelessWidget {
             height: height,
             fit: boxfit,
           ));
-    } else {
+    }
+    else {
       final String fullImagePath =
           '${PsConfig.ps_app_image_url}${defaultPhoto.imgPath}';
       print('img path : $fullImagePath');

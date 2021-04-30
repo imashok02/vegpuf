@@ -25,6 +25,8 @@ class RoutePaths {
       '/user_phone_signin_container';
   static const String user_phone_verify_container =
       '/user_phone_verify_container';
+  static const String home_item_search_view =
+      '/home_item_search_view';
   static const String user_fb_signin_container = '/user_fb_signin_container';
   static const String user_google_signin_container =
       '/user_google_signin_container';

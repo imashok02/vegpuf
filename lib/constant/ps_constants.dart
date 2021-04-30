@@ -172,6 +172,7 @@ class PsConst {
   static const String ADSFINISHED = 'Finished';
   static const String ADSNOTYETSTART = 'Not yet start';
   static const String ADSNOTAVAILABLE = 'not_available';
+  static const String SEARCH = 'Search';
 
   static final NumberFormat psFormat = NumberFormat(PsConfig.priceFormat);
   static const String priceTwoDecimalFormatString = '###.00';

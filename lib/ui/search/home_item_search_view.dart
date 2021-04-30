@@ -53,6 +53,12 @@ class _ItemSearchViewState extends State<HomeItemSearchView> {
       TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print(
         '............................Build UI Again ............................');
@@ -129,270 +135,269 @@ class _ItemSearchViewState extends State<HomeItemSearchView> {
     repo1 = Provider.of<ProductRepository>(context);
     valueHolder = Provider.of<PsValueHolder>(context);
 
-    return SliverToBoxAdapter(
-        child: ChangeNotifierProvider<SearchProductProvider>(
-            lazy: false,
-            create: (BuildContext content) {
-              _searchProductProvider = SearchProductProvider(
-                  repo: repo1, psValueHolder: valueHolder);
-              _searchProductProvider.productParameterHolder =
-                  widget.productParameterHolder;
-              final String loginUserId =
-                      Utils.checkUserLoginId(valueHolder);
-              _searchProductProvider.loadProductListByKey(
-                  loginUserId,
-                  _searchProductProvider.productParameterHolder);
+    return ChangeNotifierProvider<SearchProductProvider>(
+        lazy: false,
+        create: (BuildContext content) {
+          _searchProductProvider =
+              SearchProductProvider(repo: repo1, psValueHolder: valueHolder);
+          _searchProductProvider.productParameterHolder =
+              widget.productParameterHolder;
+          final String loginUserId = Utils.checkUserLoginId(valueHolder);
+          _searchProductProvider.loadProductListByKey(
+              loginUserId, _searchProductProvider.productParameterHolder);
 
-              return _searchProductProvider;
-            },
-            child: Consumer<SearchProductProvider>(
-              builder: (BuildContext context, SearchProductProvider provider,
-                  Widget child) {
-                if (_searchProductProvider.productList != null &&
-                    _searchProductProvider.productList.data != null) {
-                  widget.animationController.forward();
-                  return SingleChildScrollView(
-                    child: AnimatedBuilder(
-                        animation: widget.animationController,
-                        child: Container(
-                          color: PsColors.baseColor,
-                          child: Column(
-                            children: <Widget>[
-                              const PsAdMobBannerWidget(),
-                              _ProductNameWidget(
-                                userInputItemNameTextEditingController:
-                                    userInputItemNameTextEditingController,
-                              ),
-                              _PriceWidget(
-                                userInputMinimumPriceEditingController:
-                                    userInputMinimumPriceEditingController,
-                                userInputMaximunPriceEditingController:
-                                    userInputMaximunPriceEditingController,
-                              ),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'search__category'),
-                                  selectedText:
+          return _searchProductProvider;
+        },
+
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              PsConst.SEARCH,
+              style: TextStyle(
+                  color: PsColors.mainColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          body: Consumer<SearchProductProvider>(
+            builder: (BuildContext context, SearchProductProvider provider,
+                Widget child) {
+              if (_searchProductProvider.productList != null &&
+                  _searchProductProvider.productList.data != null) {
+                widget.animationController.forward();
+                return SingleChildScrollView(
+                  child: AnimatedBuilder(
+                      animation: widget.animationController,
+                      child: Container(
+                        color: PsColors.baseColor,
+                        child: Column(
+                          children: <Widget>[
+                            const PsAdMobBannerWidget(),
+                            _ProductNameWidget(
+                              userInputItemNameTextEditingController:
+                                  userInputItemNameTextEditingController,
+                            ),
+                            _PriceWidget(
+                              userInputMinimumPriceEditingController:
+                                  userInputMinimumPriceEditingController,
+                              userInputMaximunPriceEditingController:
+                                  userInputMaximunPriceEditingController,
+                            ),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'search__category'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedCategoryName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedCategoryName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
+                                          context,
+                                          listen: false);
 
-                                    final dynamic categoryResult =
-                                        await Navigator.pushNamed(
-                                            context, RoutePaths.searchCategory);
+                                  final dynamic categoryResult =
+                                      await Navigator.pushNamed(
+                                          context, RoutePaths.searchCategory);
 
-                                    if (categoryResult != null &&
-                                        categoryResult is Category) {
-                                      provider.categoryId =
-                                          categoryResult.catId;
-                                      provider.subCategoryId = '';
+                                  if (categoryResult != null &&
+                                      categoryResult is Category) {
+                                    provider.categoryId = categoryResult.catId;
+                                    provider.subCategoryId = '';
 
-                                      setState(() {
-                                        provider.selectedCategoryName =
-                                            categoryResult.catName;
-                                        provider.selectedSubCategoryName = '';
-                                      });
-                                    }
-                                  }),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'search__sub_category'),
-                                  selectedText:
+                                    setState(() {
+                                      provider.selectedCategoryName =
+                                          categoryResult.catName;
+                                      provider.selectedSubCategoryName = '';
+                                    });
+                                  }
+                                }),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'search__sub_category'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedSubCategoryName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedSubCategoryName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
-                                    if (provider.categoryId != '') {
-                                      final dynamic subCategoryResult =
-                                          await Navigator.pushNamed(context,
-                                              RoutePaths.searchSubCategory,
-                                              arguments: provider.categoryId);
-                                      if (subCategoryResult != null &&
-                                          subCategoryResult is SubCategory) {
-                                        provider.subCategoryId =
-                                            subCategoryResult.id;
+                                          context,
+                                          listen: false);
+                                  if (provider.categoryId != '') {
+                                    final dynamic subCategoryResult =
+                                        await Navigator.pushNamed(context,
+                                            RoutePaths.searchSubCategory,
+                                            arguments: provider.categoryId);
+                                    if (subCategoryResult != null &&
+                                        subCategoryResult is SubCategory) {
+                                      provider.subCategoryId =
+                                          subCategoryResult.id;
 
-                                        provider.selectedSubCategoryName =
-                                            subCategoryResult.name;
-                                      }
-                                    } else {
-                                      showDialog<dynamic>(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ErrorDialog(
-                                              message: Utils.getString(context,
-                                                  'home_search__choose_category_first'),
-                                            );
-                                          });
-                                      const ErrorDialog(
-                                          message: 'Choose Category first');
+                                      provider.selectedSubCategoryName =
+                                          subCategoryResult.name;
                                     }
-                                  }),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'item_entry__type'),
-                                  selectedText:
+                                  } else {
+                                    showDialog<dynamic>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ErrorDialog(
+                                            message: Utils.getString(context,
+                                                'home_search__choose_category_first'),
+                                          );
+                                        });
+                                    const ErrorDialog(
+                                        message: 'Choose Category first');
+                                  }
+                                }),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'item_entry__type'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedItemTypeName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedItemTypeName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
+                                          context,
+                                          listen: false);
 
-                                    final dynamic itemTypeResult =
-                                        await Navigator.pushNamed(
-                                            context, RoutePaths.itemType);
+                                  final dynamic itemTypeResult =
+                                      await Navigator.pushNamed(
+                                          context, RoutePaths.itemType);
 
-                                    if (itemTypeResult != null &&
-                                        itemTypeResult is ItemType) {
-                                      provider.itemTypeId = itemTypeResult.id;
+                                  if (itemTypeResult != null &&
+                                      itemTypeResult is ItemType) {
+                                    provider.itemTypeId = itemTypeResult.id;
 
-                                      setState(() {
-                                        provider.selectedItemTypeName =
-                                            itemTypeResult.name;
-                                      });
-                                    }
-                                  }),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'item_entry__item_condition'),
-                                  selectedText:
+                                    setState(() {
+                                      provider.selectedItemTypeName =
+                                          itemTypeResult.name;
+                                    });
+                                  }
+                                }),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'item_entry__item_condition'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedItemConditionName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedItemConditionName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
+                                          context,
+                                          listen: false);
 
-                                    final dynamic itemConditionResult =
-                                        await Navigator.pushNamed(
-                                            context, RoutePaths.itemCondition);
+                                  final dynamic itemConditionResult =
+                                      await Navigator.pushNamed(
+                                          context, RoutePaths.itemCondition);
 
-                                    if (itemConditionResult != null &&
-                                        itemConditionResult
-                                            is ConditionOfItem) {
-                                      provider.itemConditionId =
-                                          itemConditionResult.id;
+                                  if (itemConditionResult != null &&
+                                      itemConditionResult is ConditionOfItem) {
+                                    provider.itemConditionId =
+                                        itemConditionResult.id;
 
-                                      setState(() {
-                                        provider.selectedItemConditionName =
-                                            itemConditionResult.name;
-                                      });
-                                    }
-                                  }),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'item_entry__price_type'),
-                                  selectedText:
+                                    setState(() {
+                                      provider.selectedItemConditionName =
+                                          itemConditionResult.name;
+                                    });
+                                  }
+                                }),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'item_entry__price_type'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedItemPriceTypeName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedItemPriceTypeName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
+                                          context,
+                                          listen: false);
 
-                                    final dynamic itemPriceTypeResult =
-                                        await Navigator.pushNamed(
-                                            context, RoutePaths.itemPriceType);
+                                  final dynamic itemPriceTypeResult =
+                                      await Navigator.pushNamed(
+                                          context, RoutePaths.itemPriceType);
 
-                                    if (itemPriceTypeResult != null &&
-                                        itemPriceTypeResult is ItemPriceType) {
-                                      provider.itemPriceTypeId =
-                                          itemPriceTypeResult.id;
+                                  if (itemPriceTypeResult != null &&
+                                      itemPriceTypeResult is ItemPriceType) {
+                                    provider.itemPriceTypeId =
+                                        itemPriceTypeResult.id;
 
-                                      setState(() {
-                                        provider.selectedItemPriceTypeName =
-                                            itemPriceTypeResult.name;
-                                      });
-                                    }
-                                  }),
-                              PsDropdownBaseWidget(
-                                  title: Utils.getString(
-                                      context, 'item_entry__deal_option'),
-                                  selectedText:
+                                    setState(() {
+                                      provider.selectedItemPriceTypeName =
+                                          itemPriceTypeResult.name;
+                                    });
+                                  }
+                                }),
+                            PsDropdownBaseWidget(
+                                title: Utils.getString(
+                                    context, 'item_entry__deal_option'),
+                                selectedText:
+                                    Provider.of<SearchProductProvider>(context,
+                                            listen: false)
+                                        .selectedItemDealOptionName,
+                                onTap: () async {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final SearchProductProvider provider =
                                       Provider.of<SearchProductProvider>(
-                                              context,
-                                              listen: false)
-                                          .selectedItemDealOptionName,
-                                  onTap: () async {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    final SearchProductProvider provider =
-                                        Provider.of<SearchProductProvider>(
-                                            context,
-                                            listen: false);
+                                          context,
+                                          listen: false);
 
-                                    final dynamic itemDealOptionResult =
-                                        await Navigator.pushNamed(
-                                            context, RoutePaths.itemDealOption);
+                                  final dynamic itemDealOptionResult =
+                                      await Navigator.pushNamed(
+                                          context, RoutePaths.itemDealOption);
 
-                                    if (itemDealOptionResult != null &&
-                                        itemDealOptionResult is DealOption) {
-                                      provider.itemDealOptionId =
-                                          itemDealOptionResult.id;
+                                  if (itemDealOptionResult != null &&
+                                      itemDealOptionResult is DealOption) {
+                                    provider.itemDealOptionId =
+                                        itemDealOptionResult.id;
 
-                                      setState(() {
-                                        provider.selectedItemDealOptionName =
-                                            itemDealOptionResult.name;
-                                      });
-                                    }
-                                  }),
-                              Container(
-                                  margin: const EdgeInsets.only(
-                                      left: PsDimens.space16,
-                                      top: PsDimens.space16,
-                                      right: PsDimens.space16,
-                                      bottom: PsDimens.space40),
-                                  child: _searchButtonWidget),
-                            ],
-                          ),
+                                    setState(() {
+                                      provider.selectedItemDealOptionName =
+                                          itemDealOptionResult.name;
+                                    });
+                                  }
+                                }),
+                            Container(
+                                margin: const EdgeInsets.only(
+                                    left: PsDimens.space16,
+                                    top: PsDimens.space16,
+                                    right: PsDimens.space16,
+                                    bottom: PsDimens.space40),
+                                child: _searchButtonWidget),
+                          ],
                         ),
-                        builder: (BuildContext context, Widget child) {
-                          return FadeTransition(
-                              opacity: widget.animation,
-                              child: Transform(
-                                  transform: Matrix4.translationValues(
-                                      0.0,
-                                      100 * (1.0 - widget.animation.value),
-                                      0.0),
-                                  child: child));
-                        }),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            )));
+                      ),
+                      builder: (BuildContext context, Widget child) {
+                        return FadeTransition(
+                            opacity: widget.animation,
+                            child: Transform(
+                                transform: Matrix4.translationValues(0.0,
+                                    100 * (1.0 - widget.animation.value), 0.0),
+                                child: child));
+                      }),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ));
   }
 }
 
@@ -692,6 +697,7 @@ class _PriceWidget extends StatelessWidget {
   const _PriceWidget(
       {this.userInputMinimumPriceEditingController,
       this.userInputMaximunPriceEditingController});
+
   final TextEditingController userInputMinimumPriceEditingController;
   final TextEditingController userInputMaximunPriceEditingController;
 
