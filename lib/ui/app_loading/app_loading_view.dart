@@ -27,12 +27,14 @@ import 'package:flutterbuyandsell/provider/app_info/app_info_provider.dart';
 import 'package:flutterbuyandsell/repository/app_info_repository.dart';
 import 'package:flutterbuyandsell/viewobject/ps_app_info.dart';
 import 'package:provider/single_child_widget.dart';
+import '../../provider/main_category/main_category_provider.dart';
 
 class AppLoadingView extends StatelessWidget {
   Future<dynamic> callDateFunction(AppInfoProvider provider,
       ClearAllDataProvider clearAllDataProvider, BuildContext context) async {
     String realStartDate = '0';
     String realEndDate = '0';
+
     if (await Utils.checkInternetConnectivity()) {
       if (provider.psValueHolder == null ||
           provider.psValueHolder.startDate == null) {
@@ -45,40 +47,46 @@ class AppLoadingView extends StatelessWidget {
       realEndDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
       final AppInfoParameterHolder appInfoParameterHolder =
           AppInfoParameterHolder(
-        startDate: realStartDate,
-        endDate: realEndDate,
-        userId: Utils.checkUserLoginId(provider.psValueHolder)
-      );
+              startDate: realStartDate,
+              endDate: realEndDate,
+              userId: Utils.checkUserLoginId(provider.psValueHolder));
 
       final PsResource<PSAppInfo> _psAppInfo =
           await provider.loadDeleteHistory(appInfoParameterHolder.toMap());
+
+
 
       if (_psAppInfo.status == PsStatus.SUCCESS) {
         provider.replaceDate(realStartDate, realEndDate);
         print(Utils.getString(context, 'dialog__cancel'));
         print(Utils.getString(context, 'app_info__update_button_name'));
 
-        if(_psAppInfo.data.userInfo.userStatus == PsConst.USER_BANNED ){
-          callLogout(provider,
-          // deleteTaskProvider,
-          PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,context);
+        if (_psAppInfo.data.userInfo.userStatus == PsConst.USER_BANNED) {
+          callLogout(
+              provider,
+              // deleteTaskProvider,
+              PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,
+              context);
           showDialog<dynamic>(
-          context: context,
-          builder: (BuildContext context) {
-            return WarningDialog(
-              message: Utils.getString(context,
-                      'user_status__banned'),
-              onPressed: (){
-                checkVersionNumber(
-                context, _psAppInfo.data, provider, clearAllDataProvider);
-                realStartDate = realEndDate;
-              },
-            );
-          });
-        }else if(_psAppInfo.data.userInfo.userStatus == PsConst.USER_DELECTED){
-          callLogout(provider,
-          // deleteTaskProvider,
-          PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,context);
+              context: context,
+              builder: (BuildContext context) {
+                return WarningDialog(
+                  message: Utils.getString(context, 'user_status__banned'),
+                  onPressed: () {
+                    checkVersionNumber(context, _psAppInfo.data, provider,
+                        clearAllDataProvider);
+                    realStartDate = realEndDate;
+                  },
+                );
+              });
+        }
+        else if (_psAppInfo.data.userInfo.userStatus ==
+            PsConst.USER_DELECTED) {
+          callLogout(
+              provider,
+              // deleteTaskProvider,
+              PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,
+              context);
           // showDialog<dynamic>(
           // context: context,
           // builder: (BuildContext context) {
@@ -92,30 +100,30 @@ class AppLoadingView extends StatelessWidget {
           //     },
           //   );
           // });
-        }else if(_psAppInfo.data.userInfo.userStatus == PsConst.USER_UN_PUBLISHED){
-          callLogout(provider,
-          // deleteTaskProvider,
-          PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,context);
+        } else if (_psAppInfo.data.userInfo.userStatus ==
+            PsConst.USER_UN_PUBLISHED) {
+          callLogout(
+              provider,
+              // deleteTaskProvider,
+              PsConst.REQUEST_CODE__MENU_HOME_FRAGMENT,
+              context);
           showDialog<dynamic>(
-          context: context,
-          builder: (BuildContext context) {
-            return WarningDialog(
-              message: Utils.getString(context,
-                      'user_status__unpublished'),
-              onPressed: (){
-                checkVersionNumber(
-                context, _psAppInfo.data, provider, clearAllDataProvider);
-                realStartDate = realEndDate;
-              },
-            );
-          });
-        }else{
+              context: context,
+              builder: (BuildContext context) {
+                return WarningDialog(
+                  message: Utils.getString(context, 'user_status__unpublished'),
+                  onPressed: () {
+                    checkVersionNumber(context, _psAppInfo.data, provider,
+                        clearAllDataProvider);
+                    realStartDate = realEndDate;
+                  },
+                );
+              });
+        } else {
           checkVersionNumber(
-                context, _psAppInfo.data, provider, clearAllDataProvider);
-                realStartDate = realEndDate;
-          
+              context, _psAppInfo.data, provider, clearAllDataProvider);
+          realStartDate = realEndDate;
         }
-        
       } else if (_psAppInfo.status == PsStatus.ERROR) {
         if (provider.psValueHolder.locationId != null) {
           Navigator.pushReplacementNamed(
@@ -144,15 +152,16 @@ class AppLoadingView extends StatelessWidget {
     }
   }
 
-  dynamic callLogout(AppInfoProvider appInfoProvider, int index, BuildContext context) async {
-      // updateSelectedIndex( index);
-      appInfoProvider.replaceLoginUserId('');
-      appInfoProvider.replaceLoginUserName('');
-      // await deleteTaskProvider.deleteTask();
-      await FacebookLogin().logOut();
-      await GoogleSignIn().signOut();
-      await FirebaseAuth.instance.signOut();
-    }
+  dynamic callLogout(
+      AppInfoProvider appInfoProvider, int index, BuildContext context) async {
+    // updateSelectedIndex( index);
+    appInfoProvider.replaceLoginUserId('');
+    appInfoProvider.replaceLoginUserName('');
+    // await deleteTaskProvider.deleteTask();
+    await FacebookLogin().logOut();
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
+  }
 
   final Widget _imageWidget = Container(
     width: 90,
@@ -190,6 +199,15 @@ class AppLoadingView extends StatelessWidget {
         );
       }
     }
+  }
+
+  void loadMainCategoryProvider(
+      MainCategoryProvider mainCategoryProvider,
+      )  async {
+    await mainCategoryProvider.loadThings();
+    await mainCategoryProvider.loadProperty();
+    await mainCategoryProvider.loadServices();
+
   }
 
   dynamic checkForceUpdate(BuildContext context, PSAppInfo psAppInfo,
@@ -285,15 +303,22 @@ class AppLoadingView extends StatelessWidget {
     ClearAllDataRepository clearAllDataRepository;
     ClearAllDataProvider clearAllDataProvider;
     PsValueHolder valueHolder;
-
+    MainCategoryProvider mainCategoryProvider;
     PsColors.loadColor(context);
 
     repo1 = Provider.of<AppInfoRepository>(context);
     clearAllDataRepository = Provider.of<ClearAllDataRepository>(context);
     valueHolder = Provider.of<PsValueHolder>(context);
+    mainCategoryProvider = Provider.of<MainCategoryProvider>(context);
+
+
 
     if (valueHolder == null) {
       return Container();
+    }
+
+    if(mainCategoryProvider != null) {
+      loadMainCategoryProvider(mainCategoryProvider);
     }
 
     return MultiProvider(
@@ -306,8 +331,6 @@ class AppLoadingView extends StatelessWidget {
 
               return clearAllDataProvider;
             }),
-
-            
         ChangeNotifierProvider<AppInfoProvider>(
             lazy: false,
             create: (BuildContext context) {
@@ -356,9 +379,8 @@ class AppLoadingView extends StatelessWidget {
                             fontWeight: FontWeight.bold, color: PsColors.white),
                       ),
                       Container(
-                        padding: const EdgeInsets.all(PsDimens.space16),
-                        child: PsSquareProgressWidget()
-                      ),
+                          padding: const EdgeInsets.all(PsDimens.space16),
+                          child: PsSquareProgressWidget()),
                     ],
                   )
                 ],
@@ -376,6 +398,7 @@ class PsButtonWidget extends StatefulWidget {
     @required this.provider,
     @required this.text,
   });
+
   final AppInfoProvider provider;
   final String text;
 

@@ -20,6 +20,7 @@ import 'package:flutterbuyandsell/provider/common/ps_theme_provider.dart';
 import 'package:flutterbuyandsell/provider/ps_provider_dependencies.dart';
 import 'package:flutterbuyandsell/repository/ps_theme_repository.dart';
 import 'package:flutterbuyandsell/utils/utils.dart';
+import 'package:flutterbuyandsell/provider/main_category/main_category_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'config/ps_colors.dart';
 import 'config/ps_config.dart';
@@ -135,8 +136,11 @@ class _PSAppState extends State<PSApp> {
     print('*** ${Utils.convertColorToString(PsColors.mainColor)}');
 
     return MultiProvider(
-        providers: <SingleChildWidget>[
+        providers: [
           ...providers,
+          ChangeNotifierProvider<MainCategoryProvider>(
+            create: (BuildContext context) => MainCategoryProvider(),
+          )
         ],
         child: DynamicTheme(
             defaultBrightness: Brightness.light,

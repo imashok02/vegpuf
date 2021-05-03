@@ -33,6 +33,7 @@ import 'package:flutterbuyandsell/viewobject/user.dart';
 import 'package:flutterbuyandsell/viewobject/user_unread_message.dart';
 import 'common/ps_api.dart';
 import 'common/ps_resource.dart';
+import 'package:flutterbuyandsell/viewobject/category_model.dart';
 
 class PsApiService extends PsApi {
   ///
@@ -582,6 +583,11 @@ class PsApiService extends PsApi {
     return await getServerCall<ApiStatus, ApiStatus>(ApiStatus(), url);
   }
 
+
+  Future<PsResource<List<CategoryModel>>> getCategories(String key) async {
+     String url = '${PsUrl.categories_url}/$key';
+     return await getServerCall(CategoryModel(),url);
+  }
   ///
   /// Shipping Country And City
   ///

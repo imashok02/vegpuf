@@ -32,6 +32,7 @@ class PsUrl {
   static const String ps_add_chat_history_url =
       'rest/chats/add/api_key/${PsConfig.ps_api_key}';
 
+
   static const String ps_accepted_offer_url =
       'rest/chats/update_accept/api_key/${PsConfig.ps_api_key}';
 
@@ -241,4 +242,6 @@ class PsUrl {
 
   static const String ps_user_logout_url =
       'rest/users/logout/api_key/${PsConfig.ps_api_key}';
+
+  static const String categories_url = 'rest/itemtypes/get/api_key/${PsConfig.ps_api_key}/offset/0/main_cat_id/';
 }

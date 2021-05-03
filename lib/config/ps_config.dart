@@ -26,6 +26,10 @@ class PsConfig {
   static const String ps_core_url =
       'http://www.vegpuf.com';
 
+  static const String things = 'main_cat58b486f4d5d984923cbce32b6cf7f08f';
+  static const String property = 'main_cat5dfae3885eb1e48dadc7a2f2b1c09b86';
+  static const String services = 'main_cate0100cee3c7f4245b103936161f6f6cc';
+
   static const String ps_app_url = ps_core_url + '/index.php/';
 
   static const String ps_app_image_url = ps_core_url + '/uploads/';

@@ -26,6 +26,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:optimized_cached_image/widgets.dart';
 import '../../viewobject/holder/product_parameter_holder.dart';
+import '../../repository/main_category_repository.dart';
+import '../../api/common/ps_status.dart';
+import '../../api/ps_api_service.dart';
+import '../../api/common/ps_resource.dart';
+import '../../viewobject/category_model.dart';
+import '../../provider/main_category/main_category_provider.dart';
 
 class DashboardNew extends StatefulWidget {
   @override
@@ -46,7 +52,8 @@ class _DashboardNewState extends State<DashboardNew>
   BlogRepository repo3;
   ItemLocationRepository repo4;
   RecentProductProvider _recentProductProvider;
-  final userInputTEC = TextEditingController();
+  final TextEditingController userInputTEC = TextEditingController();
+  MainCategoryProvider mainCategoryProvider;
 
   Map<String, int> tabCount = {'Things': 4, 'Property': 3, 'Services': 2};
 
@@ -54,7 +61,11 @@ class _DashboardNewState extends State<DashboardNew>
   void initState() {
     super.initState();
     _initAnimations();
-    _initalizeTabControllers();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      mainCategoryProvider =
+          Provider.of<MainCategoryProvider>(context, listen: false);
+      _initalizeTabControllers(mainCategoryProvider);
+    });
   }
 
   @override
@@ -91,32 +102,18 @@ class _DashboardNewState extends State<DashboardNew>
     return false;
   }
 
-  List<String> _getTabs(int tabControllerLength) {
-    switch (tabControllerLength) {
-      case 4:
-        return ['Buying', 'Selling', 'Renting', 'Exchanging'];
-        break;
-      case 3:
-        return ['Buying', 'Selling', 'Renting'];
-        break;
-      case 2:
-        return ['Doctors', 'Electricians'];
-        break;
-    }
-  }
-
-  void _initalizeTabControllers() {
+  void _initalizeTabControllers(MainCategoryProvider provider) {
     _tabControllerFirst = TabController(
       vsync: this,
-      length: tabCount['Things'],
+      length: provider.thingsList.length,
     );
     _tabControllerSecond = TabController(
       vsync: this,
-      length: tabCount['Property'],
+      length: provider.servicesList.length,
     );
     _tabControllerThird = TabController(
       vsync: this,
-      length: tabCount['Services'],
+      length: provider.propertyList.length,
     );
   }
 
@@ -193,20 +190,18 @@ class _DashboardNewState extends State<DashboardNew>
     }
     return <dynamic>[title, index];
   }
-  
-  void _search() {
 
+  void _search() {
     final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(
-        parent: animationController,
-        curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
-    
-    Navigator.pushNamed(context, RoutePaths.home_item_search_view,arguments: [
+            parent: animationController,
+            curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
+
+    Navigator.pushNamed(context, RoutePaths.home_item_search_view, arguments: [
       animation,
       animationController,
       ProductParameterHolder().getLatestParameterHolder(),
     ]);
-    
   }
 
   @override
@@ -216,6 +211,7 @@ class _DashboardNewState extends State<DashboardNew>
     repo2 = Provider.of<ProductRepository>(context);
     repo3 = Provider.of<BlogRepository>(context);
     repo4 = Provider.of<ItemLocationRepository>(context);
+    mainCategoryProvider = Provider.of<MainCategoryProvider>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CategoryProvider>(
@@ -255,23 +251,41 @@ class _DashboardNewState extends State<DashboardNew>
       ],
       child: Scaffold(
 //      backgroundColor: Colors.white,
-        body: buildSliver(),
+        body: buildSliver(mainCategoryProvider),
         bottomNavigationBar: buildBottomNavBar(),
         floatingActionButton: buildFAB(),
       ),
     );
   }
 
-  Widget buildSliver() {
+  Widget buildSliver(MainCategoryProvider provider) {
     return IndexedStack(
       index: _currentIndex,
       children: [
         _buildNestedScrollView(
-            text: 'Things', tabController: _tabControllerFirst),
+          text: 'Things',
+          tabs: provider.thingsList,
+          tabController: TabController(
+            length: provider.thingsList.length,
+            vsync: this,
+          ),
+        ),
         _buildNestedScrollView(
-            text: 'Services', tabController: _tabControllerSecond),
+          text: 'Services',
+          tabs: provider.servicesList,
+          tabController: TabController(
+            length: provider.servicesList.length,
+            vsync: this,
+          ),
+        ),
         _buildNestedScrollView(
-            text: 'Property', tabController: _tabControllerThird),
+          text: 'Property',
+          tabs: provider.propertyList,
+          tabController: TabController(
+            length: provider.propertyList.length,
+            vsync: this,
+          ),
+        ),
       ],
     );
   }
@@ -396,6 +410,7 @@ class _DashboardNewState extends State<DashboardNew>
   Widget _buildNestedScrollView({
     @required TabController tabController,
     @required String text,
+    @required List<CategoryModel> tabs,
   }) {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
@@ -403,23 +418,23 @@ class _DashboardNewState extends State<DashboardNew>
         headerSliverBuilder: (BuildContext ctx, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              title: Row(
-                children: [
-                  Text(text),
-                  const Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: _search,
-                  )
-                ],
-              ),
-              backgroundColor: Colors.red,
-              floating: true,
-              pinned: true,
-              bottom: PreferredSize(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: TabBar(
+                title: Row(
+                  children: [
+                    Text(text),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: _search,
+                    )
+                  ],
+                ),
+                backgroundColor: Colors.red,
+                floating: true,
+                pinned: true,
+                bottom: PreferredSize(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: TabBar(
                       controller: tabController,
                       isScrollable: tabController.length > 3 ? true : false,
                       indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -433,13 +448,11 @@ class _DashboardNewState extends State<DashboardNew>
                       labelPadding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 15),
                       labelColor: Colors.black,
-                      tabs: _getTabs(tabController.length)
-                          .map((e) => Text(e))
-                          .toList()),
-                ),
-                preferredSize: const Size(double.infinity, kToolbarHeight),
-              ),
-            ),
+                      tabs: tabs.map((e) => Text(e.name)).toList(),
+                    ),
+                  ),
+                  preferredSize: const Size(double.infinity, kToolbarHeight),
+                ))
           ];
         },
         body: TabBarView(
