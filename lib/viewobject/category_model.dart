@@ -18,6 +18,12 @@ class CategoryModel extends PsObject<CategoryModel> {
     this.addedDateStr,
   });
 
+
+  @override
+  String toString() {
+    return 'CategoryModel{id: $id, name: $name, status: $status, mainCategoryId: $mainCategoryId, addedDate: $addedDate, addedDateStr: $addedDateStr}';
+  }
+
   @override
   bool operator ==(dynamic other) => other is CategoryModel && id == other.id;
   @override

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutterbuyandsell/api/common/ps_api_reponse.dart';
 import 'package:http/http.dart' as http;
@@ -87,6 +88,7 @@ abstract class PsApi {
       final PsApiResponse psApiResponse = PsApiResponse(response);
 
       if (psApiResponse.isSuccessful()) {
+        log('return json: ${response.body}');
         final dynamic hashMap = json.decode(response.body);
 
         if (!(hashMap is Map)) {

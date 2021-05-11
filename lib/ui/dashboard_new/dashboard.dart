@@ -10,6 +10,7 @@ import 'package:flutterbuyandsell/constant/ps_dimens.dart';
 import 'package:flutterbuyandsell/constant/route_paths.dart';
 import 'package:flutterbuyandsell/provider/category/category_provider.dart';
 import 'package:flutterbuyandsell/provider/product/recent_product_provider.dart';
+import 'package:flutterbuyandsell/provider/product/search_product_provider.dart';
 import 'package:flutterbuyandsell/repository/blog_repository.dart';
 import 'package:flutterbuyandsell/repository/category_repository.dart';
 import 'package:flutterbuyandsell/repository/item_location_repository.dart';
@@ -56,6 +57,8 @@ class _DashboardNewState extends State<DashboardNew>
   MainCategoryProvider mainCategoryProvider;
 
   Map<String, int> tabCount = {'Things': 4, 'Property': 3, 'Services': 2};
+
+  SearchProductProvider _searchProductProvider;
 
   @override
   void initState() {
@@ -412,6 +415,7 @@ class _DashboardNewState extends State<DashboardNew>
     @required String text,
     @required List<CategoryModel> tabs,
   }) {
+//    print('tabs: ${tabs?.first?.toString()}');
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: NestedScrollView(
@@ -459,21 +463,49 @@ class _DashboardNewState extends State<DashboardNew>
           controller: tabController,
           children: List<Widget>.generate(
               tabController.length,
-              (index) => Container(
-                    child: GridView.builder(
-                      itemCount: 10,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 0.65),
-                      itemBuilder: (context, index) => _buildItem(index),
-                    ),
-                  )),
+              (index) => ChangeNotifierProvider<SearchProductProvider>(
+                  lazy: false,
+                  create: (BuildContext content) {
+                    _searchProductProvider = SearchProductProvider(
+                        repo: repo2, psValueHolder: valueHolder);
+                    _searchProductProvider.productParameterHolder =
+                        ProductParameterHolder().getLatestParameterHolder();
+                    _searchProductProvider.productParameterHolder.itemTypeId =
+                        tabs[index].id;
+                    final String loginUserId =
+                        Utils.checkUserLoginId(valueHolder);
+                    _searchProductProvider.loadProductListByKey(loginUserId,
+                        _searchProductProvider.productParameterHolder);
+
+                    return _searchProductProvider;
+                  },
+                  child: Consumer<SearchProductProvider>(builder:
+                      (BuildContext context, SearchProductProvider provider,
+                          Widget child) {
+                    if (_searchProductProvider.productList != null &&
+                        _searchProductProvider.productList.data != null) {
+                      return Container(
+                        child: GridView.builder(
+                          itemCount:
+                              _searchProductProvider.productList.data.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, childAspectRatio: 0.65),
+                          itemBuilder: (context, index) => _buildItem(index,_searchProductProvider.productList.data[index]),
+                        ),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  }))),
         ),
       ),
     );
   }
 
-  Widget _buildItem(int index) {
+  Widget _buildItem(int index, Product product) {
+    print(
+        'ProductParameterHolder().getRecentParameterHolder(): ${ProductParameterHolder().getRecentParameterHolder().toMap()}');
     return InkWell(
 //      onTap: onTap,
       child: Card(
@@ -561,23 +593,46 @@ class _DashboardNewState extends State<DashboardNew>
               //   children: <Widget>[
 
               Expanded(
-                child: CachedNetworkImage(
-                  placeholder: (BuildContext context, String url) {
-                    return const CircularProgressIndicator();
-                  },
-                  width: 100,
-                  height: 100,
-//                          fit: BoxFit.cover,
-                  imageUrl:
-                      'https://media.croma.com/image/upload/f_auto,q_auto,d_Croma%20Assets:no-product-image.jpg,h_260,w_260/v1605337269/Croma%20Assets/Entertainment/Headphones%20and%20Earphones/Images/8984566267934.png',
-                  errorWidget:
-                      (BuildContext context, String url, Object error) =>
-                          Image.asset(
-                    'assets/images/placeholder_image.png',
-                    // width: width,
-                    // height: height,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  children: <Widget>[
+                    PsNetworkImage(
+                      photoKey: '${product.defaultPhoto.imgId}${PsConst.HERO_TAG__IMAGE}',
+                      defaultPhoto: product.defaultPhoto,
+                      width: PsDimens.space180,
+                      height: double.infinity,
+                      boxfit: BoxFit.cover,
+                      onTap: () {
+                      },
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        child: product.isSoldOut == '1'
+                            ? Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: PsDimens.space12),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                  Utils.getString(context,
+                                      'dashboard__sold_out'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                      color: PsColors.white)),
+                            ),
+                          ),
+                          height: 30,
+                          width: PsDimens.space180,
+                          decoration: BoxDecoration(
+                              color: PsColors.soldOutUIColor),
+                        )
+                            : Container()
+                      //   )
+                      // ],
+                    ),
+                  ],
                 ),
               ),
 
@@ -588,7 +643,7 @@ class _DashboardNewState extends State<DashboardNew>
                     right: PsDimens.space8,
                     bottom: PsDimens.space4),
                 child: Text(
-                  'Earphones for Buy',
+                  product.title,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyText2,
                   maxLines: 1,
@@ -644,7 +699,7 @@ class _DashboardNewState extends State<DashboardNew>
                     Padding(
                         padding: const EdgeInsets.only(
                             left: PsDimens.space8, right: PsDimens.space8),
-                        child: Text('Denver',
+                        child: Text(product.itemLocation.name,
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.caption))
                   ],
@@ -671,7 +726,7 @@ class _DashboardNewState extends State<DashboardNew>
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: PsDimens.space8, right: PsDimens.space4),
-                            child: Text('Earphones',
+                            child: Text(product.category.catName,
                                 textAlign: TextAlign.start,
                                 style: Theme.of(context).textTheme.caption))
                       ],

@@ -377,6 +377,8 @@ class PsApiService extends PsApi {
       int offset) async {
     final String url =
         '${PsUrl.ps_product_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset/login_user_id/$loginUserId';
+    print('paramMap: ${paramMap.toString()} ');
+    print('paramMap: ${url.toString()} ');
 
     return await postData<Product, List<Product>>(Product(), url, paramMap);
   }
