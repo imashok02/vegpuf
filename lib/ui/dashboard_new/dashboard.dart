@@ -43,6 +43,7 @@ class _DashboardNewState extends State<DashboardNew>
     with TickerProviderStateMixin {
   PsValueHolder valueHolder;
   int _currentIndex = 0;
+  final List<int> _innerTabIndex = [0, 0, 0];
   AnimationController animationController;
   TabController _tabControllerFirst;
   TabController _tabControllerSecond;
@@ -107,17 +108,17 @@ class _DashboardNewState extends State<DashboardNew>
 
   void _initalizeTabControllers(MainCategoryProvider provider) {
     _tabControllerFirst = TabController(
-      vsync: this,
-      length: provider.thingsList.length,
-    );
+        vsync: this,
+        length: provider.thingsList.length,
+        initialIndex: _innerTabIndex[0]);
     _tabControllerSecond = TabController(
-      vsync: this,
-      length: provider.servicesList.length,
-    );
+        vsync: this,
+        length: provider.servicesList.length,
+        initialIndex: _innerTabIndex[1]);
     _tabControllerThird = TabController(
-      vsync: this,
-      length: provider.propertyList.length,
-    );
+        vsync: this,
+        length: provider.propertyList.length,
+        initialIndex: _innerTabIndex[2]);
   }
 
   void _initAnimations() {
@@ -262,31 +263,25 @@ class _DashboardNewState extends State<DashboardNew>
   }
 
   Widget buildSliver(MainCategoryProvider provider) {
+    _initalizeTabControllers(provider);
     return IndexedStack(
       index: _currentIndex,
       children: [
         _buildNestedScrollView(
-          text: 'Things',
-          tabs: provider.thingsList,
-          tabController: TabController(
-              length: provider.thingsList.length, vsync: this, initialIndex: 0),
-        ),
+            text: 'Things',
+            tabs: provider.thingsList,
+            tabController: _tabControllerFirst,
+            tabIndex: 0),
         _buildNestedScrollView(
-          text: 'Services',
-          tabs: provider.servicesList,
-          tabController: TabController(
-              length: provider.servicesList.length,
-              vsync: this,
-              initialIndex: 0),
-        ),
+            text: 'Services',
+            tabs: provider.servicesList,
+            tabController: _tabControllerSecond,
+            tabIndex: 1),
         _buildNestedScrollView(
-          text: 'Property',
-          tabs: provider.propertyList,
-          tabController: TabController(
-              length: provider.propertyList.length,
-              vsync: this,
-              initialIndex: 0),
-        ),
+            text: 'Property',
+            tabs: provider.propertyList,
+            tabController: _tabControllerThird,
+            tabIndex: 2),
       ],
     );
   }
@@ -305,16 +300,15 @@ class _DashboardNewState extends State<DashboardNew>
         setState(() {
           _currentIndex = index;
         });
-        _searchProductProvider = SearchProductProvider(
-            repo: repo2, psValueHolder: valueHolder);
+        _searchProductProvider =
+            SearchProductProvider(repo: repo2, psValueHolder: valueHolder);
         _searchProductProvider.productParameterHolder =
             ProductParameterHolder().getLatestParameterHolder();
         _searchProductProvider.productParameterHolder.itemTypeId =
-            getIndexedTab(_currentIndex,mainCategoryProvider);
-        final String loginUserId =
-        Utils.checkUserLoginId(valueHolder);
-        _searchProductProvider.loadProductListByKey(loginUserId,
-            _searchProductProvider.productParameterHolder);
+            getIndexedTab(_currentIndex, mainCategoryProvider);
+        final String loginUserId = Utils.checkUserLoginId(valueHolder);
+        _searchProductProvider.loadProductListByKey(
+            loginUserId, _searchProductProvider.productParameterHolder);
 
         return _searchProductProvider;
       },
@@ -424,6 +418,7 @@ class _DashboardNewState extends State<DashboardNew>
     @required TabController tabController,
     @required String text,
     @required List<CategoryModel> tabs,
+    @required int tabIndex,
   }) {
 //    print('tabs: ${tabs?.first?.toString()}');
     return NotificationListener<ScrollNotification>(
@@ -463,6 +458,10 @@ class _DashboardNewState extends State<DashboardNew>
                           horizontal: 20, vertical: 15),
                       labelColor: Colors.black,
                       tabs: tabs.map((e) => Text(e.name)).toList(),
+                      onTap: (int index) {
+                        _innerTabIndex[tabIndex] = index;
+                        setState(() {});
+                      },
                     ),
                   ),
                   preferredSize: const Size(double.infinity, kToolbarHeight),
@@ -774,12 +773,12 @@ class _DashboardNewState extends State<DashboardNew>
   }
 
   String getIndexedTab(int currentIndex, MainCategoryProvider provider) {
-    if(_currentIndex==0){
-      return provider.thingsList[0].id;
-    } else if(_currentIndex==1){
-      return provider.servicesList[0].id;
-    } else if(_currentIndex==2){
-      return provider.propertyList[0].id;
+    if (_currentIndex == 0) {
+      return provider.thingsList[_innerTabIndex[0]].id;
+    } else if (_currentIndex == 1) {
+      return provider.servicesList[_innerTabIndex[1]].id;
+    } else if (_currentIndex == 2) {
+      return provider.propertyList[_innerTabIndex[2]].id;
     }
     return '';
   }
