@@ -255,7 +255,7 @@ class _DashboardNewState extends State<DashboardNew>
       child: Scaffold(
 //      backgroundColor: Colors.white,
         body: buildSliver(mainCategoryProvider),
-        bottomNavigationBar: buildBottomNavBar(),
+        bottomNavigationBar: buildBottomNavBar(mainCategoryProvider),
         floatingActionButton: buildFAB(),
       ),
     );
@@ -291,7 +291,7 @@ class _DashboardNewState extends State<DashboardNew>
     );
   }
 
-  Widget buildBottomNavBar() {
+  Widget buildBottomNavBar(MainCategoryProvider mainCategoryProvider) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: getBottonNavigationIndex(_currentIndex),
@@ -305,6 +305,18 @@ class _DashboardNewState extends State<DashboardNew>
         setState(() {
           _currentIndex = index;
         });
+        _searchProductProvider = SearchProductProvider(
+            repo: repo2, psValueHolder: valueHolder);
+        _searchProductProvider.productParameterHolder =
+            ProductParameterHolder().getLatestParameterHolder();
+        _searchProductProvider.productParameterHolder.itemTypeId =
+            getIndexedTab(_currentIndex,mainCategoryProvider);
+        final String loginUserId =
+        Utils.checkUserLoginId(valueHolder);
+        _searchProductProvider.loadProductListByKey(loginUserId,
+            _searchProductProvider.productParameterHolder);
+
+        return _searchProductProvider;
       },
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -759,5 +771,16 @@ class _DashboardNewState extends State<DashboardNew>
         ),
       ),
     );
+  }
+
+  String getIndexedTab(int currentIndex, MainCategoryProvider provider) {
+    if(_currentIndex==0){
+      return provider.thingsList[0].id;
+    } else if(_currentIndex==1){
+      return provider.servicesList[0].id;
+    } else if(_currentIndex==2){
+      return provider.propertyList[0].id;
+    }
+    return '';
   }
 }
