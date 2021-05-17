@@ -113,11 +113,11 @@ class _DashboardNewState extends State<DashboardNew>
         initialIndex: _innerTabIndex[0]);
     _tabControllerSecond = TabController(
         vsync: this,
-        length: provider.servicesList.length,
+        length: provider.propertyList.length,
         initialIndex: _innerTabIndex[1]);
     _tabControllerThird = TabController(
         vsync: this,
-        length: provider.propertyList.length,
+        length: provider.servicesList.length,
         initialIndex: _innerTabIndex[2]);
   }
 
@@ -273,13 +273,13 @@ class _DashboardNewState extends State<DashboardNew>
             tabController: _tabControllerFirst,
             tabIndex: 0),
         _buildNestedScrollView(
-            text: 'Services',
-            tabs: provider.servicesList,
+            text: 'Property',
+            tabs: provider.propertyList,
             tabController: _tabControllerSecond,
             tabIndex: 1),
         _buildNestedScrollView(
-            text: 'Property',
-            tabs: provider.propertyList,
+            text: 'Services',
+            tabs: provider.servicesList,
             tabController: _tabControllerThird,
             tabIndex: 2),
       ],
@@ -439,6 +439,7 @@ class _DashboardNewState extends State<DashboardNew>
                 ),
                 backgroundColor: Colors.red,
                 floating: true,
+                snap: true,
                 pinned: true,
                 bottom: PreferredSize(
                   child: Padding(
@@ -776,9 +777,9 @@ class _DashboardNewState extends State<DashboardNew>
     if (_currentIndex == 0) {
       return provider.thingsList[_innerTabIndex[0]].id;
     } else if (_currentIndex == 1) {
-      return provider.servicesList[_innerTabIndex[1]].id;
+      return provider.propertyList[_innerTabIndex[1]].id;
     } else if (_currentIndex == 2) {
-      return provider.propertyList[_innerTabIndex[2]].id;
+      return provider.servicesList[_innerTabIndex[2]].id;
     }
     return '';
   }
