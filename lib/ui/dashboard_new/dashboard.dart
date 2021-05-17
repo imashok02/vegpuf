@@ -269,25 +269,23 @@ class _DashboardNewState extends State<DashboardNew>
           text: 'Things',
           tabs: provider.thingsList,
           tabController: TabController(
-            length: provider.thingsList.length,
-            vsync: this,
-          ),
+              length: provider.thingsList.length, vsync: this, initialIndex: 0),
         ),
         _buildNestedScrollView(
           text: 'Services',
           tabs: provider.servicesList,
           tabController: TabController(
-            length: provider.servicesList.length,
-            vsync: this,
-          ),
+              length: provider.servicesList.length,
+              vsync: this,
+              initialIndex: 0),
         ),
         _buildNestedScrollView(
           text: 'Property',
           tabs: provider.propertyList,
           tabController: TabController(
-            length: provider.propertyList.length,
-            vsync: this,
-          ),
+              length: provider.propertyList.length,
+              vsync: this,
+              initialIndex: 0),
         ),
       ],
     );
@@ -461,51 +459,54 @@ class _DashboardNewState extends State<DashboardNew>
         },
         body: TabBarView(
           controller: tabController,
-          children: List<Widget>.generate(
-              tabController.length,
-              (index) => ChangeNotifierProvider<SearchProductProvider>(
-                  lazy: false,
-                  create: (BuildContext content) {
-                    _searchProductProvider = SearchProductProvider(
-                        repo: repo2, psValueHolder: valueHolder);
-                    _searchProductProvider.productParameterHolder =
-                        ProductParameterHolder().getLatestParameterHolder();
-                    _searchProductProvider.productParameterHolder.itemTypeId =
-                        tabs[index].id;
-                    final String loginUserId =
-                        Utils.checkUserLoginId(valueHolder);
-                    _searchProductProvider.loadProductListByKey(loginUserId,
-                        _searchProductProvider.productParameterHolder);
+          children: List<Widget>.generate(tabController.length, (int index) {
+            print('_buildNestedScrollView $text');
+            return ChangeNotifierProvider<SearchProductProvider>(
+                lazy: false,
+                create: (BuildContext content) {
+                  print('TAB VIEW BUILT');
+                  _searchProductProvider = SearchProductProvider(
+                      repo: repo2, psValueHolder: valueHolder);
+                  _searchProductProvider.productParameterHolder =
+                      ProductParameterHolder().getLatestParameterHolder();
+                  _searchProductProvider.productParameterHolder.itemTypeId =
+                      tabs[index].id;
+                  final String loginUserId =
+                      Utils.checkUserLoginId(valueHolder);
+                  _searchProductProvider.loadProductListByKey(loginUserId,
+                      _searchProductProvider.productParameterHolder);
 
-                    return _searchProductProvider;
-                  },
-                  child: Consumer<SearchProductProvider>(builder:
-                      (BuildContext context, SearchProductProvider provider,
-                          Widget child) {
-                    if (_searchProductProvider.productList != null &&
-                        _searchProductProvider.productList.data != null) {
-                      return Container(
-                        child: GridView.builder(
-                          itemCount:
-                              _searchProductProvider.productList.data.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, childAspectRatio: 0.65),
-                          itemBuilder: (context, index) => _buildItem(index,_searchProductProvider.productList.data[index]),
-                        ),
-                      );
-                    } else {
-                      return SizedBox();
-                    }
-                  }))),
+                  return _searchProductProvider;
+                },
+                child: Consumer<SearchProductProvider>(builder:
+                    (BuildContext context, SearchProductProvider provider,
+                        Widget child) {
+                  print('TAB VIEW Notified');
+                  if (_searchProductProvider.productList != null &&
+                      _searchProductProvider.productList.data != null) {
+                    return Container(
+                      child: GridView.builder(
+                        itemCount:
+                            _searchProductProvider.productList.data.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, childAspectRatio: 0.65),
+                        itemBuilder: (_, int index) => _buildItem(index,
+                            _searchProductProvider.productList.data[index]),
+                      ),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                }));
+          }),
         ),
       ),
     );
   }
 
   Widget _buildItem(int index, Product product) {
-    print(
-        'ProductParameterHolder().getRecentParameterHolder(): ${ProductParameterHolder().getRecentParameterHolder().toMap()}');
+    print('product TITLE: ${product.title}');
     return InkWell(
 //      onTap: onTap,
       child: Card(
@@ -596,42 +597,41 @@ class _DashboardNewState extends State<DashboardNew>
                 child: Stack(
                   children: <Widget>[
                     PsNetworkImage(
-                      photoKey: '${product.defaultPhoto.imgId}${PsConst.HERO_TAG__IMAGE}',
+                      photoKey:
+                          '${product.defaultPhoto.imgId}${PsConst.HERO_TAG__IMAGE}',
                       defaultPhoto: product.defaultPhoto,
                       width: PsDimens.space180,
                       height: double.infinity,
                       boxfit: BoxFit.cover,
-                      onTap: () {
-                      },
+                      onTap: () {},
                     ),
                     Positioned(
                         bottom: 0,
                         child: product.isSoldOut == '1'
                             ? Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: PsDimens.space12),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  Utils.getString(context,
-                                      'dashboard__sold_out'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                      color: PsColors.white)),
-                            ),
-                          ),
-                          height: 30,
-                          width: PsDimens.space180,
-                          decoration: BoxDecoration(
-                              color: PsColors.soldOutUIColor),
-                        )
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: PsDimens.space12),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        Utils.getString(
+                                            context, 'dashboard__sold_out'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .copyWith(color: PsColors.white)),
+                                  ),
+                                ),
+                                height: 30,
+                                width: PsDimens.space180,
+                                decoration: BoxDecoration(
+                                    color: PsColors.soldOutUIColor),
+                              )
                             : Container()
-                      //   )
-                      // ],
-                    ),
+                        //   )
+                        // ],
+                        ),
                   ],
                 ),
               ),
