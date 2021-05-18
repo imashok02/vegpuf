@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,7 +33,6 @@ Future<void> main() async {
   if (Platform.isIOS) {
     _fcm.requestNotificationPermissions(const IosNotificationSettings());
   }
-
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getString('codeC') == null) {
     await prefs.setString('codeC', null);

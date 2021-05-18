@@ -432,9 +432,22 @@ class _DashboardNewState extends State<DashboardNew>
                     Text(text),
                     const Spacer(),
                     IconButton(
+                      icon: Icon(Icons.location_on_outlined),
+                      onPressed: _search,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.message_outlined),
+                      onPressed: _search,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.notifications_none_outlined),
+                      onPressed: _search,
+                    ),
+                    IconButton(
                       icon: Icon(Icons.search),
                       onPressed: _search,
-                    )
+                    ),
+
                   ],
                 ),
                 backgroundColor: Colors.red,
