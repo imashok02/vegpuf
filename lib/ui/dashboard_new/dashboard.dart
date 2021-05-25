@@ -70,6 +70,7 @@ class _DashboardNewState extends State<DashboardNew>
           Provider.of<MainCategoryProvider>(context, listen: false);
       _initalizeTabControllers(mainCategoryProvider);
     });
+
   }
 
   @override
@@ -300,6 +301,7 @@ class _DashboardNewState extends State<DashboardNew>
         setState(() {
           _currentIndex = index;
         });
+
         _searchProductProvider =
             SearchProductProvider(repo: repo2, psValueHolder: valueHolder);
         _searchProductProvider.productParameterHolder =
@@ -447,7 +449,6 @@ class _DashboardNewState extends State<DashboardNew>
                       icon: Icon(Icons.search),
                       onPressed: _search,
                     ),
-
                   ],
                 ),
                 backgroundColor: Colors.red,
@@ -474,6 +475,8 @@ class _DashboardNewState extends State<DashboardNew>
                       tabs: tabs.map((e) => Text(e.name)).toList(),
                       onTap: (int index) {
                         _innerTabIndex[tabIndex] = index;
+                        _searchProductProvider.productList.data = null;
+                        _searchProductProvider.notifyListeners();
                         setState(() {});
                       },
                     ),
@@ -486,44 +489,71 @@ class _DashboardNewState extends State<DashboardNew>
           controller: tabController,
           children: List<Widget>.generate(tabController.length, (int index) {
             print('_buildNestedScrollView $text');
-            return ChangeNotifierProvider<SearchProductProvider>(
-                lazy: false,
-                create: (BuildContext content) {
-                  print('TAB VIEW BUILT');
-                  _searchProductProvider = SearchProductProvider(
-                      repo: repo2, psValueHolder: valueHolder);
-                  _searchProductProvider.productParameterHolder =
-                      ProductParameterHolder().getLatestParameterHolder();
-                  _searchProductProvider.productParameterHolder.itemTypeId =
-                      tabs[index].id;
-                  final String loginUserId =
-                      Utils.checkUserLoginId(valueHolder);
-                  _searchProductProvider.loadProductListByKey(loginUserId,
-                      _searchProductProvider.productParameterHolder);
+            return RefreshIndicator(
+              onRefresh: () async {
+                final String loginUserId = Utils.checkUserLoginId(valueHolder);
+                _searchProductProvider.productList.data = null;
+                _searchProductProvider.notifyListeners();
+                await _searchProductProvider.resetLatestProductList(
+                    loginUserId, _searchProductProvider.productParameterHolder);
+                return;
+              },
+              child: ChangeNotifierProvider<SearchProductProvider>(
+                  lazy: false,
+                  create: (BuildContext content) {
+                    print('TAB VIEW BUILT');
+                    _searchProductProvider = SearchProductProvider(
+                        repo: repo2, psValueHolder: valueHolder);
+                    _searchProductProvider.productParameterHolder =
+                        ProductParameterHolder().getLatestParameterHolder();
+                    _searchProductProvider.productParameterHolder.itemTypeId =
+                        tabs[index].id;
+                    final String loginUserId =
+                        Utils.checkUserLoginId(valueHolder);
+                    _searchProductProvider.loadProductListByKey(loginUserId,
+                        _searchProductProvider.productParameterHolder);
 
-                  return _searchProductProvider;
-                },
-                child: Consumer<SearchProductProvider>(builder:
-                    (BuildContext context, SearchProductProvider provider,
-                        Widget child) {
-                  print('TAB VIEW Notified');
-                  if (_searchProductProvider.productList != null &&
-                      _searchProductProvider.productList.data != null) {
-                    return Container(
-                      child: GridView.builder(
-                        itemCount:
-                            _searchProductProvider.productList.data.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, childAspectRatio: 0.65),
-                        itemBuilder: (_, int index) => _buildItem(index,
-                            _searchProductProvider.productList.data[index]),
-                      ),
-                    );
-                  } else {
-                    return SizedBox();
-                  }
-                }));
+                    return _searchProductProvider;
+                  },
+                  child: Consumer<SearchProductProvider>(builder:
+                      (BuildContext context, SearchProductProvider provider,
+                          Widget child) {
+                    print('TAB VIEW Notified');
+                    if (_searchProductProvider.productList != null &&
+                        _searchProductProvider.productList.data != null &&
+                        _searchProductProvider.productList.data.isNotEmpty) {
+                      return Container(
+                        child: GridView.builder(
+                          itemCount:
+                              _searchProductProvider.productList.data.length ??
+                                  0,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, childAspectRatio: 0.65),addAutomaticKeepAlives: false,
+                          itemBuilder: (_, int index) {
+                            print('GRID VIEW INDEX: $index');
+                            if (_searchProductProvider.productList.data.length>4 && index ==
+                                _searchProductProvider.productList.data.length -
+                                    1) {
+                              final String loginUserId =
+                                  Utils.checkUserLoginId(valueHolder);
+                              _searchProductProvider.nextProductListByKey(
+                                  loginUserId,
+                                  _searchProductProvider
+                                      .productParameterHolder);
+                            }
+                            return _buildItem(index,
+                                _searchProductProvider.productList.data[index]);
+                          },
+                        ),
+                      );
+                    } else {
+                      return SizedBox(
+                        height: 200,
+                      );
+                    }
+                  })),
+            );
           }),
         ),
       ),
@@ -796,4 +826,6 @@ class _DashboardNewState extends State<DashboardNew>
     }
     return '';
   }
+
+
 }

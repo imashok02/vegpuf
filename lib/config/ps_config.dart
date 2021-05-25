@@ -202,7 +202,7 @@ class PsConfig {
   ///
   /// Default Limit
   ///
-  static const int DEFAULT_LOADING_LIMIT = 30;
+  static const int DEFAULT_LOADING_LIMIT = 6;
   static const int CATEGORY_LOADING_LIMIT = 10;
   static const int RECENT_ITEM_LOADING_LIMIT = 10;
   static const int POPULAR_ITEM_LOADING_LIMIT = 10;

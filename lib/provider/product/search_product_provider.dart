@@ -117,6 +117,8 @@ class SearchProductProvider extends PsProvider {
       }
     }
 
+    print('loadProductListByKey offset:  $offset');
+
     daoSubscription = await _repo.getProductList(
         productListStream,
         isConnectedToInternet,
@@ -148,6 +150,8 @@ class SearchProductProvider extends PsProvider {
           }
         }
       }
+
+      print('nextProductListByKey offset:  $offset');
 
       await _repo.getNextPageProductList(
           productListStream,
