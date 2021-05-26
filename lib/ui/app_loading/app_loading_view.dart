@@ -176,6 +176,8 @@ class AppLoadingView extends StatelessWidget {
       PSAppInfo psAppInfo,
       AppInfoProvider appInfoProvider,
       ClearAllDataProvider clearAllDataProvider) async {
+    print('checkVersionNumber versionNo: ${psAppInfo.psAppVersion.versionNo} ');
+    print('checkVersionNumber versionNeedClearData: ${psAppInfo.psAppVersion.versionNeedClearData} ');
     if (PsConfig.app_version != psAppInfo.psAppVersion.versionNo) {
       if (psAppInfo.psAppVersion.versionNeedClearData == PsConst.ONE) {
         await clearAllDataProvider.clearAllData();
@@ -212,6 +214,7 @@ class AppLoadingView extends StatelessWidget {
 
   dynamic checkForceUpdate(BuildContext context, PSAppInfo psAppInfo,
       AppInfoProvider appInfoProvider) {
+    print('checkForceUpdate: ${psAppInfo.psAppVersion.versionForceUpdate}');
     if (psAppInfo.psAppVersion.versionForceUpdate == PsConst.ONE) {
       appInfoProvider.replaceAppInfoData(
           psAppInfo.psAppVersion.versionNo,

@@ -70,7 +70,6 @@ class _DashboardNewState extends State<DashboardNew>
           Provider.of<MainCategoryProvider>(context, listen: false);
       _initalizeTabControllers(mainCategoryProvider);
     });
-
   }
 
   @override
@@ -202,10 +201,10 @@ class _DashboardNewState extends State<DashboardNew>
             parent: animationController,
             curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
 
-    Navigator.pushNamed(context, RoutePaths.home_item_search_view, arguments: [
+    Navigator.pushNamed(context, RoutePaths.set_current_location, arguments: [
       animation,
       animationController,
-      ProductParameterHolder().getLatestParameterHolder(),
+      valueHolder,repo4
     ]);
   }
 
@@ -434,20 +433,20 @@ class _DashboardNewState extends State<DashboardNew>
                     Text(text),
                     const Spacer(),
                     IconButton(
-                      icon: Icon(Icons.location_on_outlined),
+                      icon: const Icon(Icons.location_on_outlined),
                       onPressed: _search,
                     ),
                     IconButton(
-                      icon: Icon(Icons.message_outlined),
-                      onPressed: _search,
+                      icon: const Icon(Icons.message_outlined),
+                      onPressed: (){},
                     ),
                     IconButton(
-                      icon: Icon(Icons.notifications_none_outlined),
-                      onPressed: _search,
+                      icon: const Icon(Icons.notifications_none_outlined),
+                      onPressed: (){},
                     ),
                     IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: _search,
+                      icon: const Icon(Icons.search),
+                      onPressed: (){},
                     ),
                   ],
                 ),
@@ -474,10 +473,12 @@ class _DashboardNewState extends State<DashboardNew>
                       labelColor: Colors.black,
                       tabs: tabs.map((e) => Text(e.name)).toList(),
                       onTap: (int index) {
-                        _innerTabIndex[tabIndex] = index;
-                        _searchProductProvider.productList.data = null;
-                        _searchProductProvider.notifyListeners();
-                        setState(() {});
+                        if (_innerTabIndex[tabIndex] != index) {
+                          _innerTabIndex[tabIndex] = index;
+                          _searchProductProvider.productList.data = null;
+                          _searchProductProvider.notifyListeners();
+                          setState(() {});
+                        }
                       },
                     ),
                   ),
@@ -519,36 +520,57 @@ class _DashboardNewState extends State<DashboardNew>
                       (BuildContext context, SearchProductProvider provider,
                           Widget child) {
                     print('TAB VIEW Notified');
-                    if (_searchProductProvider.productList != null &&
-                        _searchProductProvider.productList.data != null &&
-                        _searchProductProvider.productList.data.isNotEmpty) {
-                      return Container(
-                        child: GridView.builder(
-                          itemCount:
-                              _searchProductProvider.productList.data.length ??
+                    if (provider.productList != null &&
+                        provider.productList.data != null &&
+                        provider.productList.data.isNotEmpty) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            GridView.builder(
+                              itemCount: provider
+                                      .productList.data.length ??
                                   0,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, childAspectRatio: 0.65),addAutomaticKeepAlives: false,
-                          itemBuilder: (_, int index) {
-                            print('GRID VIEW INDEX: $index');
-                            if (_searchProductProvider.productList.data.length>4 && index ==
-                                _searchProductProvider.productList.data.length -
-                                    1) {
-                              final String loginUserId =
-                                  Utils.checkUserLoginId(valueHolder);
-                              _searchProductProvider.nextProductListByKey(
-                                  loginUserId,
-                                  _searchProductProvider
-                                      .productParameterHolder);
-                            }
-                            return _buildItem(index,
-                                _searchProductProvider.productList.data[index]);
-                          },
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.65),
+                              addAutomaticKeepAlives: false,
+                              shrinkWrap: true,
+                              itemBuilder: (_, int index) {
+                                print('GRID VIEW INDEX: $index');
+                                if (provider
+                                            .productList.data.length >
+                                        4 &&
+                                    index ==
+                                        provider
+                                                .productList.data.length -
+                                            1) {
+                                  final String loginUserId =
+                                      Utils.checkUserLoginId(valueHolder);
+                                  provider.nextProductListByKey(
+                                      loginUserId,
+                                      provider
+                                          .productParameterHolder);
+                                }
+                                return _buildItem(
+                                    index,
+                                    provider
+                                        .productList.data[index]);
+                              },
+                            ),
+                            if (provider.isLoading)
+                              Center(
+                                child: Container(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: const CircularProgressIndicator(),
+                                ),
+                              )
+                          ],
                         ),
                       );
                     } else {
-                      return SizedBox(
+                      return const SizedBox(
                         height: 200,
                       );
                     }
@@ -826,6 +848,4 @@ class _DashboardNewState extends State<DashboardNew>
     }
     return '';
   }
-
-
 }
