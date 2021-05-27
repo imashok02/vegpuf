@@ -51,6 +51,8 @@ Future<void> main() async {
     Crashlytics.instance.onError(details);
   };
 
+//  Crashlytics.instance.crash();
+
 
   NativeAdmob(adUnitID: Utils.getAdAppId());
 

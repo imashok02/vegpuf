@@ -58,7 +58,7 @@ class _DashboardNewState extends State<DashboardNew>
     super.initState();
     _initAnimations();
     _initalizeTabControllers();
-    Crashlytics.instance.crash();
+//    Crashlytics.instance.crash();
   }
 
   @override
