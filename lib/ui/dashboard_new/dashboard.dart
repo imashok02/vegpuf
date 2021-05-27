@@ -61,7 +61,7 @@ class _DashboardNewState extends State<DashboardNew>
 
   SearchProductProvider _searchProductProvider;
 
-  final ScrollController _scrollController= ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -203,11 +203,8 @@ class _DashboardNewState extends State<DashboardNew>
             parent: animationController,
             curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
 
-    Navigator.pushNamed(context, RoutePaths.set_current_location, arguments: [
-      animation,
-      animationController,
-      valueHolder,repo4
-    ]);
+    Navigator.pushNamed(context, RoutePaths.set_current_location,
+        arguments: [animation, animationController, valueHolder, repo4]);
   }
 
   @override
@@ -436,19 +433,22 @@ class _DashboardNewState extends State<DashboardNew>
                     const Spacer(),
                     IconButton(
                       icon: const Icon(Icons.location_on_outlined),
-                      onPressed: _search,
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, RoutePaths.itemLocationList);
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.message_outlined),
-                      onPressed: (){},
+                      onPressed: () {},
                     ),
                     IconButton(
                       icon: const Icon(Icons.notifications_none_outlined),
-                      onPressed: (){},
+                      onPressed: () {},
                     ),
                     IconButton(
                       icon: const Icon(Icons.search),
-                      onPressed: (){},
+                      onPressed: () {},
                     ),
                   ],
                 ),
@@ -481,8 +481,10 @@ class _DashboardNewState extends State<DashboardNew>
                           _searchProductProvider.productList.data = null;
                           _searchProductProvider.notifyListeners();
                           setState(() {});
-                          if(_scrollController.offset>1){
-                            _scrollController.animateTo(0, duration: const Duration(milliseconds: 100), curve: Curves.elasticInOut);
+                          if (_scrollController.offset > 1) {
+                            _scrollController.animateTo(0,
+                                duration: const Duration(milliseconds: 100),
+                                curve: Curves.elasticInOut);
                           }
                         }
                       },
@@ -529,13 +531,12 @@ class _DashboardNewState extends State<DashboardNew>
                     if (provider.productList != null &&
                         provider.productList.data != null &&
                         provider.productList.data.isNotEmpty) {
-                      return SingleChildScrollView(controller: _scrollController,
+                      return SingleChildScrollView(
+                        controller: _scrollController,
                         child: Column(
                           children: <Widget>[
                             GridView.builder(
-                              itemCount: provider
-                                      .productList.data.length ??
-                                  0,
+                              itemCount: provider.productList.data.length ?? 0,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -545,24 +546,16 @@ class _DashboardNewState extends State<DashboardNew>
                               shrinkWrap: true,
                               itemBuilder: (_, int index) {
                                 print('GRID VIEW INDEX: $index');
-                                if (provider
-                                            .productList.data.length >
-                                        4 &&
+                                if (provider.productList.data.length > 4 &&
                                     index ==
-                                        provider
-                                                .productList.data.length -
-                                            1) {
+                                        provider.productList.data.length - 1) {
                                   final String loginUserId =
                                       Utils.checkUserLoginId(valueHolder);
-                                  provider.nextProductListByKey(
-                                      loginUserId,
-                                      provider
-                                          .productParameterHolder);
+                                  provider.nextProductListByKey(loginUserId,
+                                      provider.productParameterHolder);
                                 }
                                 return _buildItem(
-                                    index,
-                                    provider
-                                        .productList.data[index]);
+                                    index, provider.productList.data[index]);
                               },
                             ),
                             if (provider.isLoading)
