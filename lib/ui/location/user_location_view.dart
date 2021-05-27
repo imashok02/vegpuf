@@ -8,7 +8,9 @@ import 'package:flutterbuyandsell/ui/common/ps_button_widget.dart';
 import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as geolocatorPackage;
 import 'package:location/location.dart';
+import 'package:location/location.dart' as locationPackage;
 import 'package:provider/provider.dart';
 
 class LocationSelectView extends StatefulWidget {
@@ -44,13 +46,12 @@ class _LocationSelectViewState extends State<LocationSelectView> {
   Widget build(BuildContext context) {
 //    _provider = Provider.of(context, listen: false);
     return Scaffold(
-      appBar: AppBar(backgroundColor: PsColors.mainColor,
+      appBar: AppBar(
+        backgroundColor: PsColors.mainColor,
         title: Text(
           PsConst.LOCATION,
           style: TextStyle(
-              color: PsColors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
+              color: PsColors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: ChangeNotifierProvider<ItemLocationProvider>(
@@ -65,16 +66,29 @@ class _LocationSelectViewState extends State<LocationSelectView> {
               children: [
                 Column(
                   children: [
-
-                    const SizedBox(height: 30,),
-                    const Text('Current Location', style: TextStyle(
-                        color: Colors.black,fontSize: 16,
-                        fontFamily: PsConfig.ps_default_font_family,
-                        fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 10,),
-                    Text(widget?.productParameterHolder?.locactionName ?? '',style: const TextStyle(decoration: TextDecoration.underline,decorationStyle: TextDecorationStyle.dashed),),
-
-                    const SizedBox(height: 40,),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Current Location',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: PsConfig.ps_default_font_family,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget?.productParameterHolder?.locactionName ?? '',
+                      style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.dashed),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: PSButtonWidget(
@@ -117,7 +131,7 @@ class _LocationSelectViewState extends State<LocationSelectView> {
     final Location location = Location();
 
     bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    locationPackage.PermissionStatus _permissionGranted;
     LocationData _locationData;
 
     _serviceEnabled = await location.serviceEnabled();
@@ -129,13 +143,14 @@ class _LocationSelectViewState extends State<LocationSelectView> {
     }
 
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
+    if (_permissionGranted == locationPackage.PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+      if (_permissionGranted != locationPackage.PermissionStatus.granted) {
         return;
       }
     }
-    _currentPosition = await Geolocator.getCurrentPosition();
+    _currentPosition = await Geolocator().getCurrentPosition(
+        desiredAccuracy: geolocatorPackage.LocationAccuracy.high);
     setState(() {
       _isLoading = false;
     });
