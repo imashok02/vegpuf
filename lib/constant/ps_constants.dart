@@ -9,6 +9,7 @@ import 'package:flutterbuyandsell/config/ps_config.dart';
 import 'package:intl/intl.dart';
 
 class PsConst {
+
   PsConst._();
 
   static const String THEME__IS_DARK_THEME = 'THEME__IS_DARK_THEME';
@@ -46,6 +47,7 @@ class PsConst {
   static const String FILTERING_FEATURE = 'featured_date';
   static const String FILTERING_TRENDING = 'touch_count';
 
+  static const String LOCATION = 'Set Location';
   static const String PLATFORM = 'android';
 
   static const String RATING_ONE = '1';

@@ -10,6 +10,7 @@ import 'package:flutterbuyandsell/constant/ps_dimens.dart';
 import 'package:flutterbuyandsell/constant/route_paths.dart';
 import 'package:flutterbuyandsell/provider/category/category_provider.dart';
 import 'package:flutterbuyandsell/provider/product/recent_product_provider.dart';
+import 'package:flutterbuyandsell/provider/product/search_product_provider.dart';
 import 'package:flutterbuyandsell/repository/blog_repository.dart';
 import 'package:flutterbuyandsell/repository/category_repository.dart';
 import 'package:flutterbuyandsell/repository/item_location_repository.dart';
@@ -26,6 +27,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:optimized_cached_image/widgets.dart';
 import '../../viewobject/holder/product_parameter_holder.dart';
+import '../../repository/main_category_repository.dart';
+import '../../api/common/ps_status.dart';
+import '../../api/ps_api_service.dart';
+import '../../api/common/ps_resource.dart';
+import '../../viewobject/category_model.dart';
+import '../../provider/main_category/main_category_provider.dart';
 
 class DashboardNew extends StatefulWidget {
   @override
@@ -36,6 +43,7 @@ class _DashboardNewState extends State<DashboardNew>
     with TickerProviderStateMixin {
   PsValueHolder valueHolder;
   int _currentIndex = 0;
+  final List<int> _innerTabIndex = [0, 0, 0];
   AnimationController animationController;
   TabController _tabControllerFirst;
   TabController _tabControllerSecond;
@@ -46,15 +54,24 @@ class _DashboardNewState extends State<DashboardNew>
   BlogRepository repo3;
   ItemLocationRepository repo4;
   RecentProductProvider _recentProductProvider;
-  final userInputTEC = TextEditingController();
+  final TextEditingController userInputTEC = TextEditingController();
+  MainCategoryProvider mainCategoryProvider;
 
   Map<String, int> tabCount = {'Things': 4, 'Property': 3, 'Services': 2};
+
+  SearchProductProvider _searchProductProvider;
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _initAnimations();
-    _initalizeTabControllers();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      mainCategoryProvider =
+          Provider.of<MainCategoryProvider>(context, listen: false);
+      _initalizeTabControllers(mainCategoryProvider);
+    });
   }
 
   @override
@@ -91,33 +108,19 @@ class _DashboardNewState extends State<DashboardNew>
     return false;
   }
 
-  List<String> _getTabs(int tabControllerLength) {
-    switch (tabControllerLength) {
-      case 4:
-        return ['Buying', 'Selling', 'Renting', 'Exchanging'];
-        break;
-      case 3:
-        return ['Buying', 'Selling', 'Renting'];
-        break;
-      case 2:
-        return ['Doctors', 'Electricians'];
-        break;
-    }
-  }
-
-  void _initalizeTabControllers() {
+  void _initalizeTabControllers(MainCategoryProvider provider) {
     _tabControllerFirst = TabController(
-      vsync: this,
-      length: tabCount['Things'],
-    );
+        vsync: this,
+        length: provider.thingsList.length,
+        initialIndex: _innerTabIndex[0]);
     _tabControllerSecond = TabController(
-      vsync: this,
-      length: tabCount['Property'],
-    );
+        vsync: this,
+        length: provider.propertyList.length,
+        initialIndex: _innerTabIndex[1]);
     _tabControllerThird = TabController(
-      vsync: this,
-      length: tabCount['Services'],
-    );
+        vsync: this,
+        length: provider.servicesList.length,
+        initialIndex: _innerTabIndex[2]);
   }
 
   void _initAnimations() {
@@ -193,20 +196,15 @@ class _DashboardNewState extends State<DashboardNew>
     }
     return <dynamic>[title, index];
   }
-  
-  void _search() {
 
+  void _search() {
     final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(
-        parent: animationController,
-        curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
-    
-    Navigator.pushNamed(context, RoutePaths.home_item_search_view,arguments: [
-      animation,
-      animationController,
-      ProductParameterHolder().getLatestParameterHolder(),
-    ]);
-    
+            parent: animationController,
+            curve: const Interval(0.5 * 1, 1.0, curve: Curves.elasticInOut)));
+
+    Navigator.pushNamed(context, RoutePaths.set_current_location,
+        arguments: [animation, animationController, valueHolder, repo4]);
   }
 
   @override
@@ -216,6 +214,7 @@ class _DashboardNewState extends State<DashboardNew>
     repo2 = Provider.of<ProductRepository>(context);
     repo3 = Provider.of<BlogRepository>(context);
     repo4 = Provider.of<ItemLocationRepository>(context);
+    mainCategoryProvider = Provider.of<MainCategoryProvider>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CategoryProvider>(
@@ -255,28 +254,38 @@ class _DashboardNewState extends State<DashboardNew>
       ],
       child: Scaffold(
 //      backgroundColor: Colors.white,
-        body: buildSliver(),
-        bottomNavigationBar: buildBottomNavBar(),
+        body: buildSliver(mainCategoryProvider),
+        bottomNavigationBar: buildBottomNavBar(mainCategoryProvider),
         floatingActionButton: buildFAB(),
       ),
     );
   }
 
-  Widget buildSliver() {
+  Widget buildSliver(MainCategoryProvider provider) {
+    _initalizeTabControllers(provider);
     return IndexedStack(
       index: _currentIndex,
       children: [
         _buildNestedScrollView(
-            text: 'Things', tabController: _tabControllerFirst),
+            text: 'Things',
+            tabs: provider.thingsList,
+            tabController: _tabControllerFirst,
+            tabIndex: 0),
         _buildNestedScrollView(
-            text: 'Services', tabController: _tabControllerSecond),
+            text: 'Property',
+            tabs: provider.propertyList,
+            tabController: _tabControllerSecond,
+            tabIndex: 1),
         _buildNestedScrollView(
-            text: 'Property', tabController: _tabControllerThird),
+            text: 'Services',
+            tabs: provider.servicesList,
+            tabController: _tabControllerThird,
+            tabIndex: 2),
       ],
     );
   }
 
-  Widget buildBottomNavBar() {
+  Widget buildBottomNavBar(MainCategoryProvider mainCategoryProvider) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: getBottonNavigationIndex(_currentIndex),
@@ -290,6 +299,18 @@ class _DashboardNewState extends State<DashboardNew>
         setState(() {
           _currentIndex = index;
         });
+
+        _searchProductProvider =
+            SearchProductProvider(repo: repo2, psValueHolder: valueHolder);
+        _searchProductProvider.productParameterHolder =
+            ProductParameterHolder().getLatestParameterHolder();
+        _searchProductProvider.productParameterHolder.itemTypeId =
+            getIndexedTab(_currentIndex, mainCategoryProvider);
+        final String loginUserId = Utils.checkUserLoginId(valueHolder);
+        _searchProductProvider.loadProductListByKey(
+            loginUserId, _searchProductProvider.productParameterHolder);
+
+        return _searchProductProvider;
       },
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -396,30 +417,49 @@ class _DashboardNewState extends State<DashboardNew>
   Widget _buildNestedScrollView({
     @required TabController tabController,
     @required String text,
+    @required List<CategoryModel> tabs,
+    @required int tabIndex,
   }) {
+//    print('tabs: ${tabs?.first?.toString()}');
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext ctx, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              title: Row(
-                children: [
-                  Text(text),
-                  const Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: _search,
-                  )
-                ],
-              ),
-              backgroundColor: Colors.red,
-              floating: true,
-              pinned: true,
-              bottom: PreferredSize(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: TabBar(
+                title: Row(
+                  children: [
+                    Text(text),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.location_on_outlined),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, RoutePaths.itemLocationList);
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.message_outlined),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.notifications_none_outlined),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.red,
+                floating: true,
+                snap: true,
+                pinned: true,
+                bottom: PreferredSize(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: TabBar(
                       controller: tabController,
                       isScrollable: tabController.length > 3 ? true : false,
                       indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -433,34 +473,116 @@ class _DashboardNewState extends State<DashboardNew>
                       labelPadding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 15),
                       labelColor: Colors.black,
-                      tabs: _getTabs(tabController.length)
-                          .map((e) => Text(e))
-                          .toList()),
-                ),
-                preferredSize: const Size(double.infinity, kToolbarHeight),
-              ),
-            ),
+                      tabs: tabs.map((e) => Text(e.name)).toList(),
+                      onTap: (int index) {
+                        print('INNER TAB CHANGED');
+                        if (_innerTabIndex[tabIndex] != index) {
+                          _innerTabIndex[tabIndex] = index;
+                          _searchProductProvider.productList.data = null;
+                          _searchProductProvider.notifyListeners();
+                          setState(() {});
+                          if (_scrollController.offset > 1) {
+                            _scrollController.animateTo(0,
+                                duration: const Duration(milliseconds: 100),
+                                curve: Curves.elasticInOut);
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  preferredSize: const Size(double.infinity, kToolbarHeight),
+                ))
           ];
         },
         body: TabBarView(
           controller: tabController,
-          children: List<Widget>.generate(
-              tabController.length,
-              (index) => Container(
-                    child: GridView.builder(
-                      itemCount: 10,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 0.65),
-                      itemBuilder: (context, index) => _buildItem(index),
-                    ),
-                  )),
+          children: List<Widget>.generate(tabController.length, (int index) {
+            print('_buildNestedScrollView $text');
+            return RefreshIndicator(
+              onRefresh: () async {
+                final String loginUserId = Utils.checkUserLoginId(valueHolder);
+                _searchProductProvider.productList.data = null;
+                _searchProductProvider.notifyListeners();
+                await _searchProductProvider.resetLatestProductList(
+                    loginUserId, _searchProductProvider.productParameterHolder);
+                return;
+              },
+              child: ChangeNotifierProvider<SearchProductProvider>(
+                  lazy: false,
+                  create: (BuildContext content) {
+                    print('TAB VIEW BUILT');
+                    _searchProductProvider = SearchProductProvider(
+                        repo: repo2, psValueHolder: valueHolder);
+                    _searchProductProvider.productParameterHolder =
+                        ProductParameterHolder().getLatestParameterHolder();
+                    _searchProductProvider.productParameterHolder.itemTypeId =
+                        tabs[index].id;
+                    final String loginUserId =
+                        Utils.checkUserLoginId(valueHolder);
+                    _searchProductProvider.loadProductListByKey(loginUserId,
+                        _searchProductProvider.productParameterHolder);
+
+                    return _searchProductProvider;
+                  },
+                  child: Consumer<SearchProductProvider>(builder:
+                      (BuildContext context, SearchProductProvider provider,
+                          Widget child) {
+                    print('TAB VIEW Notified');
+                    if (provider.productList != null &&
+                        provider.productList.data != null &&
+                        provider.productList.data.isNotEmpty) {
+                      return SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
+                          children: <Widget>[
+                            GridView.builder(
+                              itemCount: provider.productList.data.length ?? 0,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.65),
+                              addAutomaticKeepAlives: false,
+                              shrinkWrap: true,
+                              itemBuilder: (_, int index) {
+                                print('GRID VIEW INDEX: $index');
+                                if (provider.productList.data.length > 4 &&
+                                    index ==
+                                        provider.productList.data.length - 1) {
+                                  final String loginUserId =
+                                      Utils.checkUserLoginId(valueHolder);
+                                  provider.nextProductListByKey(loginUserId,
+                                      provider.productParameterHolder);
+                                }
+                                return _buildItem(
+                                    index, provider.productList.data[index]);
+                              },
+                            ),
+                            if (provider.isLoading)
+                              Center(
+                                child: Container(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: const CircularProgressIndicator(),
+                                ),
+                              )
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const SizedBox(
+                        height: 200,
+                      );
+                    }
+                  })),
+            );
+          }),
         ),
       ),
     );
   }
 
-  Widget _buildItem(int index) {
+  Widget _buildItem(int index, Product product) {
+    print('product TITLE: ${product.title}');
     return InkWell(
 //      onTap: onTap,
       child: Card(
@@ -468,7 +590,7 @@ class _DashboardNewState extends State<DashboardNew>
         color: PsColors.transparent,
         child: Container(
           margin: const EdgeInsets.symmetric(
-              horizontal: PsDimens.space4, vertical: PsDimens.space12),
+              horizontal: PsDimens.space4, vertical: PsDimens.space8),
           decoration: BoxDecoration(
             color: PsColors.backgroundColor,
             borderRadius:
@@ -548,23 +670,45 @@ class _DashboardNewState extends State<DashboardNew>
               //   children: <Widget>[
 
               Expanded(
-                child: CachedNetworkImage(
-                  placeholder: (BuildContext context, String url) {
-                    return const CircularProgressIndicator();
-                  },
-                  width: 100,
-                  height: 100,
-//                          fit: BoxFit.cover,
-                  imageUrl:
-                      'https://media.croma.com/image/upload/f_auto,q_auto,d_Croma%20Assets:no-product-image.jpg,h_260,w_260/v1605337269/Croma%20Assets/Entertainment/Headphones%20and%20Earphones/Images/8984566267934.png',
-                  errorWidget:
-                      (BuildContext context, String url, Object error) =>
-                          Image.asset(
-                    'assets/images/placeholder_image.png',
-                    // width: width,
-                    // height: height,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  children: <Widget>[
+                    PsNetworkImage(
+                      photoKey:
+                          '${product.defaultPhoto.imgId}${PsConst.HERO_TAG__IMAGE}',
+                      defaultPhoto: product.defaultPhoto,
+                      width: PsDimens.space180,
+                      height: double.infinity,
+                      boxfit: BoxFit.cover,
+                      onTap: () {},
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        child: product.isSoldOut == '1'
+                            ? Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: PsDimens.space12),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        Utils.getString(
+                                            context, 'dashboard__sold_out'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .copyWith(color: PsColors.white)),
+                                  ),
+                                ),
+                                height: 30,
+                                width: PsDimens.space180,
+                                decoration: BoxDecoration(
+                                    color: PsColors.soldOutUIColor),
+                              )
+                            : Container()
+                        //   )
+                        // ],
+                        ),
+                  ],
                 ),
               ),
 
@@ -575,7 +719,7 @@ class _DashboardNewState extends State<DashboardNew>
                     right: PsDimens.space8,
                     bottom: PsDimens.space4),
                 child: Text(
-                  'Earphones for Buy',
+                  product.title,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyText2,
                   maxLines: 1,
@@ -631,7 +775,7 @@ class _DashboardNewState extends State<DashboardNew>
                     Padding(
                         padding: const EdgeInsets.only(
                             left: PsDimens.space8, right: PsDimens.space8),
-                        child: Text('Denver',
+                        child: Text(product.itemLocation.name,
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.caption))
                   ],
@@ -658,7 +802,7 @@ class _DashboardNewState extends State<DashboardNew>
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: PsDimens.space8, right: PsDimens.space4),
-                            child: Text('Earphones',
+                            child: Text(product.category.catName,
                                 textAlign: TextAlign.start,
                                 style: Theme.of(context).textTheme.caption))
                       ],
@@ -691,5 +835,16 @@ class _DashboardNewState extends State<DashboardNew>
         ),
       ),
     );
+  }
+
+  String getIndexedTab(int currentIndex, MainCategoryProvider provider) {
+    if (_currentIndex == 0) {
+      return provider.thingsList[_innerTabIndex[0]].id;
+    } else if (_currentIndex == 1) {
+      return provider.propertyList[_innerTabIndex[1]].id;
+    } else if (_currentIndex == 2) {
+      return provider.servicesList[_innerTabIndex[2]].id;
+    }
+    return '';
   }
 }

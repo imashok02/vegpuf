@@ -10,6 +10,11 @@ import 'package:flutterbuyandsell/utils/utils.dart';
 import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
 import 'package:flutterbuyandsell/viewobject/holder/location_parameter_holder.dart';
 import 'package:flutterbuyandsell/viewobject/item_location.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as geolocatorPackage;
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterbuyandsell/constant/ps_dimens.dart';
 import 'package:flutterbuyandsell/constant/route_paths.dart';
@@ -20,6 +25,7 @@ class ItemLocationView extends StatefulWidget {
       : super(key: key);
 
   final AnimationController animationController;
+
   @override
   _ItemLocationViewState createState() => _ItemLocationViewState();
 }
@@ -30,8 +36,10 @@ class _ItemLocationViewState extends State<ItemLocationView>
 
   ItemLocationProvider _itemLocationProvider;
   PsValueHolder valueHolder;
+
   // Animation<double> animation;
   int i = 0;
+
   @override
   void dispose() {
     // animation = null;
@@ -44,8 +52,8 @@ class _ItemLocationViewState extends State<ItemLocationView>
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _itemLocationProvider.nextItemLocationList(
-          _itemLocationProvider.latestLocationParameterHolder.toMap(),
-          _itemLocationProvider.psValueHolder.loginUserId);
+            _itemLocationProvider.latestLocationParameterHolder.toMap(),
+            _itemLocationProvider.psValueHolder.loginUserId);
       }
     });
 
@@ -63,16 +71,18 @@ class _ItemLocationViewState extends State<ItemLocationView>
     print(
         '............................Build Item Location UI Again ............................');
 
-    return PsWidgetWithAppBarNoAppBarTitle<ItemLocationProvider>(
-        initProvider: () {
+    return PsWidgetWithAppBarNoAppBarTitle<ItemLocationProvider>(initProvider:
+        () {
       return ItemLocationProvider(repo: repo1, psValueHolder: valueHolder);
     }, onProviderReady: (ItemLocationProvider provider) {
-      provider.latestLocationParameterHolder.keyword = searchNameController.text;
-      provider.loadItemLocationList(provider.latestLocationParameterHolder.toMap(),
-      Utils.checkUserLoginId(provider.psValueHolder));
+      provider.latestLocationParameterHolder.keyword =
+          searchNameController.text;
+      provider.loadItemLocationList(
+          provider.latestLocationParameterHolder.toMap(),
+          Utils.checkUserLoginId(provider.psValueHolder));
       _itemLocationProvider = provider;
-    }, builder: (BuildContext context, ItemLocationProvider provider,
-            Widget child) {
+    }, builder:
+        (BuildContext context, ItemLocationProvider provider, Widget child) {
       return ItemLocationListViewWidget(
         scrollController: _scrollController,
         animationController: widget.animationController,
@@ -95,147 +105,238 @@ class ItemLocationListViewWidget extends StatefulWidget {
   _ItemLocationListViewWidgetState createState() =>
       _ItemLocationListViewWidgetState();
 }
+
 LocationParameterHolder locationParameterHolder =
-        LocationParameterHolder().getDefaultParameterHolder();
+    LocationParameterHolder().getDefaultParameterHolder();
 final TextEditingController searchNameController = TextEditingController();
 
 class _ItemLocationListViewWidgetState
     extends State<ItemLocationListViewWidget> {
   Widget _widget;
+  Position _currentPosition;
+
+  @override
+  void initState() {
+    _determinePosition();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final ItemLocationProvider _provider = Provider.of(context, listen: false);
-    _widget ??= Column(
-      mainAxisSize: MainAxisSize.max,
+    _widget ??= Stack(
+      alignment: Alignment.center,
       children: <Widget>[
-        Container(child: ItemLocationHeaderTextWidget()),
-        Row(
+        Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            const SizedBox(
-              width: PsDimens.space4,
-            ),
-            Flexible(
-                child: PsTextFieldWidgetWithIcon(
-              hintText: Utils.getString(context, 'home__bottom_app_bar_search'),
-              textEditingController: searchNameController,
-              psValueHolder: _provider.psValueHolder,
-              clickSearchButton: (){
-                _provider.latestLocationParameterHolder.keyword = searchNameController.text;
-                _provider.resetItemLocationList(_provider.latestLocationParameterHolder.toMap(),
-                Utils.checkUserLoginId(_provider.psValueHolder));
-              },
-              clickEnterFunction:(){
-                _provider.latestLocationParameterHolder.keyword = searchNameController.text;
-                _provider.resetItemLocationList(_provider.latestLocationParameterHolder.toMap(),
-                Utils.checkUserLoginId(_provider.psValueHolder));
-              }
-            )),
-            Container(
-              height: PsDimens.space44,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: PsColors.baseDarkColor,
-                borderRadius: BorderRadius.circular(PsDimens.space4),
-                border: Border.all(color: PsColors.mainDividerColor),
-              ),
-              child: InkWell(
-                  child: Container(
-                    height: double.infinity,
-                    width: PsDimens.space44,
-                    child: Icon(
-                      Octicons.settings,
-                      color: PsColors.iconColor,
-                      size: PsDimens.space20,
-                    ),
+            Container(child: ItemLocationHeaderTextWidget()),
+            Row(
+              children: <Widget>[
+                const SizedBox(
+                  width: PsDimens.space4,
+                ),
+                Flexible(
+                    child: PsTextFieldWidgetWithIcon(
+                        hintText: Utils.getString(
+                            context, 'home__bottom_app_bar_search'),
+                        textEditingController: searchNameController,
+                        psValueHolder: _provider.psValueHolder,
+                        clickSearchButton: () {
+                          _provider.latestLocationParameterHolder.keyword =
+                              searchNameController.text;
+                          _provider.resetItemLocationList(
+                              _provider.latestLocationParameterHolder.toMap(),
+                              Utils.checkUserLoginId(_provider.psValueHolder));
+                        },
+                        clickEnterFunction: () {
+                          _provider.latestLocationParameterHolder.keyword =
+                              searchNameController.text;
+                          _provider.resetItemLocationList(
+                              _provider.latestLocationParameterHolder.toMap(),
+                              Utils.checkUserLoginId(_provider.psValueHolder));
+                        })),
+                Container(
+                  height: PsDimens.space44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: PsColors.baseDarkColor,
+                    borderRadius: BorderRadius.circular(PsDimens.space4),
+                    border: Border.all(color: PsColors.mainDividerColor),
                   ),
-                  onTap: () async {
-                    locationParameterHolder.keyword =
-                        searchNameController.text;
-                    final dynamic returnData = await Navigator.pushNamed(context, RoutePaths.filterLocationList,
-                        arguments: locationParameterHolder);
-                    if(returnData != null && returnData is LocationParameterHolder){
-                      _provider.latestLocationParameterHolder = returnData;
-                      searchNameController.text = returnData.keyword;
-                      _provider.resetItemLocationList(_provider.latestLocationParameterHolder.toMap(),
-                      Utils.checkUserLoginId(_provider.psValueHolder));
-                    }
-                  }),
+                  child: InkWell(
+                      child: Container(
+                        height: double.infinity,
+                        width: PsDimens.space44,
+                        child: Icon(
+                          Octicons.settings,
+                          color: PsColors.iconColor,
+                          size: PsDimens.space20,
+                        ),
+                      ),
+                      onTap: () async {
+                        locationParameterHolder.keyword =
+                            searchNameController.text;
+                        final dynamic returnData = await Navigator.pushNamed(
+                            context, RoutePaths.filterLocationList,
+                            arguments: locationParameterHolder);
+                        if (returnData != null &&
+                            returnData is LocationParameterHolder) {
+                          _provider.latestLocationParameterHolder = returnData;
+                          searchNameController.text = returnData.keyword;
+                          _provider.resetItemLocationList(
+                              _provider.latestLocationParameterHolder.toMap(),
+                              Utils.checkUserLoginId(_provider.psValueHolder));
+                        }
+                      }),
+                ),
+                const SizedBox(
+                  width: PsDimens.space16,
+                ),
+              ],
             ),
-            const SizedBox(
-              width: PsDimens.space16,
-            ),
+            Consumer<ItemLocationProvider>(builder: (BuildContext context,
+                ItemLocationProvider provider, Widget child) {
+              print('Refresh Progress Indicator');
+
+              return PSProgressIndicator(provider.itemLocationList.status,
+                  message: provider.itemLocationList.message);
+            }),
+            Expanded(
+              child: RefreshIndicator(
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: Selector<ItemLocationProvider, List<ItemLocation>>(
+                      child: Container(),
+                      selector: (BuildContext context,
+                          ItemLocationProvider provider) {
+                        print(
+                            'Selector ${provider.itemLocationList.data.hashCode}');
+                        return provider.itemLocationList.data;
+                      },
+                      builder: (BuildContext context,
+                          List<ItemLocation> dataList, Widget child) {
+                        print('Builder');
+                        return ListView.builder(
+                            controller: widget.scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: dataList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final int count = dataList.length;
+                              if (dataList != null || dataList.isNotEmpty) {
+                                return ItemLocationListItem(
+                                  animationController:
+                                      widget.animationController,
+                                  animation: Tween<double>(begin: 0.0, end: 1.0)
+                                      .animate(
+                                    CurvedAnimation(
+                                      parent: widget.animationController,
+                                      curve: Interval((1 / count) * index, 1.0,
+                                          curve: Curves.fastOutSlowIn),
+                                    ),
+                                  ),
+                                  itemLocation: dataList[index],
+                                  onTap: () async {
+                                    await _provider.replaceItemLocationData(
+                                        dataList[index].id,
+                                        dataList[index].name,
+                                        dataList[index].lat,
+                                        dataList[index].lng);
+                                    if (_provider.psValueHolder.locactionName !=
+                                            null &&
+                                        _provider.psValueHolder.locactionName
+                                            .isNotEmpty) {
+                                      Navigator.pop(context);
+                                    } else {
+                                      Navigator.pushReplacementNamed(
+                                          context, RoutePaths.home);
+                                    }
+                                  },
+                                );
+                              } else {
+                                return null;
+                              }
+                            });
+                      }),
+                ),
+                onRefresh: () {
+                  return _provider.resetItemLocationList(
+                      _provider.latestLocationParameterHolder.toMap(),
+                      _provider.psValueHolder.loginUserId);
+                },
+              ),
+            )
           ],
         ),
-        Consumer<ItemLocationProvider>(builder: (BuildContext context,
-            ItemLocationProvider provider, Widget child) {
-          print('Refresh Progress Indicator');
+        Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: () async {
+                final List<Address> addressList = await _getAddress(
+                    _currentPosition.latitude, _currentPosition.longitude);
+                await _provider.replaceItemLocationData(
+                    addressList.first.postalCode,
+                    addressList.first.subAdminArea,
+                    _currentPosition.latitude.toString(),
+                    _currentPosition.latitude.toString());
 
-          return PSProgressIndicator(provider.itemLocationList.status,
-              message: provider.itemLocationList.message);
-        }),
-        Expanded(
-          child: RefreshIndicator(
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: Selector<ItemLocationProvider, List<ItemLocation>>(
-                  child: Container(),
-                  selector:
-                      (BuildContext context, ItemLocationProvider provider) {
-                    print(
-                        'Selector ${provider.itemLocationList.data.hashCode}');
-                    return provider.itemLocationList.data;
-                  },
-                  builder: (BuildContext context, List<ItemLocation> dataList,
-                      Widget child) {
-                    print('Builder');
-                    return ListView.builder(
-                        controller: widget.scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: dataList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final int count = dataList.length;
-                          if (dataList != null || dataList.isNotEmpty) {
-                            return ItemLocationListItem(
-                              animationController: widget.animationController,
-                              animation:
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                CurvedAnimation(
-                                  parent: widget.animationController,
-                                  curve: Interval((1 / count) * index, 1.0,
-                                      curve: Curves.fastOutSlowIn),
-                                ),
-                              ),
-                              itemLocation: dataList[index],
-                              onTap: () async {
-                                await _provider.replaceItemLocationData(
-                                    dataList[index].id,
-                                    dataList[index].name,
-                                    dataList[index].lat,
-                                    dataList[index].lng);
-                                Navigator.pushReplacementNamed(
-                                    context, RoutePaths.home);
-                              },
-                            );
-                          } else {
-                            return null;
-                          }
-                        });
-                  }),
-            ),
-            onRefresh: () {
-              return _provider.resetItemLocationList(
-                _provider.latestLocationParameterHolder.toMap(),
-                _provider.psValueHolder.loginUserId
-              );
-            },
-          ),
-        )
+                if (_provider.psValueHolder.locactionName != null &&
+                    _provider.psValueHolder.locactionName.isNotEmpty) {
+                  Fluttertoast.showToast(
+                      msg: 'Location set to ${addressList.first.subAdminArea}',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.blueGrey,
+                      textColor: Colors.white);
+                  Navigator.pop(context);
+                } else {
+                  Navigator.pushReplacementNamed(context, RoutePaths.home);
+                }
+              },
+              backgroundColor: const Color(0xFFA92428),
+              child: const Icon(Icons.my_location),
+            )),
       ],
     );
     print('Widget ${_widget.hashCode}');
     return _widget;
+  }
+
+  Future<void> _determinePosition() async {
+    final Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    _currentPosition = await Geolocator().getCurrentPosition(
+        desiredAccuracy: geolocatorPackage.LocationAccuracy.high);
+    setState(() {});
+  }
+
+  Future<List<Address>> _getAddress(double lat, double lang) async {
+    final Coordinates coordinates = Coordinates(lat, lang);
+    final List<Address> add =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    print(' ADDRESS: ${add.first.toMap()}');
+    return add;
   }
 }
 

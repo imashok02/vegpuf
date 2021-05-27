@@ -32,7 +32,8 @@ class SearchProductProvider extends PsProvider {
       //   print('**** ${resource.data.hashCode}');
       print('**** SearchProductProvider ${resource.data.length}');
       _productList = resource;
-      _productList.data = Product().checkDuplicate(resource.data);
+//      _productList.data = Product().checkDuplicate(resource.data);
+      _productList.data = resource.data;
       // } else {
       //   _productList.status = PsStatus.SUCCESS;
       // }
@@ -100,6 +101,7 @@ class SearchProductProvider extends PsProvider {
       ProductParameterHolder productParameterHolder) async {
     isConnectedToInternet = await Utils.checkInternetConnectivity();
     isLoading = true;
+    print('loadProductListByKey:  ${productParameterHolder.toMap()}');
 
     if (PsConfig.noFilterWithLocationOnMap) {
       if (productParameterHolder.lat != '' &&
@@ -114,6 +116,8 @@ class SearchProductProvider extends PsProvider {
         }
       }
     }
+
+    print('loadProductListByKey offset:  $offset');
 
     daoSubscription = await _repo.getProductList(
         productListStream,
@@ -146,6 +150,8 @@ class SearchProductProvider extends PsProvider {
           }
         }
       }
+
+      print('nextProductListByKey offset:  $offset');
 
       await _repo.getNextPageProductList(
           productListStream,
