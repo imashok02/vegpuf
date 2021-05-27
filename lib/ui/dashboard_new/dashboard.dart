@@ -61,6 +61,8 @@ class _DashboardNewState extends State<DashboardNew>
 
   SearchProductProvider _searchProductProvider;
 
+  final ScrollController _scrollController= ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -473,11 +475,15 @@ class _DashboardNewState extends State<DashboardNew>
                       labelColor: Colors.black,
                       tabs: tabs.map((e) => Text(e.name)).toList(),
                       onTap: (int index) {
+                        print('INNER TAB CHANGED');
                         if (_innerTabIndex[tabIndex] != index) {
                           _innerTabIndex[tabIndex] = index;
                           _searchProductProvider.productList.data = null;
                           _searchProductProvider.notifyListeners();
                           setState(() {});
+                          if(_scrollController.offset>1){
+                            _scrollController.animateTo(0, duration: const Duration(milliseconds: 100), curve: Curves.elasticInOut);
+                          }
                         }
                       },
                     ),
@@ -523,7 +529,7 @@ class _DashboardNewState extends State<DashboardNew>
                     if (provider.productList != null &&
                         provider.productList.data != null &&
                         provider.productList.data.isNotEmpty) {
-                      return SingleChildScrollView(
+                      return SingleChildScrollView(controller: _scrollController,
                         child: Column(
                           children: <Widget>[
                             GridView.builder(
@@ -591,7 +597,7 @@ class _DashboardNewState extends State<DashboardNew>
         color: PsColors.transparent,
         child: Container(
           margin: const EdgeInsets.symmetric(
-              horizontal: PsDimens.space4, vertical: PsDimens.space12),
+              horizontal: PsDimens.space4, vertical: PsDimens.space8),
           decoration: BoxDecoration(
             color: PsColors.backgroundColor,
             borderRadius:
