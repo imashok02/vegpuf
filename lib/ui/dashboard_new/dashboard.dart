@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterbuyandsell/config/ps_colors.dart';
@@ -26,6 +28,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:optimized_cached_image/widgets.dart';
 import '../../viewobject/holder/product_parameter_holder.dart';
+
 
 class DashboardNew extends StatefulWidget {
   @override
@@ -55,6 +58,7 @@ class _DashboardNewState extends State<DashboardNew>
     super.initState();
     _initAnimations();
     _initalizeTabControllers();
+    Crashlytics.instance.crash();
   }
 
   @override

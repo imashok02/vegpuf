@@ -1,48 +1,46 @@
 {
-    "project_info": {
-      "project_number": "000000000000",
-      "firebase_url": "https://flutter-store-ecommerce.firebaseio.com",
-      "project_id": "flutter-store-ecommerce",
-      "storage_bucket": "flutter-store-ecommerce.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:376000000000:android:bd90000000000000000000",
-          "android_client_info": {
-            "package_name": "com.panaceasoft.flutterbuyandsell"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "000000000000-00000000000000000000000000000lip.apps.googleusercontent.com",
-            "client_type": 1,
-            "android_info": {
-              "package_name": "com.panaceasoft.flutterbuyandsell",
-              "certificate_hash": "0000000000000000000000000000000000000000"
-            }
-          },
-          {
-            "client_id": "000000000000-00000000000000000000000000000000.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaS000000-000000000000000000000000000"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "000000000000-00000000000000000000000000000000.apps.googleusercontent.com",
-                "client_type": 3
+  "project_info": {
+    "project_number": "1090418960443",
+    "project_id": "vegpuf-57d05",
+    "storage_bucket": "vegpuf-57d05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090418960443:android:3da1adc0e8fb1b4e46541e",
+        "android_client_info": {
+          "package_name": "com.ashtech.vegpuf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090418960443-ebok8t172mat5gsj1qqf5u6davos2q8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQc3bhS-5XNhSnZ6HdnGmFiUxwM2bnaXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090418960443-ebok8t172mat5gsj1qqf5u6davos2q8k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1090418960443-6f4olshpg6nvvkrkrij155m0b8ss8rol.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ashtech.vegpuf"
               }
-            ]
-          }
+            }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}

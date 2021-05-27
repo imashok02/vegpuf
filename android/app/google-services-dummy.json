@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:376000000000:android:bd90000000000000000000",
         "android_client_info": {
-          "package_name": "com.panaceasoft.flutterbuyandsell"
+          "package_name": "com.ashtech.vegpuf"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "000000000000-00000000000000000000000000000lip.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.panaceasoft.flutterbuyandsell",
+            "package_name": "com.ashtech.vegpuf",
             "certificate_hash": "0000000000000000000000000000000000000000"
           }
         },

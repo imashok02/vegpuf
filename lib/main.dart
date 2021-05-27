@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutterbuyandsell/constant/router.dart' as router;
@@ -41,6 +44,14 @@ Future<void> main() async {
   }
 
   Firebase.initializeApp();
+
+  Crashlytics.instance.enableInDevMode = true;
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Crashlytics.instance.onError(details);
+  };
+
+
   NativeAdmob(adUnitID: Utils.getAdAppId());
 
   //check is apple signin is available
@@ -133,6 +144,7 @@ class _PSAppState extends State<PSApp> {
     // init Color
     PsColors.loadColor(context);
     print('*** ${Utils.convertColorToString(PsColors.mainColor)}');
+    FirebaseAnalytics analytics = FirebaseAnalytics();
 
     return MultiProvider(
         providers: <SingleChildWidget>[
@@ -153,6 +165,9 @@ class _PSAppState extends State<PSApp> {
                 title: 'Panacea-Soft',
                 theme: theme,
                 initialRoute: '/',
+                navigatorObservers: [
+                  FirebaseAnalyticsObserver(analytics: analytics),
+              ],
                 onGenerateRoute: router.generateRoute,
                 localizationsDelegates: <LocalizationsDelegate<dynamic>>[
                   GlobalMaterialLocalizations.delegate,
