@@ -231,9 +231,9 @@ class PsApiService extends PsApi {
   /// Category
   ///
   Future<PsResource<List<Category>>> getCategoryList(
-      int limit, int offset) async {
+      int limit, int offset, String mainCatId) async {
     final String url =
-        '${PsUrl.ps_category_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
+        '${PsUrl.ps_category_url}/api_key/${PsConfig.ps_api_key}/main_cat_id/$mainCatId';
 
     return await getServerCall<Category, List<Category>>(Category(), url);
   }
@@ -586,11 +586,11 @@ class PsApiService extends PsApi {
     return await getServerCall<ApiStatus, ApiStatus>(ApiStatus(), url);
   }
 
-
   Future<PsResource<List<CategoryModel>>> getCategories(String key) async {
-     String url = '${PsUrl.categories_url}/$key';
-     return await getServerCall(CategoryModel(),url);
+    String url = '${PsUrl.categories_url}/$key';
+    return await getServerCall(CategoryModel(), url);
   }
+
   ///
   /// Shipping Country And City
   ///
