@@ -27,6 +27,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'config/ps_colors.dart';
 import 'config/ps_config.dart';
 import 'db/common/ps_shared_preferences.dart';
+import 'package:appodeal_flutter/appodeal_flutter.dart';
 
 Future<void> main() async {
   // add this, and it should be the first line in main method
@@ -44,6 +45,10 @@ Future<void> main() async {
   }
 
   Firebase.initializeApp();
+  Appodeal.setAppKeys(
+    androidAppKey: 'be7f875efd760600dff4a3c0cb0438517fb99d53f4b2405a',
+    // iosAppKey: '<your-appodeal-ios-key>',
+  );
 
   Crashlytics.instance.enableInDevMode = true;
 

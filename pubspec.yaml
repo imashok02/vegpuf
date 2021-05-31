@@ -91,6 +91,8 @@ dependencies:
   flutter_linkify: ^4.0.2
   rate_my_app: 0.7.2
   cached_network_image: any
+  appodeal_flutter: ^0.3.0
+
 
 dev_dependencies:
   flutter_test:

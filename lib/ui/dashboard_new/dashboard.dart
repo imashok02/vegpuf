@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:appodeal_flutter/appodeal_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -58,7 +59,16 @@ class _DashboardNewState extends State<DashboardNew>
     super.initState();
     _initAnimations();
     _initalizeTabControllers();
+    _initializeAppodeal();
 //    Crashlytics.instance.crash();
+  }
+
+  Future<void> _initializeAppodeal() async {
+    await Appodeal.initialize(
+        hasConsent: true,
+        adTypes: [AdType.BANNER, AdType.INTERSTITIAL, AdType.REWARD],
+        testMode: true
+    );
   }
 
   @override
@@ -336,7 +346,9 @@ class _DashboardNewState extends State<DashboardNew>
                   backgroundColor: Colors.white,
                   isExtended: true,
                   heroTag: null,
-                  onPressed: () {},
+                  onPressed: () async {
+                    await Appodeal.show(AdType.NON_SKIPPABLE);
+                  },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
