@@ -1,4 +1,4 @@
-package com.ashtech.vegpuf;
+package com.ashtech.vegpuftest;
 
  import io.flutter.app.FlutterApplication;
  import io.flutter.plugin.common.PluginRegistry;

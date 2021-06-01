@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appodeal_flutter/appodeal_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:flutterbuyandsell/repository/gallery_repository.dart';
 import 'package:flutterbuyandsell/repository/product_repository.dart';
 import 'package:flutterbuyandsell/ui/common/base/ps_widget_with_multi_provider.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/choose_camera_type_dialog.dart';
+import 'package:flutterbuyandsell/ui/common/dialog/confirm_dialog_view.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/error_dialog.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/success_dialog.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/warning_dialog_view.dart';
@@ -115,6 +117,21 @@ class _ItemEntryViewState extends State<ItemEntryView> {
 
   String isShopCheckbox = '1';
 
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAppodeal();
+
+  }
+  Future<void> _initializeAppodeal() async {
+    await Appodeal.initialize(
+        hasConsent: true,
+        adTypes: [AdType.BANNER, AdType.INTERSTITIAL, AdType.REWARD],
+        testMode: true
+    );
+
+  }
   // ProgressDialog progressDialog;
 
   // File file;
@@ -1481,6 +1498,48 @@ class ImageUploadHorizontalList extends StatefulWidget {
 
 class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
   ItemEntryProvider provider;
+
+
+  @override
+  void initState() {
+    super.initState();
+    rewardVideoEventHandler();
+  }
+
+  void rewardVideoEventHandler() {
+    Appodeal.setRewardCallback((event) {
+      switch(event) {
+        case 'onRewardedVideoLoaded' :
+          print('reward video loaded');
+          break;
+        case 'onRewardedVideoFailedToLoad' :
+          print('reward video failed to loaded');
+          break;
+        case 'onRewardedVideoShown' :
+          print('reward video shown');
+          break;
+        case 'onRewardedVideoShowFailed' :
+          print('reward video show failed');
+          break;
+        case 'onRewardedVideoFinished' :
+          print('reward video finished');
+          provider.rewardVideoWatched();
+          break;
+        case 'onRewardedVideoClosed' :
+          print('reward video closed');
+          break;
+        case 'onRewardedVideoExpired' :
+          print('reward video expired');
+          break;
+        case 'onRewardedVideoClicked' :
+          print('reward video clicked');
+          break;
+        default :
+          print('nothing happened');
+      }
+    });
+  }
+
   Future<void> loadPickMultiImage() async {
     List<Asset> resultList = <Asset>[];
 
@@ -1577,7 +1636,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
   Widget build(BuildContext context) {
     Asset defaultAssetImage;
     DefaultPhoto defaultUrlImage;
-    provider = Provider.of<ItemEntryProvider>(context, listen: false);
+    provider = Provider.of<ItemEntryProvider>(context, );
 
     return Container(
       height: PsDimens.space120,
@@ -1588,6 +1647,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
             return Row(
               children: <Widget>[
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 0,
                   images: (widget.firstImagePath != null)
                       ? widget.firstImagePath
@@ -1636,6 +1696,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 1,
                   images: (widget.secondImagePath != null)
                       ? widget.secondImagePath
@@ -1686,6 +1747,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 2,
                   images: (widget.thirdImagePath != null)
                       ? widget.thirdImagePath
@@ -1736,6 +1798,8 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
                   index: 3,
                   images: (widget.fouthImagePath != null)
                       ? widget.fouthImagePath
@@ -1786,6 +1850,8 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
                   index: 4,
                   images: (widget.fifthImagePath != null)
                       ? widget.fifthImagePath
@@ -1844,13 +1910,15 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
 }
 
 class ItemEntryImageWidget extends StatefulWidget {
-  const ItemEntryImageWidget({
+   ItemEntryImageWidget({
     Key key,
     @required this.index,
     @required this.images,
     @required this.cameraImagePath,
     @required this.selectedImage,
+    @required this.provider,
     this.onTap,
+    this.shouldShowImage=true,
   }) : super(key: key);
 
   final Function onTap;
@@ -1858,6 +1926,8 @@ class ItemEntryImageWidget extends StatefulWidget {
   final Asset images;
   final String cameraImagePath;
   final DefaultPhoto selectedImage;
+  bool shouldShowImage;
+  ItemEntryProvider provider;
   @override
   State<StatefulWidget> createState() {
     return ItemEntryImageWidgetState();
@@ -1868,21 +1938,31 @@ class ItemEntryImageWidgetState extends State<ItemEntryImageWidget> {
   int i = 0;
   @override
   Widget build(BuildContext context) {
+    print('shouldShowImage is ${widget.shouldShowImage}');
     if (widget.selectedImage != null) {
       return Padding(
         padding: const EdgeInsets.only(right: 4, left: 4),
-        child: InkWell(
-          onTap: widget.onTap,
-          child: Container(
-             width: 100,
-              height: 100,
-            child: PsNetworkImageWithUrl(
-              photoKey: '',
-              // width: 100,
-              // height: 100,
-              imagePath: widget.selectedImage.imgPath,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            InkWell(
+              onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+              child: Container(
+                 width: 100,
+                  height: 100,
+                child: PsNetworkImageWithUrl(
+                  photoKey: '',
+                  // width: 100,
+                  // height: 100,
+                  imagePath: widget.selectedImage.imgPath,
+                ),
+              ),
             ),
-          ),
+            widget.shouldShowImage ? Container() :IconButton(
+              icon: Icon(Icons.lock),
+              onPressed: _launchConfirmDialog,
+            )
+          ],
         ),
       );
     } else {
@@ -1890,41 +1970,87 @@ class ItemEntryImageWidgetState extends State<ItemEntryImageWidget> {
         final Asset asset = widget.images;
         return Padding(
           padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-            onTap: widget.onTap,
-            child: AssetThumb(
-              asset: asset,
-              width: 100,
-              height: 100,
-            ),
-          ),
-        );
-      } else if (widget.cameraImagePath != null) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-              onTap: widget.onTap,
-              child: Image(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                child: AssetThumb(
+                  asset: asset,
                   width: 100,
                   height: 100,
-                  image: FileImage(File(widget.cameraImagePath)))),
+                ),
+              ),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
+          ),
+        );
+      }
+      else if (widget.cameraImagePath != null) {
+        return Padding(
+          padding: const EdgeInsets.only(right: 4, left: 4),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                  onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                  child: Image(
+                      width: 100,
+                      height: 100,
+                      image: FileImage(File(widget.cameraImagePath)))),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
+          ),
         );
       } else {
         return Padding(
           padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-            onTap: widget.onTap,
-            child: Image.asset(
-              'assets/images/default_image.png',
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                child: Image.asset(
+                  'assets/images/default_image.png',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
           ),
         );
       }
     }
   }
+
+  Future<bool> _launchConfirmDialog() {
+    return showDialog<dynamic>(
+        context: context,
+        builder: (BuildContext context) {
+          return ConfirmDialogView(
+              description: 'Watch a reward video to unlock more image uploads?',
+              leftButtonText: 'No',
+              rightButtonText: 'Yes',
+              onAgreeTap: () async {
+                await Appodeal.show(AdType.REWARD).whenComplete(() {
+                  Navigator.of(context).pop();
+                });
+              });
+        }) ??
+        false;
+  }
+
 }
 
 class PriceDropDownControllerWidget extends StatelessWidget {
@@ -2174,7 +2300,7 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   dynamic _initCurrentLocation() {
-    Geolocator()
+   /* Geolocator()
       ..forceAndroidLocationManager = !widget.androidFusedLocation
       ..getCurrentPosition(
         desiredAccuracy: LocationAccuracy.medium,
@@ -2186,7 +2312,7 @@ class _LocationState extends State<CurrentLocationWidget> {
         }
       }).catchError((Object e) {
         //
-      });
+      });*/
   }
 
   @override

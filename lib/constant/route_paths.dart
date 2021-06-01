@@ -102,4 +102,5 @@ class RoutePaths {
   static const String subCategoryGrid = '/subCategoryGrid';
   static const String itemListFromFollower = '/itemListFromFollower';
   static const String inAppPurchase = '/inAppPurchase';
+  static const String set_current_location = '/set_current_location';
 }

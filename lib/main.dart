@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -23,6 +22,7 @@ import 'package:flutterbuyandsell/provider/common/ps_theme_provider.dart';
 import 'package:flutterbuyandsell/provider/ps_provider_dependencies.dart';
 import 'package:flutterbuyandsell/repository/ps_theme_repository.dart';
 import 'package:flutterbuyandsell/utils/utils.dart';
+import 'package:flutterbuyandsell/provider/main_category/main_category_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'config/ps_colors.dart';
 import 'config/ps_config.dart';
@@ -37,7 +37,6 @@ Future<void> main() async {
   if (Platform.isIOS) {
     _fcm.requestNotificationPermissions(const IosNotificationSettings());
   }
-
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getString('codeC') == null) {
     await prefs.setString('codeC', null);
@@ -46,7 +45,7 @@ Future<void> main() async {
 
   Firebase.initializeApp();
   Appodeal.setAppKeys(
-    androidAppKey: 'be7f875efd760600dff4a3c0cb0438517fb99d53f4b2405a',
+    androidAppKey: PsConfig.androidAppodealApiKey,
     // iosAppKey: '<your-appodeal-ios-key>',
   );
 
@@ -154,8 +153,11 @@ class _PSAppState extends State<PSApp> {
     FirebaseAnalytics analytics = FirebaseAnalytics();
 
     return MultiProvider(
-        providers: <SingleChildWidget>[
+        providers: [
           ...providers,
+          ChangeNotifierProvider<MainCategoryProvider>(
+            create: (BuildContext context) => MainCategoryProvider(),
+          )
         ],
         child: DynamicTheme(
             defaultBrightness: Brightness.light,

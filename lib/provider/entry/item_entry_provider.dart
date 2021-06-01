@@ -48,6 +48,8 @@ class ItemEntryProvider extends PsProvider {
   StreamSubscription<PsResource<Product>> subscription;
   StreamController<PsResource<Product>> itemListStream;
 
+  bool hasViewedRewardVideo = false;
+
   Product item;
 
   String categoryId = '';
@@ -95,5 +97,10 @@ class ItemEntryProvider extends PsProvider {
 
     await _repo.getItemFromDB(
         itemId, itemListStream, PsStatus.PROGRESS_LOADING);
+  }
+
+  void rewardVideoWatched() {
+    hasViewedRewardVideo = true;
+    notifyListeners();
   }
 }

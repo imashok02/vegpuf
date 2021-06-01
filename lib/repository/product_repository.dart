@@ -130,6 +130,7 @@ class ProductRepository extends PsRepository {
       if (_resource.status == PsStatus.SUCCESS) {
         // Create Map List
         final List<ProductMap> productMapList = <ProductMap>[];
+        print('_resource.data: ${_resource.data}');
         int i = 0;
         for (Product data in _resource.data) {
           productMapList.add(ProductMap(
