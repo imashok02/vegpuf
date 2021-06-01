@@ -100,11 +100,13 @@ class _ItemEntryViewState extends State<ItemEntryView> {
   Asset thirdSelectedImageAsset;
   Asset fouthSelectedImageAsset;
   Asset fifthSelectedImageAsset;
+  Asset sixthSelectedImageAsset;
   String firstCameraImagePath;
   String secondCameraImagePath;
   String thirdCameraImagePath;
   String fouthCameraImagePath;
   String fifthCameraImagePath;
+  String sixthCameraImagePath;
 
   Asset defaultAssetImage;
 
@@ -114,6 +116,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
   bool isSelectedThirdImagePath = false;
   bool isSelectedFouthImagePath = false;
   bool isSelectedFifthImagePath = false;
+  bool isSelectedSixthImagePath = false;
 
   String isShopCheckbox = '1';
 
@@ -148,6 +151,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       bool _isThirdDone = isSelectedThirdImagePath;
       bool _isFouthDone = isSelectedFouthImagePath;
       bool _isFifthDone = isSelectedFifthImagePath;
+      bool _isSixthDone = isSelectedSixthImagePath;
 
       if (!PsProgressDialog.isShowing()) {
         if (!isSelectedFirstImagePath) {
@@ -306,12 +310,39 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
 
       PsProgressDialog.dismissDialog();
+      if (!PsProgressDialog.isShowing()) {
+        if (!isSelectedSixthImagePath) {
+          PsProgressDialog.dismissDialog();
+        } else {
+          await PsProgressDialog.showDialog(context,
+              message:
+              Utils.getString(context, 'progressloading_image6_uploading'));
+        }
+      }
+
+      if (isSelectedSixthImagePath) {
+        final PsResource<DefaultPhoto> _apiStatus =
+        await galleryProvider.postItemImageUpload(
+            itemId,
+            _itemEntryProvider.sixImageId,
+            sixthSelectedImageAsset == null
+                ? await Utils.getImageFileFromCameraImagePath(
+                sixthCameraImagePath, PsConfig.uploadImageSize)
+                : await Utils.getImageFileFromAssets(
+                sixthSelectedImageAsset, PsConfig.uploadImageSize));
+        if (_apiStatus.data != null) {
+          print('5 image uploaded');
+          isSelectedSixthImagePath = false;
+          _isSixthDone = isSelectedSixthImagePath;
+        }
+      }
 
       if (!(_isFirstDone ||
           _isSecondDone ||
           _isThirdDone ||
           _isFouthDone ||
-          _isFifthDone)) {
+          _isFifthDone ||
+          _isSixthDone)) {
         showDialog<dynamic>(
             context: context,
             builder: (BuildContext context) {
@@ -351,6 +382,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
             fifthCameraImagePath = imagePath;
             isSelectedFifthImagePath = true;
           }
+          if (index == 5 && imagePath.isNotEmpty) {
+            sixthCameraImagePath = imagePath;
+            isSelectedSixthImagePath = true;
+          }
           //end single select image
         });
       }
@@ -363,6 +398,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
         thirdSelectedImageAsset = defaultAssetImage;
         fouthSelectedImageAsset = defaultAssetImage;
         fifthSelectedImageAsset = defaultAssetImage;
+        sixthSelectedImageAsset = defaultAssetImage;
       }
       setState(() {
         images = resultList;
@@ -378,6 +414,8 @@ class _ItemEntryViewState extends State<ItemEntryView> {
           isSelectedFouthImagePath = false;
           fifthSelectedImageAsset = defaultAssetImage;
           isSelectedFifthImagePath = false;
+          sixthSelectedImageAsset = defaultAssetImage;
+          isSelectedSixthImagePath = false;
         }
 
         //for single select image
@@ -400,6 +438,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
         if (index == 4 && resultList.isNotEmpty) {
           fifthSelectedImageAsset = resultList[0];
           isSelectedFifthImagePath = true;
+        }
+        if (index == 5 && resultList.isNotEmpty) {
+          sixthSelectedImageAsset = resultList[0];
+          isSelectedSixthImagePath = true;
         }
         //end single select image
 
@@ -443,6 +485,20 @@ class _ItemEntryViewState extends State<ItemEntryView> {
           isSelectedThirdImagePath = true;
           isSelectedFouthImagePath = true;
           isSelectedFifthImagePath = true;
+        }
+        if (index == -1 && resultList.length == 6) {
+          firstSelectedImageAsset = resultList[0];
+          secondSelectedImageAsset = resultList[1];
+          thirdSelectedImageAsset = resultList[2];
+          fouthSelectedImageAsset = resultList[3];
+          fifthSelectedImageAsset = resultList[4];
+          sixthSelectedImageAsset = resultList[5];
+          isSelectedFirstImagePath = true;
+          isSelectedSecondImagePath = true;
+          isSelectedThirdImagePath = true;
+          isSelectedFouthImagePath = true;
+          isSelectedFifthImagePath = true;
+          isSelectedSixthImagePath = true;
         }
         //end multi select
 
@@ -576,6 +632,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                               _itemEntryProvider.fiveImageId =
                                   provider.galleryList.data[imageId].imgId;
                             }
+                            if (imageId == 5) {
+                              _itemEntryProvider.sixImageId =
+                                  provider.galleryList.data[imageId].imgId;
+                            }
                           }
                         }
 
@@ -591,11 +651,13 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                           thirdImagePath: thirdSelectedImageAsset,
                           fouthImagePath: fouthSelectedImageAsset,
                           fifthImagePath: fifthSelectedImageAsset,
+                          sixthImagePath: sixthSelectedImageAsset,
                           firstCameraImagePath: firstCameraImagePath,
                           secondCameraImagePath: secondCameraImagePath,
                           thirdCameraImagePath: thirdCameraImagePath,
                           fouthCameraImagePath: fouthCameraImagePath,
                           fifthCameraImagePath: fifthCameraImagePath,
+                          sixthCameraImagePath: sixthCameraImagePath,
                         );
                       }),
 
@@ -1470,11 +1532,15 @@ class ImageUploadHorizontalList extends StatefulWidget {
       @required this.thirdImagePath,
       @required this.fouthImagePath,
       @required this.fifthImagePath,
+      @required this.sixthImagePath,
       @required this.firstCameraImagePath,
       @required this.secondCameraImagePath,
       @required this.thirdCameraImagePath,
       @required this.fouthCameraImagePath,
-      @required this.fifthCameraImagePath});
+      @required this.fifthCameraImagePath,
+      @required this.sixthCameraImagePath
+      });
+
   final String flag;
   final List<Asset> images;
   final List<DefaultPhoto> selectedImageList;
@@ -1485,11 +1551,13 @@ class ImageUploadHorizontalList extends StatefulWidget {
   final Asset thirdImagePath;
   final Asset fouthImagePath;
   final Asset fifthImagePath;
+  final Asset sixthImagePath;
   final String firstCameraImagePath;
   final String secondCameraImagePath;
   final String thirdCameraImagePath;
   final String fouthCameraImagePath;
   final String fifthCameraImagePath;
+  final String sixthCameraImagePath;
   @override
   State<StatefulWidget> createState() {
     return ImageUploadHorizontalListState();
@@ -1902,6 +1970,58 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                     }
                   },
                 ),
+                ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
+                  images: (widget.sixthImagePath != null)
+                      ? widget.sixthImagePath
+                      : defaultAssetImage,
+                  cameraImagePath: (widget.sixthCameraImagePath != null)
+                      ? widget.sixthCameraImagePath
+                      : defaultAssetImage,
+                  selectedImage: //widget.fifthImagePath != null ||
+                  //     widget.selectedImageList.length - 1 >= 4)
+                  // ? widget.selectedImageList[4]
+                  // : defaultUrlImage,
+                  (widget.selectedImageList.length > 5 &&
+                      widget.sixthImagePath == null &&
+                      widget.sixthCameraImagePath == null)
+                      ? widget.selectedImageList[5]
+                      : null,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    if (provider.psValueHolder.isCustomCamera ?? true) {
+                      showDialog<dynamic>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ChooseCameraTypeDialog(
+                              onCameraTap: () async {
+                                final dynamic returnData =
+                                await Navigator.pushNamed(
+                                    context, RoutePaths.cameraView);
+                                if (returnData is String) {
+                                  widget.updateImagesFromCustomCamera(
+                                      returnData, 5);
+                                }
+                              },
+                              onGalleryTap: () {
+                                if (widget.flag == PsConst.ADD_NEW_ITEM) {
+                                  loadPickMultiImage();
+                                } else {
+                                  loadSingleImage(5);
+                                }
+                              },
+                            );
+                          });
+                    } else {
+                      if (widget.flag == PsConst.ADD_NEW_ITEM) {
+                        loadPickMultiImage();
+                      } else {
+                        loadSingleImage(5);
+                      }
+                    }
+                  },
+                )
               ],
             );
           }),

@@ -70,6 +70,7 @@ class ItemEntryProvider extends PsProvider {
   String thirdImageId = '';
   String fourthImageId = '';
   String fiveImageId = '';
+  String sixImageId = '';
 
   @override
   void dispose() {
