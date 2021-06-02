@@ -13,6 +13,7 @@ import 'package:flutterbuyandsell/viewobject/item_location.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as geolocatorPackage;
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterbuyandsell/constant/ps_dimens.dart';
@@ -325,7 +326,8 @@ class _ItemLocationListViewWidgetState
         return;
       }
     }
-    _currentPosition = await Geolocator.getCurrentPosition();
+    _currentPosition = await Geolocator().getCurrentPosition(
+        desiredAccuracy: geolocatorPackage.LocationAccuracy.high);
     setState(() {});
   }
 

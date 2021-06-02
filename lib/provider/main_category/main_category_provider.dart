@@ -16,79 +16,65 @@ class MainCategoryProvider extends ChangeNotifier {
   MainCategoryRepository repo;
   bool failedToLoadData = false;
 
-
   Future<bool> checkInternetConnectivity() async {
     return await Utils.checkInternetConnectivity();
-
   }
 
   Future<void> loadThings() async {
     bool network = await checkInternetConnectivity();
-    if(network) {
+    if (network) {
       MainCategoryRepository repo = MainCategoryRepository(
-        key: PsConfig.things, psApiService: PsApiService(),
+        key: PsConfig.things,
+        psApiService: PsApiService(),
       );
       final PsResource<List<CategoryModel>> list =
-      await repo.getMainCategory(true, PsStatus.SUCCESS);
+          await repo.getMainCategory(true, PsStatus.SUCCESS);
 
-      if(list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
+      if (list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
         print('loadThings: ${list.data.toString()}');
         thingsList = list.data;
       }
-
+    } else {
+      failedToLoadData = true;
     }
-    else
-      {
-        failedToLoadData = true;
-      }
     notifyListeners();
-
   }
 
   Future<void> loadServices() async {
     bool network = await checkInternetConnectivity();
-    if(network) {
+    if (network) {
       MainCategoryRepository repo = MainCategoryRepository(
-        key: PsConfig.services, psApiService: PsApiService(),
+        key: PsConfig.services,
+        psApiService: PsApiService(),
       );
       final PsResource<List<CategoryModel>> list =
-      await repo.getMainCategory(true, PsStatus.SUCCESS);
+          await repo.getMainCategory(true, PsStatus.SUCCESS);
 
-      if(list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
+      if (list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
         servicesList = list.data;
       }
-
-    }
-    else
-    {
+    } else {
       failedToLoadData = true;
     }
     notifyListeners();
-
   }
 
   Future<void> loadProperty() async {
     bool network = await checkInternetConnectivity();
-    if(network) {
+    if (network) {
       MainCategoryRepository repo = MainCategoryRepository(
-        key: PsConfig.property, psApiService: PsApiService(),
+        key: PsConfig.property,
+        psApiService: PsApiService(),
       );
       final PsResource<List<CategoryModel>> list =
-      await repo.getMainCategory(true, PsStatus.SUCCESS);
+          await repo.getMainCategory(true, PsStatus.SUCCESS);
 
-      if(list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
+      if (list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
         propertyList = list.data;
       }
-
-    }
-    else
-    {
+    } else {
       failedToLoadData = true;
     }
     notifyListeners();
-
   }
-
-
-
 }
