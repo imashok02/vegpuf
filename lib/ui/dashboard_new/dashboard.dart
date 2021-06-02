@@ -353,7 +353,12 @@ class _DashboardNewState extends State<DashboardNew>
                   backgroundColor: Colors.white,
                   isExtended: true,
                   heroTag: null,
-                  onPressed: () {},
+                  onPressed: () {
+                    print(
+                        'servicesList DATA :${mainCategoryProvider.servicesList[0]}');
+                    Navigator.pushNamed(context, RoutePaths.categoryList,
+                        arguments: getMainCategoryId());
+                  },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -846,5 +851,12 @@ class _DashboardNewState extends State<DashboardNew>
       return provider.servicesList[_innerTabIndex[2]].id;
     }
     return '';
+  }
+
+  String getMainCategoryId() {
+    if (_currentIndex == 0) return PsConfig.things;
+    if (_currentIndex == 1) return PsConfig.property;
+    if (_currentIndex == 0) return PsConfig.services;
+    return PsConfig.things;
   }
 }

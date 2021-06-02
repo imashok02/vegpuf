@@ -12,6 +12,7 @@ import 'package:flutterbuyandsell/ui/common/ps_ui_widget.dart';
 import 'package:flutterbuyandsell/ui/subcategory/item/sub_category_grid_item.dart';
 import 'package:flutterbuyandsell/utils/utils.dart';
 import 'package:flutterbuyandsell/viewobject/category.dart';
+import 'package:flutterbuyandsell/viewobject/category_model.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/product_list_intent_holder.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
