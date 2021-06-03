@@ -49,7 +49,8 @@ class CategoryRepository extends PsRepository {
       int offset,
       // CategoryParameterHolder holder,
       PsStatus status,
-      {bool isLoadFromServer = true}) async {
+      {bool isLoadFromServer = true,
+      String mainCatId}) async {
     // Prepare Holder and Map Dao
 
     sinkCategoryListStream(
@@ -57,7 +58,7 @@ class CategoryRepository extends PsRepository {
 
     if (isConnectedToInternet) {
       final PsResource<List<Category>> _resource =
-          await _psApiService.getCategoryList(limit, offset);
+          await _psApiService.getCategoryList(limit, offset, mainCatId);
 
       if (_resource.status == PsStatus.SUCCESS) {
         // Delete and Insert Map Dao
@@ -82,7 +83,8 @@ class CategoryRepository extends PsRepository {
       int limit,
       int offset,
       PsStatus status,
-      {bool isLoadFromServer = true}) async {
+      {bool isLoadFromServer = true,
+      String mainCatId}) async {
     // Prepare Holder and Map Dao
 
     sinkCategoryListStream(
@@ -90,7 +92,7 @@ class CategoryRepository extends PsRepository {
 
     if (isConnectedToInternet) {
       final PsResource<List<Category>> _resource =
-          await _psApiService.getCategoryList(limit, offset);
+          await _psApiService.getCategoryList(limit, offset, mainCatId);
 
       if (_resource.status == PsStatus.SUCCESS) {
         await _categoryDao.getAll();

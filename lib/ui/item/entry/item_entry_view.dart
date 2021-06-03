@@ -53,11 +53,12 @@ import 'package:geolocator/geolocator.dart';
 
 class ItemEntryView extends StatefulWidget {
   const ItemEntryView(
-      {Key key, this.flag, this.item, @required this.animationController})
+      {Key key, this.flag, this.item, @required this.animationController, this.mainCategoryId})
       : super(key: key);
   final AnimationController animationController;
   final String flag;
   final Product item;
+  final String mainCategoryId;
 
   @override
   State<StatefulWidget> createState() => _ItemEntryViewState();
@@ -725,6 +726,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                           }
                         }
                         return AllControllerTextWidget(
+                          mainCategoryId: widget.mainCategoryId,
                           userInputListingTitle: userInputListingTitle,
                           categoryController: categoryController,
                           subCategoryController: subCategoryController,
@@ -814,7 +816,8 @@ class AllControllerTextWidget extends StatefulWidget {
       this.secondImageId,
       this.thirdImageId,
       this.fourthImageId,
-      this.fiveImageId})
+      this.fiveImageId,
+      this.mainCategoryId})
       : super(key: key);
 
   final TextEditingController userInputListingTitle;
@@ -853,6 +856,8 @@ class AllControllerTextWidget extends StatefulWidget {
   final String fourthImageId;
   final String fiveImageId;
   final GalleryProvider galleryProvider;
+
+  final String mainCategoryId;
 
   @override
   _AllControllerTextWidgetState createState() =>
@@ -1163,7 +1168,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
               Provider.of<ItemEntryProvider>(context, listen: false);
 
           final dynamic categoryResult =
-              await Navigator.pushNamed(context, RoutePaths.searchCategory);
+              await Navigator.pushNamed(context, RoutePaths.searchCategory,arguments: widget.mainCategoryId);
 
           if (categoryResult != null && categoryResult is Category) {
             provider.categoryId = categoryResult.catId;

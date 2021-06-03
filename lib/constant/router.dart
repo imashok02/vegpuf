@@ -72,6 +72,7 @@ import 'package:flutterbuyandsell/ui/user/verify/verify_email_container_view.dar
 import 'package:flutterbuyandsell/utils/utils.dart';
 import 'package:flutterbuyandsell/viewobject/blog.dart';
 import 'package:flutterbuyandsell/viewobject/category.dart';
+import 'package:flutterbuyandsell/viewobject/category_model.dart';
 import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
 import 'package:flutterbuyandsell/viewobject/default_photo.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/chat_history_intent_holder.dart';
@@ -113,20 +114,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             return DashboardNew();
           });
 
-    case '${RoutePaths.home_item_search_view}' :
+    case '${RoutePaths.home_item_search_view}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
         final List args = settings.arguments;
         final Animation animation = args[0];
         final AnimationController animationController = args[1];
         final ProductParameterHolder productParameterholder = args[2];
         return HomeItemSearchView(
-        animation: animation,
-        animationController: animationController,
-        productParameterHolder: productParameterholder,
+          animation: animation,
+          animationController: animationController,
+          productParameterHolder: productParameterholder,
         );
       });
 
-    case '${RoutePaths.set_current_location}' :
+    case '${RoutePaths.set_current_location}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
         final List args = settings.arguments;
         final Animation animation = args[0];
@@ -134,11 +135,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         final PsValueHolder productParameterholder = args[2];
         final ItemLocationRepository itemLocationRepository = args[3];
         return LocationSelectView(
-        animation: animation,
-        animationController: animationController,
-        productParameterHolder: productParameterholder,
-            itemLocationRepository: itemLocationRepository
-        );
+            animation: animation,
+            animationController: animationController,
+            productParameterHolder: productParameterholder,
+            itemLocationRepository: itemLocationRepository);
       });
 
     case '${RoutePaths.force_update}':
@@ -201,10 +201,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       });
 
     case '${RoutePaths.categoryList}':
-      return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-        return CategoryListViewContainerView(
-            appBarTitle: Utils.getString(context, 'dashboard__category_list'));
-      });
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          final Object args = settings.arguments;
+          final String mainCatId = args ?? String;
+          return CategoryListViewContainerView(
+              appBarTitle: Utils.getString(context, 'dashboard__category_list'),
+              mainCatId: mainCatId);
+        },
+      );
 
     case '${RoutePaths.notiList}':
       return MaterialPageRoute<dynamic>(
@@ -486,7 +491,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '${RoutePaths.searchCategory}':
       return MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => CategoryFilterListView());
+          builder: (BuildContext context) {
+            final String mainCategoryId = settings.arguments;
+            return CategoryFilterListView(mainCategoryId: mainCategoryId,);
+          } );
 
     case '${RoutePaths.searchSubCategory}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
@@ -529,12 +537,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       });
     case '${RoutePaths.itemEntry}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-        final Object args = settings.arguments;
+        final List<Object> args = settings.arguments;
         final ItemEntryIntentHolder itemEntryIntentHolder =
-            args ?? ItemEntryIntentHolder;
+            args[0] ?? ItemEntryIntentHolder;
+        final String mainCategoryId = args[1];
         return ItemEntryContainerView(
           flag: itemEntryIntentHolder.flag,
           item: itemEntryIntentHolder.item,
+          mainCategoryId:  mainCategoryId
         );
       });
 
