@@ -522,6 +522,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                       repo: repo1, psValueHolder: valueHolder);
 
                   _itemEntryProvider.item = widget.item;
+                  print('widget item id is ${widget.item.id}');
 
                   latlng = LatLng(
                       double.parse(
@@ -539,7 +540,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                     userInputLongitude.text =
                         _itemEntryProvider.psValueHolder.locationLng;
                   _itemEntryProvider.getItemFromDB(widget.item.id);
-
+                  print('itemEntryProvider before returning it item id is ${_itemEntryProvider.item.id}');
                   return _itemEntryProvider;
                 }),
             ChangeNotifierProvider<GalleryProvider>(
@@ -665,6 +666,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                       Consumer<ItemEntryProvider>(builder:
                           (BuildContext context, ItemEntryProvider provider,
                               Widget child) {
+                        print('inside consumer itemEntryProvider item id is ${provider.item.id}');
                         if (provider != null &&
                             provider.item != null &&
                             provider.item.id != null) {
@@ -766,6 +768,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                           isSelectedThirdImagePath: isSelectedThirdImagePath,
                           isSelectedFouthImagePath: isSelectedFouthImagePath,
                           isSelectedFifthImagePath: isSelectedFifthImagePath,
+
                         );
                       })
                     ],
@@ -812,11 +815,13 @@ class AllControllerTextWidget extends StatefulWidget {
       this.isSelectedThirdImagePath,
       this.isSelectedFouthImagePath,
       this.isSelectedFifthImagePath,
+      this.isSelectedSixthImagePath,
       this.firstImageId,
       this.secondImageId,
       this.thirdImageId,
       this.fourthImageId,
       this.fiveImageId,
+      this.sixImageId,
       this.mainCategoryId})
       : super(key: key);
 
@@ -849,12 +854,14 @@ class AllControllerTextWidget extends StatefulWidget {
   final bool isSelectedThirdImagePath;
   final bool isSelectedFouthImagePath;
   final bool isSelectedFifthImagePath;
+  final bool isSelectedSixthImagePath;
 
   final String firstImageId;
   final String secondImageId;
   final String thirdImageId;
   final String fourthImageId;
   final String fiveImageId;
+  final String sixImageId;
   final GalleryProvider galleryProvider;
 
   final String mainCategoryId;
@@ -905,6 +912,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                 !widget.isSelectedThirdImagePath &&
                 !widget.isSelectedFouthImagePath &&
                 !widget.isSelectedFifthImagePath &&
+                !widget.isSelectedSixthImagePath &&
                 widget.galleryProvider.galleryList.data.isEmpty) {
               showDialog<dynamic>(
                   context: context,
@@ -1034,6 +1042,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
               }
               if (widget.flag == PsConst.ADD_NEW_ITEM) {
                 //
+                print('item entry id is ${widget.provider.itemId}');
                 //add new
                 final ItemEntryParameterHolder itemEntryParameterHolder =
                     ItemEntryParameterHolder(
@@ -1061,6 +1070,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   addedUserId: widget.provider.psValueHolder.loginUserId,
                 );
 
+
                 final PsResource<Product> itemData = await widget.provider
                     .postItemEntry(itemEntryParameterHolder.toMap());
                 PsProgressDialog.dismissDialog();
@@ -1072,7 +1082,8 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                         widget.isSelectedSecondImagePath ||
                         widget.isSelectedThirdImagePath ||
                         widget.isSelectedFouthImagePath ||
-                        widget.isSelectedFifthImagePath) {
+                        widget.isSelectedFifthImagePath ||
+                        widget.isSelectedSixthImagePath) {
                       widget.uploadImage(itemData.data.id);
                     }
                   }
@@ -1085,7 +1096,8 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                         );
                       });
                 }
-              } else {
+              }
+              else {
                 // edit item
 
                 final ItemEntryParameterHolder itemEntryParameterHolder =
@@ -1113,7 +1125,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                   id: widget.item.id,
                   addedUserId: widget.provider.psValueHolder.loginUserId,
                 );
-
+                print('else part itemEntryParameterHolder id is ${itemEntryParameterHolder.id} .');
                 final PsResource<Product> itemData = await widget.provider
                     .postItemEntry(itemEntryParameterHolder.toMap());
                 PsProgressDialog.dismissDialog();
@@ -1132,7 +1144,9 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                         widget.isSelectedSecondImagePath ||
                         widget.isSelectedThirdImagePath ||
                         widget.isSelectedFouthImagePath ||
-                        widget.isSelectedFifthImagePath) {
+                        widget.isSelectedFifthImagePath ||
+                        widget.isSelectedSixthImagePath
+                    ) {
                       widget.uploadImage(itemData.data.id);
                     }
                   }
@@ -1222,7 +1236,7 @@ class _AllControllerTextWidgetState extends State<AllControllerTextWidget> {
                 Provider.of<ItemEntryProvider>(context, listen: false);
 
             final dynamic itemTypeResult =
-                await Navigator.pushNamed(context, RoutePaths.itemType);
+                await Navigator.pushNamed(context, RoutePaths.itemType,arguments:  widget.mainCategoryId);
 
             if (itemTypeResult != null && itemTypeResult is ItemType) {
               provider.itemTypeId = itemTypeResult.id;

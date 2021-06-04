@@ -37,6 +37,7 @@ class ItemEntryContainerViewState extends State<ItemEntryContainerView>
 
   @override
   Widget build(BuildContext context) {
+    print('itemEntryContainer item id is ${widget.item.id}');
     Future<bool> _requestPop() {
       animationController.reverse().then<dynamic>(
         (void data) {

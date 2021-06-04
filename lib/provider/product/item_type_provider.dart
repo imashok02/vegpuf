@@ -54,11 +54,11 @@ class ItemTypeProvider extends PsProvider {
     super.dispose();
   }
 
-  Future<dynamic> loadItemTypeList() async {
+  Future<dynamic> loadItemTypeList({String mainCategoryId}) async {
     isLoading = true;
     isConnectedToInternet = await Utils.checkInternetConnectivity();
     await _repo.getItemTypeList(itemTypeListStream, isConnectedToInternet,
-        limit, offset, PsStatus.PROGRESS_LOADING);
+        limit, offset, PsStatus.PROGRESS_LOADING,mainCategoryId: mainCategoryId);
   }
 
   Future<dynamic> nextItemTypeList() async {

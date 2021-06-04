@@ -284,9 +284,16 @@ class PsApiService extends PsApi {
   /// Item Type
   ///
   Future<PsResource<List<ItemType>>> getItemTypeList(
-      int limit, int offset) async {
-    final String url =
-        '${PsUrl.ps_item_type_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
+      int limit, int offset, {String mainCategoryId}) async {
+     String url ;
+        if(mainCategoryId == null) {
+          url = '${PsUrl.ps_item_type_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
+          print('url fo getItemTypeList is  $url');
+        }
+        else {
+          url = '${PsUrl.categories_url}/$mainCategoryId';
+          print('url fo getItemTypeList is  $url');
+        }
 
     return await getServerCall<ItemType, List<ItemType>>(ItemType(), url);
   }
@@ -588,6 +595,7 @@ class PsApiService extends PsApi {
 
   Future<PsResource<List<CategoryModel>>> getCategories(String key) async {
     String url = '${PsUrl.categories_url}/$key';
+    print('url for getCategories is $url');
     return await getServerCall(CategoryModel(), url);
   }
 

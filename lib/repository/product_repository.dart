@@ -96,7 +96,6 @@ class ProductRepository extends PsRepository {
   Future<dynamic> getItemFromDB(String itemId,
       StreamController<dynamic> itemStream, PsStatus status) async {
     final Finder finder = Finder(filter: Filter.equals(primaryKey, itemId));
-
     itemStream.sink
         .add(await _productDao.getOne(finder: finder, status: status));
   }
@@ -806,6 +805,8 @@ class ProductRepository extends PsRepository {
   Future<PsResource<Product>> postItemEntry(Map<dynamic, dynamic> jsonMap,
       bool isConnectedToInternet, PsStatus status,
       {bool isLoadFromServer = true}) async {
+    print('item repo postItemEntry item id is ${jsonMap}');
+
     final PsResource<Product> _resource =
         await _psApiService.postItemEntry(jsonMap);
 

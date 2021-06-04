@@ -76,6 +76,7 @@ abstract class PsApi {
       T obj, String url, Map<dynamic, dynamic> jsonMap) async {
     final Client client = http.Client();
     try {
+      print('json n postData $jsonMap');
       final Response response = await client
           .post('${PsConfig.ps_app_url}$url',
               headers: <String, String>{'content-type': 'application/json'},
@@ -122,6 +123,8 @@ abstract class PsApi {
       File imageFile) async {
     final Client client = http.Client();
     try {
+      print('is the imageFile empty? ${imageFile != null}');
+
       final ByteStream stream =
           http.ByteStream(Stream.castFrom(imageFile.openRead()));
       final int length = await imageFile.length();

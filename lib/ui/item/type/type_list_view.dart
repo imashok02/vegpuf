@@ -15,6 +15,11 @@ import 'package:shimmer/shimmer.dart';
 
 class TypeListView extends StatefulWidget {
   // const TypeListView({@required this.categoryId});
+  final String mainCategoryId;
+
+  const TypeListView({
+    this.mainCategoryId,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -87,7 +92,7 @@ class TypeListViewState extends State<TypeListView>
             );
           },
           onProviderReady: (ItemTypeProvider provider) {
-            provider.loadItemTypeList();
+            provider.loadItemTypeList(mainCategoryId: widget.mainCategoryId);
             _itemTypeProvider = provider;
           },
           builder:
@@ -96,7 +101,7 @@ class TypeListViewState extends State<TypeListView>
               Container(
                   child: RefreshIndicator(
                 child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     controller: _scrollController,
                     itemCount: provider.itemTypeList.data.length,
                     itemBuilder: (BuildContext context, int index) {

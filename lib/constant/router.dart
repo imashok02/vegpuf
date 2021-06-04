@@ -540,6 +540,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         final List<Object> args = settings.arguments;
         final ItemEntryIntentHolder itemEntryIntentHolder =
             args[0] ?? ItemEntryIntentHolder;
+        print('itemEntryIntentHolder item id is ${itemEntryIntentHolder.item.id}');
         final String mainCategoryId = args[1];
         return ItemEntryContainerView(
           flag: itemEntryIntentHolder.flag,
@@ -550,7 +551,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '${RoutePaths.itemType}':
       return MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => TypeListView());
+          builder: (BuildContext context) {
+            final String mainCategoryId = settings.arguments;
+            return TypeListView(
+              mainCategoryId: mainCategoryId,
+            );
+          } );
 
     case '${RoutePaths.itemCondition}':
       return MaterialPageRoute<dynamic>(
