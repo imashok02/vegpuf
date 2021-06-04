@@ -69,9 +69,10 @@ class _DashboardNewState extends State<DashboardNew>
   void initState() {
     super.initState();
     _initAnimations();
-//    Crashlytics.instance.crash();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Crashlytics.instance.crash();
+
       mainCategoryProvider =
           Provider.of<MainCategoryProvider>(context, listen: false);
       _initalizeTabControllers(mainCategoryProvider);
