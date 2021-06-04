@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'category_list_view.dart';
 
 class CategoryListViewContainerView extends StatefulWidget {
-  const CategoryListViewContainerView({this.appBarTitle});
+  const CategoryListViewContainerView({this.appBarTitle, this.mainCatId});
 
   final String appBarTitle;
+  final String mainCatId;
+
   @override
   _CategoryListWithFilterContainerViewState createState() =>
       _CategoryListWithFilterContainerViewState();
@@ -19,6 +21,7 @@ class _CategoryListWithFilterContainerViewState
     extends State<CategoryListViewContainerView>
     with SingleTickerProviderStateMixin {
   AnimationController animationController;
+
   @override
   void initState() {
     animationController =
@@ -68,7 +71,7 @@ class _CategoryListWithFilterContainerViewState
           ),
           elevation: 0,
         ),
-        body: CategoryListView(),
+        body: CategoryListView(mainCatId: widget.mainCatId),
       ),
     );
   }

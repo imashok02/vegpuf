@@ -15,6 +15,11 @@ import 'package:flutterbuyandsell/repository/category_repository.dart';
 import 'package:flutterbuyandsell/ui/common/ps_ui_widget.dart';
 
 class CategoryListView extends StatefulWidget {
+  final String mainCatId;
+
+  // ignore: sort_constructors_first
+  const CategoryListView({this.mainCatId});
+
   @override
   _CategoryListViewState createState() {
     return _CategoryListViewState();
@@ -40,12 +45,12 @@ class _CategoryListViewState extends State<CategoryListView>
 
   @override
   void initState() {
-    _scrollController.addListener(() {
+    /* _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _categoryProvider.nextCategoryList();
+        _categoryProvider.nextCategoryList(mainCatId:widget.mainCatId);
       }
-    });
+    });*/
 
     animationController =
         AnimationController(duration: PsConfig.animation_duration, vsync: this);
@@ -102,7 +107,7 @@ class _CategoryListViewState extends State<CategoryListView>
                 create: (BuildContext context) {
                   final CategoryProvider provider = CategoryProvider(
                       repo: repo1, psValueHolder: psValueHolder);
-                  provider.loadCategoryList();
+                  provider.loadCategoryList(mainCatId: widget.mainCatId);
                   _categoryProvider = provider;
                   return _categoryProvider;
                 },
@@ -152,33 +157,37 @@ class _CategoryListViewState extends State<CategoryListView>
                                                 category: provider
                                                     .categoryList.data[index],
                                                 onTap: () {
-                                                  if (PsConfig.isShowSubCategory) {
+                                                  if (PsConfig
+                                                      .isShowSubCategory) {
                                                     Navigator.pushNamed(
-                                                    context, RoutePaths.subCategoryGrid,
-                                                    arguments: provider
-                                                    .categoryList
-                                                      .data[index]);
-                                                  } else {
-                                                  final ProductParameterHolder
-                                                      productParameterHolder =
-                                                      ProductParameterHolder()
-                                                          .getLatestParameterHolder();
-                                                  productParameterHolder.catId =
-                                                      provider.categoryList
-                                                          .data[index].catId;
-                                                  Navigator.pushNamed(
-                                                      context,
-                                                      RoutePaths
-                                                          .filterProductList,
-                                                      arguments:
-                                                          ProductListIntentHolder(
-                                                        appBarTitle: provider
+                                                        context,
+                                                        RoutePaths
+                                                            .subCategoryGrid,
+                                                        arguments: provider
                                                             .categoryList
-                                                            .data[index]
-                                                            .catName,
-                                                        productParameterHolder:
-                                                            productParameterHolder,
-                                                      ));
+                                                            .data[index]);
+                                                  } else {
+                                                    final ProductParameterHolder
+                                                        productParameterHolder =
+                                                        ProductParameterHolder()
+                                                            .getLatestParameterHolder();
+                                                    productParameterHolder
+                                                            .catId =
+                                                        provider.categoryList
+                                                            .data[index].catId;
+                                                    Navigator.pushNamed(
+                                                        context,
+                                                        RoutePaths
+                                                            .filterProductList,
+                                                        arguments:
+                                                            ProductListIntentHolder(
+                                                          appBarTitle: provider
+                                                              .categoryList
+                                                              .data[index]
+                                                              .catName,
+                                                          productParameterHolder:
+                                                              productParameterHolder,
+                                                        ));
                                                   }
                                                 },
                                               );

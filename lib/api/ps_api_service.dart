@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutterbuyandsell/api/ps_url.dart';
 import 'package:flutterbuyandsell/viewobject/about_us.dart';
@@ -33,6 +34,7 @@ import 'package:flutterbuyandsell/viewobject/user.dart';
 import 'package:flutterbuyandsell/viewobject/user_unread_message.dart';
 import 'common/ps_api.dart';
 import 'common/ps_resource.dart';
+import 'package:flutterbuyandsell/viewobject/category_model.dart';
 
 class PsApiService extends PsApi {
   ///
@@ -229,9 +231,9 @@ class PsApiService extends PsApi {
   /// Category
   ///
   Future<PsResource<List<Category>>> getCategoryList(
-      int limit, int offset) async {
+      int limit, int offset, String mainCatId) async {
     final String url =
-        '${PsUrl.ps_category_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
+        '${PsUrl.ps_category_url}/api_key/${PsConfig.ps_api_key}/main_cat_id/$mainCatId';
 
     return await getServerCall<Category, List<Category>>(Category(), url);
   }
@@ -376,6 +378,8 @@ class PsApiService extends PsApi {
       int offset) async {
     final String url =
         '${PsUrl.ps_product_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset/login_user_id/$loginUserId';
+    print('paramMap: ${json.encode(paramMap)} ');
+    print('paramMap: ${url.toString()} ');
 
     return await postData<Product, List<Product>>(Product(), url, paramMap);
   }
@@ -580,6 +584,11 @@ class PsApiService extends PsApi {
   Future<PsResource<ApiStatus>> getToken() async {
     const String url = '${PsUrl.ps_token_url}/api_key/${PsConfig.ps_api_key}';
     return await getServerCall<ApiStatus, ApiStatus>(ApiStatus(), url);
+  }
+
+  Future<PsResource<List<CategoryModel>>> getCategories(String key) async {
+    String url = '${PsUrl.categories_url}/$key';
+    return await getServerCall(CategoryModel(), url);
   }
 
   ///

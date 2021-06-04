@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutterbuyandsell/constant/route_paths.dart';
+import 'package:flutterbuyandsell/repository/item_location_repository.dart';
 import 'package:flutterbuyandsell/ui/contact/contact_us_container_view.dart';
 import 'package:flutterbuyandsell/ui/item/entry/custom_camera_view.dart';
 import 'package:flutterbuyandsell/ui/item/promote/InAppPurchaseView.dart';
 import 'package:flutterbuyandsell/ui/item/promote/choose_payment_view.dart';
 import 'package:flutterbuyandsell/ui/item/paid_ad_product/paid_ad_product_list_container.dart';
+import 'package:flutterbuyandsell/ui/location/user_location_view.dart';
 import 'package:flutterbuyandsell/ui/setting/camera/camera_setting_view.dart';
 import 'package:flutterbuyandsell/ui/user/more/more_container_view.dart';
 import 'package:flutterbuyandsell/ui/app_info/app_info_view.dart';
@@ -70,6 +72,8 @@ import 'package:flutterbuyandsell/ui/user/verify/verify_email_container_view.dar
 import 'package:flutterbuyandsell/utils/utils.dart';
 import 'package:flutterbuyandsell/viewobject/blog.dart';
 import 'package:flutterbuyandsell/viewobject/category.dart';
+import 'package:flutterbuyandsell/viewobject/category_model.dart';
+import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
 import 'package:flutterbuyandsell/viewobject/default_photo.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/chat_history_intent_holder.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/item_entry_intent_holder.dart';
@@ -110,17 +114,31 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             return DashboardNew();
           });
 
-    case '${RoutePaths.home_item_search_view}' :
+    case '${RoutePaths.home_item_search_view}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
         final List args = settings.arguments;
         final Animation animation = args[0];
         final AnimationController animationController = args[1];
         final ProductParameterHolder productParameterholder = args[2];
         return HomeItemSearchView(
-        animation: animation,
-        animationController: animationController,
-        productParameterHolder: productParameterholder,
+          animation: animation,
+          animationController: animationController,
+          productParameterHolder: productParameterholder,
         );
+      });
+
+    case '${RoutePaths.set_current_location}':
+      return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+        final List args = settings.arguments;
+        final Animation animation = args[0];
+        final AnimationController animationController = args[1];
+        final PsValueHolder productParameterholder = args[2];
+        final ItemLocationRepository itemLocationRepository = args[3];
+        return LocationSelectView(
+            animation: animation,
+            animationController: animationController,
+            productParameterHolder: productParameterholder,
+            itemLocationRepository: itemLocationRepository);
       });
 
     case '${RoutePaths.force_update}':
@@ -183,10 +201,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       });
 
     case '${RoutePaths.categoryList}':
-      return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-        return CategoryListViewContainerView(
-            appBarTitle: Utils.getString(context, 'dashboard__category_list'));
-      });
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          final Object args = settings.arguments;
+          final String mainCatId = args ?? String;
+          return CategoryListViewContainerView(
+              appBarTitle: Utils.getString(context, 'dashboard__category_list'),
+              mainCatId: mainCatId);
+        },
+      );
 
     case '${RoutePaths.notiList}':
       return MaterialPageRoute<dynamic>(

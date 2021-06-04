@@ -2174,7 +2174,7 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   dynamic _initCurrentLocation() {
-    Geolocator()
+   /* Geolocator()
       ..forceAndroidLocationManager = !widget.androidFusedLocation
       ..getCurrentPosition(
         desiredAccuracy: LocationAccuracy.medium,
@@ -2186,7 +2186,7 @@ class _LocationState extends State<CurrentLocationWidget> {
         }
       }).catchError((Object e) {
         //
-      });
+      });*/
   }
 
   @override

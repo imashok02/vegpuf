@@ -209,7 +209,7 @@ abstract class PsDao<T extends PsObject<T>> {
         await db,
         finder: finder,
       );
-
+      print('recordSnapshots: ${recordSnapshots}');
       final List<T> resultList = <T>[];
       // sorting
       for (String id in valueList) {
