@@ -1,8 +1,4 @@
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterbuyandsell/config/ps_colors.dart';
@@ -18,21 +14,14 @@ import 'package:flutterbuyandsell/repository/category_repository.dart';
 import 'package:flutterbuyandsell/repository/item_location_repository.dart';
 import 'package:flutterbuyandsell/repository/product_repository.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/error_dialog.dart';
-import 'package:flutterbuyandsell/ui/common/ps_hero.dart';
 import 'package:flutterbuyandsell/ui/common/ps_ui_widget.dart';
 import 'package:flutterbuyandsell/utils/utils.dart';
 import 'package:flutterbuyandsell/viewobject/common/ps_value_holder.dart';
-import 'package:flutterbuyandsell/viewobject/default_photo.dart';
 import 'package:flutterbuyandsell/viewobject/holder/intent_holder/item_entry_intent_holder.dart';
 import 'package:flutterbuyandsell/viewobject/product.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:optimized_cached_image/widgets.dart';
 import '../../viewobject/holder/product_parameter_holder.dart';
-import '../../repository/main_category_repository.dart';
-import '../../api/common/ps_status.dart';
-import '../../api/ps_api_service.dart';
-import '../../api/common/ps_resource.dart';
 import '../../viewobject/category_model.dart';
 import '../../provider/main_category/main_category_provider.dart';
 
