@@ -1,4 +1,4 @@
-package com.panaceasoft.flutterbuyandsell;
+package com.ashtech.vegpuf;
 
 import io.flutter.embedding.android.FlutterActivity;
 

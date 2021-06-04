@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>000000000000-00000000000000000000000000000000.apps.googleusercontent.com</string>
+	<string>625366324908-vvumvd8mee6be15bpm7m02vfiea1klbs.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.000000000000-00000000000000000000000000000000</string>
+	<string>com.googleusercontent.apps.625366324908-vvumvd8mee6be15bpm7m02vfiea1klbs</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>000000000000-00000000000000000000000000000000.apps.googleusercontent.com</string>
+	<string>625366324908-l96rthg2mtlcj8usgnptt3denf020ivt.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD_0000000000000000000000000000000</string>
+	<string>AIzaSyDx492RH5P2Xt1SsnL9i2Jnm_kIpjdwX5s</string>
 	<key>GCM_SENDER_ID</key>
-	<string>000000000000</string>
+	<string>625366324908</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.panaceasoft.flutterbuyandsell</string>
+	<string>com.ashtech.vegpuftest</string>
 	<key>PROJECT_ID</key>
-	<string>flutter-store-ecommerce</string>
+	<string>vegpuf-test</string>
 	<key>STORAGE_BUCKET</key>
-	<string>flutter-store-ecommerce.appspot.com</string>
+	<string>vegpuf-test.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:000000000000:ios:0000000000000000000000</string>
+	<string>1:625366324908:ios:a554efe9cdda1092e83109</string>
 	<key>DATABASE_URL</key>
-	<string>https://flutter-store-ecommerce.firebaseio.com</string>
+	<string>https://vegpuf-test.firebaseio.com</string>
 </dict>
 </plist>
