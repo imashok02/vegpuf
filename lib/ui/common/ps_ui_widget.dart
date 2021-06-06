@@ -40,8 +40,7 @@ class PsNetworkImage extends StatelessWidget {
             height: height,
             fit: boxfit,
           ));
-    }
-    else {
+    } else {
       final String fullImagePath =
           '${PsConfig.ps_app_image_url}${defaultPhoto.imgPath}';
       print('img path : $fullImagePath');
@@ -55,7 +54,7 @@ class PsNetworkImage extends StatelessWidget {
           onTap: onTap,
           child: OptimizedCacheImage(
             placeholder: (BuildContext context, String url) {
-              if (PsConfig.USE_THUMBNAIL_AS_PLACEHOLDER) {
+              if (!PsConfig.USE_THUMBNAIL_AS_PLACEHOLDER) {
                 return OptimizedCacheImage(
                   width: width,
                   height: height,
@@ -671,6 +670,7 @@ class PsFileCircleImage extends StatelessWidget {
 
 class PSProgressIndicator extends StatefulWidget {
   const PSProgressIndicator(this._status, {this.message});
+
   final PsStatus _status;
   final String message;
 

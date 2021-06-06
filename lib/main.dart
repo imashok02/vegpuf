@@ -33,6 +33,8 @@ Future<void> main() async {
   // add this, and it should be the first line in main method
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   final FirebaseMessaging _fcm = FirebaseMessaging();
   if (Platform.isIOS) {
     _fcm.requestNotificationPermissions(const IosNotificationSettings());
@@ -43,20 +45,17 @@ Future<void> main() async {
     await prefs.setString('codeL', null);
   }
 
-  Firebase.initializeApp();
   Appodeal.setAppKeys(
     androidAppKey: PsConfig.androidAppodealApiKey,
     // iosAppKey: '<your-appodeal-ios-key>',
   );
 
+  //Crashlytics
   Crashlytics.instance.enableInDevMode = true;
 
   FlutterError.onError = (FlutterErrorDetails details) {
     Crashlytics.instance.onError(details);
   };
-
-//  Crashlytics.instance.crash();
-
 
   NativeAdmob(adUnitID: Utils.getAdAppId());
 
@@ -150,44 +149,46 @@ class _PSAppState extends State<PSApp> {
     // init Color
     PsColors.loadColor(context);
     print('*** ${Utils.convertColorToString(PsColors.mainColor)}');
-    FirebaseAnalytics analytics = FirebaseAnalytics();
+    final FirebaseAnalytics analytics = FirebaseAnalytics();
 
     return MultiProvider(
-        providers: [
-          ...providers,
-          ChangeNotifierProvider<MainCategoryProvider>(
-            create: (BuildContext context) => MainCategoryProvider(),
-          )
-        ],
-        child: DynamicTheme(
-            defaultBrightness: Brightness.light,
-            data: (Brightness brightness) {
-              if (brightness == Brightness.light) {
-                return themeData(ThemeData.light());
-              } else {
-                return themeData(ThemeData.dark());
-              }
-            },
-            themedWidgetBuilder: (BuildContext context, ThemeData theme) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Panacea-Soft',
-                theme: theme,
-                initialRoute: '/',
-                navigatorObservers: [
-                  FirebaseAnalyticsObserver(analytics: analytics),
-              ],
-                onGenerateRoute: router.generateRoute,
-                localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  EasyLocalization.of(context).delegate,
-                  DefaultCupertinoLocalizations.delegate
-                ],
-                supportedLocales: EasyLocalization.of(context).supportedLocales,
-                locale: EasyLocalization.of(context).locale,
-              );
-            }));
+      providers: [
+        ...providers,
+        ChangeNotifierProvider<MainCategoryProvider>(
+          create: (BuildContext context) => MainCategoryProvider(),
+        )
+      ],
+      child: DynamicTheme(
+        defaultBrightness: Brightness.light,
+        data: (Brightness brightness) {
+          if (brightness == Brightness.light) {
+            return themeData(ThemeData.light());
+          } else {
+            return themeData(ThemeData.dark());
+          }
+        },
+        themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Panacea-Soft',
+            theme: theme,
+            initialRoute: '/',
+            navigatorObservers: [
+              FirebaseAnalyticsObserver(analytics: analytics),
+            ],
+            onGenerateRoute: router.generateRoute,
+            localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              EasyLocalization.of(context).delegate,
+              DefaultCupertinoLocalizations.delegate
+            ],
+            supportedLocales: EasyLocalization.of(context).supportedLocales,
+            locale: EasyLocalization.of(context).locale,
+          );
+        },
+      ),
+    );
   }
 }

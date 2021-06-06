@@ -46,6 +46,7 @@ class CategoryProvider extends PsProvider {
       }
     });
   }
+
   StreamController<PsResource<List<Category>>> categoryListStream;
   final CategoryParameterHolder category = CategoryParameterHolder();
 
@@ -60,7 +61,9 @@ class CategoryProvider extends PsProvider {
 
   PsResource<ApiStatus> _apiStatus =
       PsResource<ApiStatus>(PsStatus.NOACTION, '', null);
+
   PsResource<ApiStatus> get user => _apiStatus;
+
   @override
   void dispose() {
     subscription.cancel();
@@ -69,24 +72,26 @@ class CategoryProvider extends PsProvider {
     super.dispose();
   }
 
-  Future<dynamic> loadCategoryList() async {
+  Future<dynamic> loadCategoryList({String mainCatId}) async {
     isLoading = true;
 
     isConnectedToInternet = await Utils.checkInternetConnectivity();
     if (isConnectedToInternet) {
       await _repo.getCategoryList(categoryListStream, isConnectedToInternet,
-          limit, offset, PsStatus.PROGRESS_LOADING);
+          limit, offset, PsStatus.PROGRESS_LOADING,
+          mainCatId: mainCatId);
     }
     return isConnectedToInternet;
   }
 
-  Future<dynamic> nextCategoryList() async {
+  Future<dynamic> nextCategoryList({String mainCatId}) async {
     isConnectedToInternet = await Utils.checkInternetConnectivity();
 
     if (!isLoading && !isReachMaxData) {
       super.isLoading = true;
       await _repo.getNextPageCategoryList(categoryListStream,
-          isConnectedToInternet, limit, offset, PsStatus.PROGRESS_LOADING);
+          isConnectedToInternet, limit, offset, PsStatus.PROGRESS_LOADING,
+          mainCatId: mainCatId);
     }
   }
 
@@ -95,14 +100,13 @@ class CategoryProvider extends PsProvider {
     isLoading = true;
 
     updateOffset(0);
-     if (isConnectedToInternet) {
-
-    await _repo.getCategoryList(categoryListStream, isConnectedToInternet,
-        limit, offset, PsStatus.PROGRESS_LOADING);
-     }
+    if (isConnectedToInternet) {
+      await _repo.getCategoryList(categoryListStream, isConnectedToInternet,
+          limit, offset, PsStatus.PROGRESS_LOADING);
+    }
 
     isLoading = false;
-     return isConnectedToInternet;
+    return isConnectedToInternet;
   }
 
   Future<dynamic> postTouchCount(
