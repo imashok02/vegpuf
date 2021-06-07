@@ -23,13 +23,15 @@ class PsConfig {
   /// API URL
   /// Change your backend url
   ///
-  static const String ps_core_url =
-      'http://www.vegpuf.com';
+  static const String ps_core_url = 'http://www.vegpuf.com';
 
   static const String things = 'main_cat58b486f4d5d984923cbce32b6cf7f08f';
   static const String property = 'main_cat5dfae3885eb1e48dadc7a2f2b1c09b86';
   static const String services = 'main_cate0100cee3c7f4245b103936161f6f6cc';
-  static const String androidAppodealApiKey = 'be7f875efd760600dff4a3c0cb0438517fb99d53f4b2405a';
+  static const String androidAppodealApiKey =
+      'be7f875efd760600dff4a3c0cb0438517fb99d53f4b2405a';
+  static const String iosAppodealApiKey =
+      'd20cac761f66c389c3947a09fa430fb9c35726937f7200e1';
 
   static const String ps_app_url = ps_core_url + '/index.php/';
 
@@ -67,10 +69,11 @@ class PsConfig {
   ///
   static bool showAdMob = true;
   static String androidAdMobAdsIdKey = 'ca-app-pub-3940256099942544~3347511713';
-  static String androidAdMobUnitIdApiKey = 'ca-app-pub-0000000000000000/0000000000';
+  static String androidAdMobUnitIdApiKey =
+      'ca-app-pub-0000000000000000/0000000000';
   static String iosAdMobAdsIdKey = 'ca-app-pub-0000000000000000~0000000000';
   static String iosAdMobUnitIdApiKey = 'ca-app-pub-0000000000000000/0000000000';
-  
+
   ///
   /// iOS App No
   ///
