@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterbuyandsell/config/ps_colors.dart';
@@ -21,9 +20,10 @@ import 'package:flutterbuyandsell/viewobject/holder/intent_holder/item_entry_int
 import 'package:flutterbuyandsell/viewobject/product.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import '../../viewobject/holder/product_parameter_holder.dart';
-import '../../viewobject/category_model.dart';
+
 import '../../provider/main_category/main_category_provider.dart';
+import '../../viewobject/category_model.dart';
+import '../../viewobject/holder/product_parameter_holder.dart';
 
 class DashboardNew extends StatefulWidget {
   @override

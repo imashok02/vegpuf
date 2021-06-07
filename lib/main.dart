@@ -27,6 +27,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'config/ps_colors.dart';
 import 'config/ps_config.dart';
 import 'db/common/ps_shared_preferences.dart';
+import 'package:appodeal_flutter/appodeal_flutter.dart';
 
 Future<void> main() async {
   // add this, and it should be the first line in main method
@@ -43,6 +44,11 @@ Future<void> main() async {
     await prefs.setString('codeC', null);
     await prefs.setString('codeL', null);
   }
+
+  Appodeal.setAppKeys(
+    androidAppKey: PsConfig.androidAppodealApiKey,
+    iosAppKey: PsConfig.iosAppodealApiKey,
+  );
 
   //Crashlytics
   Crashlytics.instance.enableInDevMode = true;

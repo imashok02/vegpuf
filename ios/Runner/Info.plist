@@ -22,16 +22,16 @@
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.ashtech.vegpuf.braintree</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.ashtech.vegpuf.braintree</string>
-			</array>
-		</dict>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>com.ashtech.vegpuftest.braintree</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.ashtech.vegpuftest.braintree</string>
+            </array>
+        </dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>

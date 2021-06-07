@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appodeal_flutter/appodeal_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:flutterbuyandsell/repository/gallery_repository.dart';
 import 'package:flutterbuyandsell/repository/product_repository.dart';
 import 'package:flutterbuyandsell/ui/common/base/ps_widget_with_multi_provider.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/choose_camera_type_dialog.dart';
+import 'package:flutterbuyandsell/ui/common/dialog/confirm_dialog_view.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/error_dialog.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/success_dialog.dart';
 import 'package:flutterbuyandsell/ui/common/dialog/warning_dialog_view.dart';
@@ -98,11 +100,13 @@ class _ItemEntryViewState extends State<ItemEntryView> {
   Asset thirdSelectedImageAsset;
   Asset fouthSelectedImageAsset;
   Asset fifthSelectedImageAsset;
+  Asset sixthSelectedImageAsset;
   String firstCameraImagePath;
   String secondCameraImagePath;
   String thirdCameraImagePath;
   String fouthCameraImagePath;
   String fifthCameraImagePath;
+  String sixthCameraImagePath;
 
   Asset defaultAssetImage;
 
@@ -112,9 +116,25 @@ class _ItemEntryViewState extends State<ItemEntryView> {
   bool isSelectedThirdImagePath = false;
   bool isSelectedFouthImagePath = false;
   bool isSelectedFifthImagePath = false;
+  bool isSelectedSixthImagePath = false;
 
   String isShopCheckbox = '1';
 
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAppodeal();
+
+  }
+  Future<void> _initializeAppodeal() async {
+    await Appodeal.initialize(
+        hasConsent: true,
+        adTypes: [AdType.BANNER, AdType.INTERSTITIAL, AdType.REWARD],
+        testMode: true
+    );
+
+  }
   // ProgressDialog progressDialog;
 
   // File file;
@@ -131,6 +151,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       bool _isThirdDone = isSelectedThirdImagePath;
       bool _isFouthDone = isSelectedFouthImagePath;
       bool _isFifthDone = isSelectedFifthImagePath;
+      bool _isSixthDone = isSelectedSixthImagePath;
 
       if (!PsProgressDialog.isShowing()) {
         if (!isSelectedFirstImagePath) {
@@ -289,12 +310,39 @@ class _ItemEntryViewState extends State<ItemEntryView> {
       }
 
       PsProgressDialog.dismissDialog();
+      if (!PsProgressDialog.isShowing()) {
+        if (!isSelectedSixthImagePath) {
+          PsProgressDialog.dismissDialog();
+        } else {
+          await PsProgressDialog.showDialog(context,
+              message:
+              Utils.getString(context, 'progressloading_image6_uploading'));
+        }
+      }
+
+      if (isSelectedSixthImagePath) {
+        final PsResource<DefaultPhoto> _apiStatus =
+        await galleryProvider.postItemImageUpload(
+            itemId,
+            _itemEntryProvider.sixImageId,
+            sixthSelectedImageAsset == null
+                ? await Utils.getImageFileFromCameraImagePath(
+                sixthCameraImagePath, PsConfig.uploadImageSize)
+                : await Utils.getImageFileFromAssets(
+                sixthSelectedImageAsset, PsConfig.uploadImageSize));
+        if (_apiStatus.data != null) {
+          print('5 image uploaded');
+          isSelectedSixthImagePath = false;
+          _isSixthDone = isSelectedSixthImagePath;
+        }
+      }
 
       if (!(_isFirstDone ||
           _isSecondDone ||
           _isThirdDone ||
           _isFouthDone ||
-          _isFifthDone)) {
+          _isFifthDone ||
+          _isSixthDone)) {
         showDialog<dynamic>(
             context: context,
             builder: (BuildContext context) {
@@ -334,6 +382,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
             fifthCameraImagePath = imagePath;
             isSelectedFifthImagePath = true;
           }
+          if (index == 5 && imagePath.isNotEmpty) {
+            sixthCameraImagePath = imagePath;
+            isSelectedSixthImagePath = true;
+          }
           //end single select image
         });
       }
@@ -346,6 +398,7 @@ class _ItemEntryViewState extends State<ItemEntryView> {
         thirdSelectedImageAsset = defaultAssetImage;
         fouthSelectedImageAsset = defaultAssetImage;
         fifthSelectedImageAsset = defaultAssetImage;
+        sixthSelectedImageAsset = defaultAssetImage;
       }
       setState(() {
         images = resultList;
@@ -361,6 +414,8 @@ class _ItemEntryViewState extends State<ItemEntryView> {
           isSelectedFouthImagePath = false;
           fifthSelectedImageAsset = defaultAssetImage;
           isSelectedFifthImagePath = false;
+          sixthSelectedImageAsset = defaultAssetImage;
+          isSelectedSixthImagePath = false;
         }
 
         //for single select image
@@ -383,6 +438,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
         if (index == 4 && resultList.isNotEmpty) {
           fifthSelectedImageAsset = resultList[0];
           isSelectedFifthImagePath = true;
+        }
+        if (index == 5 && resultList.isNotEmpty) {
+          sixthSelectedImageAsset = resultList[0];
+          isSelectedSixthImagePath = true;
         }
         //end single select image
 
@@ -426,6 +485,20 @@ class _ItemEntryViewState extends State<ItemEntryView> {
           isSelectedThirdImagePath = true;
           isSelectedFouthImagePath = true;
           isSelectedFifthImagePath = true;
+        }
+        if (index == -1 && resultList.length == 6) {
+          firstSelectedImageAsset = resultList[0];
+          secondSelectedImageAsset = resultList[1];
+          thirdSelectedImageAsset = resultList[2];
+          fouthSelectedImageAsset = resultList[3];
+          fifthSelectedImageAsset = resultList[4];
+          sixthSelectedImageAsset = resultList[5];
+          isSelectedFirstImagePath = true;
+          isSelectedSecondImagePath = true;
+          isSelectedThirdImagePath = true;
+          isSelectedFouthImagePath = true;
+          isSelectedFifthImagePath = true;
+          isSelectedSixthImagePath = true;
         }
         //end multi select
 
@@ -559,6 +632,10 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                               _itemEntryProvider.fiveImageId =
                                   provider.galleryList.data[imageId].imgId;
                             }
+                            if (imageId == 5) {
+                              _itemEntryProvider.sixImageId =
+                                  provider.galleryList.data[imageId].imgId;
+                            }
                           }
                         }
 
@@ -574,11 +651,13 @@ class _ItemEntryViewState extends State<ItemEntryView> {
                           thirdImagePath: thirdSelectedImageAsset,
                           fouthImagePath: fouthSelectedImageAsset,
                           fifthImagePath: fifthSelectedImageAsset,
+                          sixthImagePath: sixthSelectedImageAsset,
                           firstCameraImagePath: firstCameraImagePath,
                           secondCameraImagePath: secondCameraImagePath,
                           thirdCameraImagePath: thirdCameraImagePath,
                           fouthCameraImagePath: fouthCameraImagePath,
                           fifthCameraImagePath: fifthCameraImagePath,
+                          sixthCameraImagePath: sixthCameraImagePath,
                         );
                       }),
 
@@ -1453,11 +1532,15 @@ class ImageUploadHorizontalList extends StatefulWidget {
       @required this.thirdImagePath,
       @required this.fouthImagePath,
       @required this.fifthImagePath,
+      @required this.sixthImagePath,
       @required this.firstCameraImagePath,
       @required this.secondCameraImagePath,
       @required this.thirdCameraImagePath,
       @required this.fouthCameraImagePath,
-      @required this.fifthCameraImagePath});
+      @required this.fifthCameraImagePath,
+      @required this.sixthCameraImagePath
+      });
+
   final String flag;
   final List<Asset> images;
   final List<DefaultPhoto> selectedImageList;
@@ -1468,11 +1551,13 @@ class ImageUploadHorizontalList extends StatefulWidget {
   final Asset thirdImagePath;
   final Asset fouthImagePath;
   final Asset fifthImagePath;
+  final Asset sixthImagePath;
   final String firstCameraImagePath;
   final String secondCameraImagePath;
   final String thirdCameraImagePath;
   final String fouthCameraImagePath;
   final String fifthCameraImagePath;
+  final String sixthCameraImagePath;
   @override
   State<StatefulWidget> createState() {
     return ImageUploadHorizontalListState();
@@ -1481,6 +1566,48 @@ class ImageUploadHorizontalList extends StatefulWidget {
 
 class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
   ItemEntryProvider provider;
+
+
+  @override
+  void initState() {
+    super.initState();
+    rewardVideoEventHandler();
+  }
+
+  void rewardVideoEventHandler() {
+    Appodeal.setRewardCallback((event) {
+      switch(event) {
+        case 'onRewardedVideoLoaded' :
+          print('reward video loaded');
+          break;
+        case 'onRewardedVideoFailedToLoad' :
+          print('reward video failed to loaded');
+          break;
+        case 'onRewardedVideoShown' :
+          print('reward video shown');
+          break;
+        case 'onRewardedVideoShowFailed' :
+          print('reward video show failed');
+          break;
+        case 'onRewardedVideoFinished' :
+          print('reward video finished');
+          provider.rewardVideoWatched();
+          break;
+        case 'onRewardedVideoClosed' :
+          print('reward video closed');
+          break;
+        case 'onRewardedVideoExpired' :
+          print('reward video expired');
+          break;
+        case 'onRewardedVideoClicked' :
+          print('reward video clicked');
+          break;
+        default :
+          print('nothing happened');
+      }
+    });
+  }
+
   Future<void> loadPickMultiImage() async {
     List<Asset> resultList = <Asset>[];
 
@@ -1577,7 +1704,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
   Widget build(BuildContext context) {
     Asset defaultAssetImage;
     DefaultPhoto defaultUrlImage;
-    provider = Provider.of<ItemEntryProvider>(context, listen: false);
+    provider = Provider.of<ItemEntryProvider>(context, );
 
     return Container(
       height: PsDimens.space120,
@@ -1588,6 +1715,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
             return Row(
               children: <Widget>[
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 0,
                   images: (widget.firstImagePath != null)
                       ? widget.firstImagePath
@@ -1636,6 +1764,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 1,
                   images: (widget.secondImagePath != null)
                       ? widget.secondImagePath
@@ -1686,6 +1815,7 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
                   index: 2,
                   images: (widget.thirdImagePath != null)
                       ? widget.thirdImagePath
@@ -1736,6 +1866,8 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
                   index: 3,
                   images: (widget.fouthImagePath != null)
                       ? widget.fouthImagePath
@@ -1786,6 +1918,8 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                   },
                 ),
                 ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
                   index: 4,
                   images: (widget.fifthImagePath != null)
                       ? widget.fifthImagePath
@@ -1836,6 +1970,58 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
                     }
                   },
                 ),
+                ItemEntryImageWidget(
+                  provider: provider,
+                  shouldShowImage: provider.hasViewedRewardVideo,
+                  images: (widget.sixthImagePath != null)
+                      ? widget.sixthImagePath
+                      : defaultAssetImage,
+                  cameraImagePath: (widget.sixthCameraImagePath != null)
+                      ? widget.sixthCameraImagePath
+                      : defaultAssetImage,
+                  selectedImage: //widget.fifthImagePath != null ||
+                  //     widget.selectedImageList.length - 1 >= 4)
+                  // ? widget.selectedImageList[4]
+                  // : defaultUrlImage,
+                  (widget.selectedImageList.length > 5 &&
+                      widget.sixthImagePath == null &&
+                      widget.sixthCameraImagePath == null)
+                      ? widget.selectedImageList[5]
+                      : null,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    if (provider.psValueHolder.isCustomCamera ?? true) {
+                      showDialog<dynamic>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ChooseCameraTypeDialog(
+                              onCameraTap: () async {
+                                final dynamic returnData =
+                                await Navigator.pushNamed(
+                                    context, RoutePaths.cameraView);
+                                if (returnData is String) {
+                                  widget.updateImagesFromCustomCamera(
+                                      returnData, 5);
+                                }
+                              },
+                              onGalleryTap: () {
+                                if (widget.flag == PsConst.ADD_NEW_ITEM) {
+                                  loadPickMultiImage();
+                                } else {
+                                  loadSingleImage(5);
+                                }
+                              },
+                            );
+                          });
+                    } else {
+                      if (widget.flag == PsConst.ADD_NEW_ITEM) {
+                        loadPickMultiImage();
+                      } else {
+                        loadSingleImage(5);
+                      }
+                    }
+                  },
+                )
               ],
             );
           }),
@@ -1844,13 +2030,15 @@ class ImageUploadHorizontalListState extends State<ImageUploadHorizontalList> {
 }
 
 class ItemEntryImageWidget extends StatefulWidget {
-  const ItemEntryImageWidget({
+   ItemEntryImageWidget({
     Key key,
     @required this.index,
     @required this.images,
     @required this.cameraImagePath,
     @required this.selectedImage,
+    @required this.provider,
     this.onTap,
+    this.shouldShowImage=true,
   }) : super(key: key);
 
   final Function onTap;
@@ -1858,6 +2046,8 @@ class ItemEntryImageWidget extends StatefulWidget {
   final Asset images;
   final String cameraImagePath;
   final DefaultPhoto selectedImage;
+  bool shouldShowImage;
+  ItemEntryProvider provider;
   @override
   State<StatefulWidget> createState() {
     return ItemEntryImageWidgetState();
@@ -1868,21 +2058,31 @@ class ItemEntryImageWidgetState extends State<ItemEntryImageWidget> {
   int i = 0;
   @override
   Widget build(BuildContext context) {
+    print('shouldShowImage is ${widget.shouldShowImage}');
     if (widget.selectedImage != null) {
       return Padding(
         padding: const EdgeInsets.only(right: 4, left: 4),
-        child: InkWell(
-          onTap: widget.onTap,
-          child: Container(
-             width: 100,
-              height: 100,
-            child: PsNetworkImageWithUrl(
-              photoKey: '',
-              // width: 100,
-              // height: 100,
-              imagePath: widget.selectedImage.imgPath,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            InkWell(
+              onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+              child: Container(
+                 width: 100,
+                  height: 100,
+                child: PsNetworkImageWithUrl(
+                  photoKey: '',
+                  // width: 100,
+                  // height: 100,
+                  imagePath: widget.selectedImage.imgPath,
+                ),
+              ),
             ),
-          ),
+            widget.shouldShowImage ? Container() :IconButton(
+              icon: Icon(Icons.lock),
+              onPressed: _launchConfirmDialog,
+            )
+          ],
         ),
       );
     } else {
@@ -1890,41 +2090,87 @@ class ItemEntryImageWidgetState extends State<ItemEntryImageWidget> {
         final Asset asset = widget.images;
         return Padding(
           padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-            onTap: widget.onTap,
-            child: AssetThumb(
-              asset: asset,
-              width: 100,
-              height: 100,
-            ),
-          ),
-        );
-      } else if (widget.cameraImagePath != null) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-              onTap: widget.onTap,
-              child: Image(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                child: AssetThumb(
+                  asset: asset,
                   width: 100,
                   height: 100,
-                  image: FileImage(File(widget.cameraImagePath)))),
+                ),
+              ),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
+          ),
+        );
+      }
+      else if (widget.cameraImagePath != null) {
+        return Padding(
+          padding: const EdgeInsets.only(right: 4, left: 4),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                  onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                  child: Image(
+                      width: 100,
+                      height: 100,
+                      image: FileImage(File(widget.cameraImagePath)))),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
+          ),
         );
       } else {
         return Padding(
           padding: const EdgeInsets.only(right: 4, left: 4),
-          child: InkWell(
-            onTap: widget.onTap,
-            child: Image.asset(
-              'assets/images/default_image.png',
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              InkWell(
+                onTap: widget.shouldShowImage ? widget.onTap : _launchConfirmDialog,
+                child: Image.asset(
+                  'assets/images/default_image.png',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              widget.shouldShowImage ? Container() :IconButton(
+                icon: Icon(Icons.lock),
+                onPressed: _launchConfirmDialog,
+              )
+            ],
           ),
         );
       }
     }
   }
+
+  Future<bool> _launchConfirmDialog() {
+    return showDialog<dynamic>(
+        context: context,
+        builder: (BuildContext context) {
+          return ConfirmDialogView(
+              description: 'Watch a reward video to unlock more image uploads?',
+              leftButtonText: 'No',
+              rightButtonText: 'Yes',
+              onAgreeTap: () async {
+                await Appodeal.show(AdType.REWARD).whenComplete(() {
+                  Navigator.of(context).pop();
+                });
+              });
+        }) ??
+        false;
+  }
+
 }
 
 class PriceDropDownControllerWidget extends StatelessWidget {
