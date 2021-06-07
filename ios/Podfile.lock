@@ -1,0 +1,854 @@
+PODS:
+  - AdColony (4.3.1)
+  - AmazonAd (3.1.0)
+  - APDAdColonyAdapter (2.8.0.1-Beta):
+    - AdColony (= 4.3.1)
+    - Appodeal (= 2.8.0-Beta)
+  - APDAmazonAdsAdapter (2.8.0.1-Beta):
+    - AmazonAd (= 3.1.0)
+    - Appodeal (= 2.8.0-Beta)
+  - APDAppLovinAdapter (2.8.0.2-Beta):
+    - AppLovinSDK (~> 6.14.2)
+    - Appodeal (= 2.8.0-Beta)
+  - APDBidMachineAdapter (2.8.0.1-Beta):
+    - APDBidMachineAdapter/HeaderBidding (= 2.8.0.1-Beta)
+    - Appodeal (= 2.8.0-Beta)
+    - BidMachine (= 1.6.0)
+  - APDBidMachineAdapter/HeaderBidding (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - BidMachine (= 1.6.0)
+    - BidMachine/Adapters
+  - APDFacebookAudienceAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - FBAudienceNetwork (= 5.10.1)
+  - APDGoogleAdMobAdapter (2.8.0.2-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - Google-Mobile-Ads-SDK (~> 7.65.0)
+  - APDIronSourceAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - IronSourceSDK (= 7.0.1)
+  - APDMyTargetAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - myTargetSDK (= 5.8.0)
+  - APDOguryAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - OguryAds (~> 1.4.3)
+  - APDSmaatoAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - smaato-ios-sdk (~> 21.6.1)
+  - APDStartAppAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - StartAppSDK (= 4.5.0)
+  - APDUnityAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - UnityAds (= 3.4.8)
+  - APDVungleAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - VungleSDK-iOS (= 6.7.1)
+  - APDYandexAdapter (2.8.0.1-Beta):
+    - Appodeal (= 2.8.0-Beta)
+    - YandexMobileAds (= 2.19.0)
+    - YandexMobileMetrica (< 4.0.0, >= 3.2.0)
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
+  - apple_sign_in (0.0.1):
+    - Flutter
+  - AppLovinSDK (6.14.11)
+  - Appodeal (2.8.0-Beta):
+    - Protobuf (~> 3.9)
+    - StackIAB (~> 0.6.0)
+    - StackModules (= 1.0.1)
+  - appodeal_flutter (0.3.2):
+    - APDAdColonyAdapter (= 2.8.0.1-Beta)
+    - APDAmazonAdsAdapter (= 2.8.0.1-Beta)
+    - APDAppLovinAdapter (= 2.8.0.2-Beta)
+    - APDBidMachineAdapter (= 2.8.0.1-Beta)
+    - APDFacebookAudienceAdapter (= 2.8.0.1-Beta)
+    - APDGoogleAdMobAdapter (= 2.8.0.2-Beta)
+    - APDIronSourceAdapter (= 2.8.0.1-Beta)
+    - APDMyTargetAdapter (= 2.8.0.1-Beta)
+    - APDOguryAdapter (= 2.8.0.1-Beta)
+    - APDSmaatoAdapter (= 2.8.0.1-Beta)
+    - APDStartAppAdapter (= 2.8.0.1-Beta)
+    - APDUnityAdapter (= 2.8.0.1-Beta)
+    - APDVungleAdapter (= 2.8.0.1-Beta)
+    - APDYandexAdapter (= 2.8.0.1-Beta)
+    - Flutter
+    - StackConsentManager (= 1.0.1)
+  - BidMachine (1.6.0):
+    - BidMachine/Core (= 1.6.0)
+  - BidMachine/Adapters (1.6.0):
+    - BidMachine/AdColonyAdapter
+    - BidMachine/AmazonAdapter
+    - BidMachine/CriteoAdapter
+    - BidMachine/FacebookAdapter
+    - BidMachine/MyTargetAdapter
+    - BidMachine/SmaatoAdapter
+    - BidMachine/TapjoyAdapter
+    - BidMachine/VungleAdapter
+  - BidMachine/AdColonyAdapter (1.6.0):
+    - AdColony (= 4.3.1)
+    - BidMachine/Core
+  - BidMachine/AmazonAdapter (1.6.0):
+    - BidMachine/Core
+  - BidMachine/Core (1.6.0):
+    - Protobuf (~> 3.9)
+    - StackIAB (~> 0.6.0)
+    - StackModules (~> 1.0.0)
+  - BidMachine/CriteoAdapter (1.6.0):
+    - BidMachine/Core
+    - CriteoPublisherSdk (= 3.4.1)
+  - BidMachine/FacebookAdapter (1.6.0):
+    - BidMachine/Core
+    - FBAudienceNetwork (= 5.10.1)
+  - BidMachine/MyTargetAdapter (1.6.0):
+    - BidMachine/Core
+    - myTargetSDK (= 5.8.0)
+  - BidMachine/SmaatoAdapter (1.6.0):
+    - BidMachine/Core
+    - smaato-ios-sdk (= 21.6.1)
+    - smaato-ios-sdk/Modules/UnifiedBidding (= 21.6.1)
+  - BidMachine/TapjoyAdapter (1.6.0):
+    - BidMachine/Core
+    - TapjoySDK (= 12.6.1)
+  - BidMachine/VungleAdapter (1.6.0):
+    - BidMachine/Core
+    - VungleSDK-iOS (= 6.7.1)
+  - Braintree/Apple-Pay (4.37.1):
+    - Braintree/Core
+  - Braintree/Card (4.37.1):
+    - Braintree/Core
+  - Braintree/Core (4.37.1)
+  - Braintree/PaymentFlow (4.37.1):
+    - Braintree/Card
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPal (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPalDataCollector (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalUtils
+  - Braintree/PayPalOneTouch (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
+    - Braintree/PayPalUtils
+  - Braintree/PayPalUtils (4.37.1)
+  - Braintree/UnionPay (4.37.1):
+    - Braintree/Card
+    - Braintree/Core
+  - braintree_payment (1.0.2):
+    - Braintree/Apple-Pay
+    - Braintree/PayPal
+    - BraintreeDropIn
+    - Flutter
+  - BraintreeDropIn (8.1.4):
+    - BraintreeDropIn/DropIn (= 8.1.4)
+  - BraintreeDropIn/DropIn (8.1.4):
+    - Braintree/Card (~> 4.32)
+    - Braintree/Core (~> 4.32)
+    - Braintree/PaymentFlow (~> 4.32)
+    - Braintree/PayPal (~> 4.32)
+    - Braintree/UnionPay (~> 4.32)
+    - BraintreeDropIn/UIKit
+  - BraintreeDropIn/UIKit (8.1.4)
+  - BSGridCollectionViewLayout (1.2.5)
+  - BSImagePicker (2.10.3):
+    - BSGridCollectionViewLayout (= 1.2.5)
+    - BSImageView (= 1.0.3)
+  - BSImageView (1.0.3)
+  - camera (0.0.1):
+    - Flutter
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - Crashlytics (3.14.0):
+    - Fabric (~> 1.10.2)
+  - CriteoPublisherSdk (3.4.1)
+  - Fabric (1.10.2)
+  - FBAudienceNetwork (5.10.1):
+    - FBSDKCoreKit/Basics (>= 5.6.0)
+  - FBSDKCoreKit (5.15.1):
+    - FBSDKCoreKit/Basics (= 5.15.1)
+    - FBSDKCoreKit/Core (= 5.15.1)
+  - FBSDKCoreKit/Basics (5.15.1)
+  - FBSDKCoreKit/Core (5.15.1):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.15.1):
+    - FBSDKLoginKit/Login (= 5.15.1)
+  - FBSDKLoginKit/Login (5.15.1):
+    - FBSDKCoreKit (~> 5.0)
+  - Firebase/Analytics (6.26.0):
+    - Firebase/Core
+  - Firebase/Auth (6.26.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 6.5.3)
+  - Firebase/Core (6.26.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 6.6.0)
+  - Firebase/CoreOnly (6.26.0):
+    - FirebaseCore (= 6.7.2)
+  - Firebase/Database (6.26.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 6.2.1)
+  - Firebase/DynamicLinks (6.26.0):
+    - Firebase/CoreOnly
+    - FirebaseDynamicLinks (~> 4.0.8)
+  - Firebase/Messaging (6.26.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.4.1)
+  - firebase_analytics (0.0.1):
+    - Firebase/Analytics (~> 6.0)
+    - Firebase/Core
+    - Flutter
+  - firebase_auth (0.18.1):
+    - Firebase/Auth (~> 6.26.0)
+    - Firebase/CoreOnly (~> 6.26.0)
+    - firebase_core
+    - Flutter
+  - firebase_core (0.5.0):
+    - Firebase/CoreOnly (~> 6.26.0)
+    - Flutter
+  - firebase_crashlytics (0.0.1):
+    - Crashlytics
+    - Fabric
+    - Firebase/Core
+    - Flutter
+  - firebase_database (4.0.0):
+    - Firebase/CoreOnly (~> 6.26.0)
+    - Firebase/Database (~> 6.26.0)
+    - firebase_core
+    - Flutter
+  - firebase_dynamic_links (0.1.0):
+    - Firebase/DynamicLinks
+    - Flutter
+  - firebase_messaging (7.0.0):
+    - Firebase/CoreOnly (~> 6.26.0)
+    - Firebase/Messaging (~> 6.26.0)
+    - firebase_core
+    - Flutter
+  - FirebaseAnalytics (6.6.0):
+    - FirebaseCore (~> 6.7)
+    - FirebaseInstallations (~> 1.3)
+    - GoogleAppMeasurement (= 6.6.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 1.30905.0)
+  - FirebaseAnalyticsInterop (1.5.0)
+  - FirebaseAuth (6.5.3):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.6)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseAuthInterop (1.1.0)
+  - FirebaseCore (6.7.2):
+    - FirebaseCoreDiagnostics (~> 1.3)
+    - FirebaseCoreDiagnosticsInterop (~> 1.2)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GoogleUtilities/Logger (~> 6.5)
+  - FirebaseCoreDiagnostics (1.5.0):
+    - GoogleDataTransport (~> 7.0)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+    - nanopb (~> 1.30905.0)
+  - FirebaseCoreDiagnosticsInterop (1.2.0)
+  - FirebaseDatabase (6.2.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - leveldb-library (~> 1.22)
+  - FirebaseDynamicLinks (4.0.8):
+    - FirebaseAnalyticsInterop (~> 1.3)
+    - FirebaseCore (~> 6.2)
+  - FirebaseInstallations (1.3.0):
+    - FirebaseCore (~> 6.6)
+    - GoogleUtilities/Environment (~> 6.6)
+    - GoogleUtilities/UserDefaults (~> 6.6)
+    - PromisesObjC (~> 1.2)
+  - FirebaseInstanceID (4.3.4):
+    - FirebaseCore (~> 6.6)
+    - FirebaseInstallations (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GoogleUtilities/UserDefaults (~> 6.5)
+  - FirebaseMessaging (4.4.1):
+    - FirebaseAnalyticsInterop (~> 1.5)
+    - FirebaseCore (~> 6.6)
+    - FirebaseInstanceID (~> 4.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GoogleUtilities/Reachability (~> 6.5)
+    - GoogleUtilities/UserDefaults (~> 6.5)
+    - Protobuf (>= 3.9.2, ~> 3.9)
+  - Flutter (1.0.0)
+  - flutter_facebook_login (0.0.1):
+    - FBSDKCoreKit (~> 5.5)
+    - FBSDKLoginKit (~> 5.5)
+    - Flutter
+  - flutter_image_compress (0.0.1):
+    - Flutter
+    - Mantle
+    - SDWebImageWebPCoder
+  - flutter_native_admob (0.0.1):
+    - Flutter
+    - Google-Mobile-Ads-SDK
+    - PureLayout
+  - flutter_native_image (0.0.1):
+    - Flutter
+  - flutter_paystack (0.0.1):
+    - Flutter
+  - flutter_webview_plugin (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - geocoder (0.0.1):
+    - Flutter
+  - geolocator (5.1.3):
+    - Flutter
+  - Google-Mobile-Ads-SDK (7.65.0):
+    - GoogleAppMeasurement (~> 6.0)
+    - GoogleUserMessagingPlatform (~> 1.1)
+  - google_sign_in (0.0.1):
+    - Flutter
+    - GoogleSignIn (~> 5.0)
+  - GoogleAppMeasurement (6.6.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 1.30905.0)
+  - GoogleDataTransport (7.2.0):
+    - nanopb (~> 1.30905.0)
+  - GoogleSignIn (5.0.2):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleUserMessagingPlatform (1.4.0)
+  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.7.2):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (6.7.2):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (6.7.2):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (6.7.2):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.7.2)"
+  - GoogleUtilities/Reachability (6.7.2):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (6.7.2):
+    - GoogleUtilities/Logger
+  - GTMAppAuth (1.2.2):
+    - AppAuth/Core (~> 1.4)
+    - GTMSessionFetcher/Core (~> 1.5)
+  - GTMSessionFetcher/Core (1.5.0)
+  - in_app_purchase (0.0.1):
+    - Flutter
+  - IronSourceSDK (7.0.1.0)
+  - launch_review (0.0.1):
+    - Flutter
+  - leveldb-library (1.22.1)
+  - libwebp (1.2.0):
+    - libwebp/demux (= 1.2.0)
+    - libwebp/mux (= 1.2.0)
+    - libwebp/webp (= 1.2.0)
+  - libwebp/demux (1.2.0):
+    - libwebp/webp
+  - libwebp/mux (1.2.0):
+    - libwebp/demux
+  - libwebp/webp (1.2.0)
+  - location (0.0.1):
+    - Flutter
+  - location_permissions (2.0.5):
+    - Flutter
+  - Mantle (2.1.6):
+    - Mantle/extobjc (= 2.1.6)
+  - Mantle/extobjc (2.1.6)
+  - multi_image_picker (4.7.12):
+    - BSImagePicker (~> 2.10.3)
+    - Flutter
+  - myTargetSDK (5.8.0)
+  - nanopb (1.30905.0):
+    - nanopb/decode (= 1.30905.0)
+    - nanopb/encode (= 1.30905.0)
+  - nanopb/decode (1.30905.0)
+  - nanopb/encode (1.30905.0)
+  - OguryAds (1.4.10):
+    - OguryAds/OMID (= 1.4.10)
+  - OguryAds/OMID (1.4.10)
+  - package_info (0.0.1):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - "permission_handler (5.0.1+1)":
+    - Flutter
+  - PromisesObjC (1.2.12)
+  - Protobuf (3.17.0)
+  - PureLayout (3.1.8)
+  - rate_my_app (0.7.1):
+    - Flutter
+  - razorpay-pod (1.1.13)
+  - razorpay_flutter (1.1.5):
+    - Flutter
+    - razorpay-pod
+  - Reachability (3.2)
+  - SDWebImage/Core (5.11.1)
+  - SDWebImageWebPCoder (0.8.4):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
+  - share (0.0.1):
+    - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
+  - smaato-ios-sdk (21.6.1):
+    - smaato-ios-sdk/Full (= 21.6.1)
+  - smaato-ios-sdk/Banner (21.6.1):
+    - smaato-ios-sdk/Modules/Banner
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/RichMedia
+  - smaato-ios-sdk/Full (21.6.1):
+    - smaato-ios-sdk/Banner
+    - smaato-ios-sdk/Interstitial
+    - smaato-ios-sdk/Native
+    - smaato-ios-sdk/RewardedAds
+  - smaato-ios-sdk/Interstitial (21.6.1):
+    - smaato-ios-sdk/Modules/Interstitial
+    - smaato-ios-sdk/Modules/RichMedia
+    - smaato-ios-sdk/Modules/Video
+  - smaato-ios-sdk/Modules/Banner (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Core (21.6.1)
+  - smaato-ios-sdk/Modules/Interstitial (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Native (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/OpenMeasurement (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/RewardedAds (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/RichMedia (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/OpenMeasurement
+  - smaato-ios-sdk/Modules/UnifiedBidding (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Video (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/OpenMeasurement
+  - smaato-ios-sdk/Native (21.6.1):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/Native
+  - smaato-ios-sdk/RewardedAds (21.6.1):
+    - smaato-ios-sdk/Modules/RewardedAds
+    - smaato-ios-sdk/Modules/Video
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
+  - StackConsentManager (1.0.1)
+  - StackIAB (0.6.1):
+    - StackIAB/StackMRAIDKit (= 0.6.1)
+    - StackIAB/StackNASTKit (= 0.6.1)
+    - StackIAB/StackRichMedia (= 0.6.1)
+    - StackIAB/StackVASTAssets (= 0.6.1)
+    - StackIAB/StackVASTKit (= 0.6.1)
+    - StackIAB/StackVideoPlayer (= 0.6.1)
+    - StackIAB/StackXML (= 0.6.1)
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackMRAIDKit (0.6.1):
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackNASTKit (0.6.1):
+    - StackIAB/StackVASTKit
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackRichMedia (0.6.1):
+    - StackIAB/StackVASTAssets
+    - StackIAB/StackVideoPlayer
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackVASTAssets (0.6.1):
+    - StackIAB/StackXML
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackVASTKit (0.6.1):
+    - StackIAB/StackMRAIDKit
+    - StackIAB/StackVASTAssets
+    - StackIAB/StackVideoPlayer
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackVideoPlayer (0.6.1):
+    - StackModules (~> 1.0.0)
+  - StackIAB/StackXML (0.6.1):
+    - StackModules (~> 1.0.0)
+  - StackModules (1.0.1):
+    - StackModules/StackUIKit (= 1.0.1)
+  - StackModules/StackFoundation (1.0.1)
+  - StackModules/StackUIKit (1.0.1):
+    - StackModules/StackFoundation
+  - StartAppSDK (4.5.0)
+  - Stripe (19.4.1)
+  - stripe_payment (1.0.0):
+    - Flutter
+    - Stripe (>= 19.0.1)
+  - TapjoySDK (12.6.1)
+  - UnityAds (3.4.8)
+  - url_launcher (0.0.1):
+    - Flutter
+  - video_player (0.0.1):
+    - Flutter
+  - VungleSDK-iOS (6.7.1)
+  - wakelock (0.0.1):
+    - Flutter
+  - webview_flutter (0.0.1):
+    - Flutter
+  - YandexMobileAds (2.19.0):
+    - YandexMobileAds/Static (= 2.19.0)
+  - YandexMobileAds/Static (2.19.0):
+    - YandexMobileMetrica (< 4.0.0, >= 3.2.0)
+  - YandexMobileMetrica (3.16.0):
+    - YandexMobileMetrica/Static (= 3.16.0)
+  - YandexMobileMetrica/Static (3.16.0):
+    - YandexMobileMetrica/Static/Core (= 3.16.0)
+    - YandexMobileMetrica/Static/Crashes (= 3.16.0)
+  - YandexMobileMetrica/Static/Core (3.16.0)
+  - YandexMobileMetrica/Static/Crashes (3.16.0):
+    - YandexMobileMetrica/Static/Core
+
+DEPENDENCIES:
+  - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
+  - appodeal_flutter (from `.symlinks/plugins/appodeal_flutter/ios`)
+  - braintree_payment (from `.symlinks/plugins/braintree_payment/ios`)
+  - camera (from `.symlinks/plugins/camera/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+  - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
+  - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
+  - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
+  - flutter_native_image (from `.symlinks/plugins/flutter_native_image/ios`)
+  - flutter_paystack (from `.symlinks/plugins/flutter_paystack/ios`)
+  - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - geocoder (from `.symlinks/plugins/geocoder/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
+  - launch_review (from `.symlinks/plugins/launch_review/ios`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
+  - multi_image_picker (from `.symlinks/plugins/multi_image_picker/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
+  - razorpay_flutter (from `.symlinks/plugins/razorpay_flutter/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - stripe_payment (from `.symlinks/plugins/stripe_payment/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - AdColony
+    - AmazonAd
+    - APDAdColonyAdapter
+    - APDAmazonAdsAdapter
+    - APDAppLovinAdapter
+    - APDBidMachineAdapter
+    - APDFacebookAudienceAdapter
+    - APDGoogleAdMobAdapter
+    - APDIronSourceAdapter
+    - APDMyTargetAdapter
+    - APDOguryAdapter
+    - APDSmaatoAdapter
+    - APDStartAppAdapter
+    - APDUnityAdapter
+    - APDVungleAdapter
+    - APDYandexAdapter
+    - AppAuth
+    - AppLovinSDK
+    - Appodeal
+    - BidMachine
+    - Braintree
+    - BraintreeDropIn
+    - BSGridCollectionViewLayout
+    - BSImagePicker
+    - BSImageView
+    - Crashlytics
+    - CriteoPublisherSdk
+    - Fabric
+    - FBAudienceNetwork
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
+    - FirebaseAuth
+    - FirebaseAuthInterop
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCoreDiagnosticsInterop
+    - FirebaseDatabase
+    - FirebaseDynamicLinks
+    - FirebaseInstallations
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - FMDB
+    - Google-Mobile-Ads-SDK
+    - GoogleAppMeasurement
+    - GoogleDataTransport
+    - GoogleSignIn
+    - GoogleUserMessagingPlatform
+    - GoogleUtilities
+    - GTMAppAuth
+    - GTMSessionFetcher
+    - IronSourceSDK
+    - leveldb-library
+    - libwebp
+    - Mantle
+    - myTargetSDK
+    - nanopb
+    - OguryAds
+    - PromisesObjC
+    - Protobuf
+    - PureLayout
+    - razorpay-pod
+    - Reachability
+    - SDWebImage
+    - SDWebImageWebPCoder
+    - smaato-ios-sdk
+    - StackConsentManager
+    - StackIAB
+    - StackModules
+    - StartAppSDK
+    - Stripe
+    - TapjoySDK
+    - UnityAds
+    - VungleSDK-iOS
+    - YandexMobileAds
+    - YandexMobileMetrica
+
+EXTERNAL SOURCES:
+  apple_sign_in:
+    :path: ".symlinks/plugins/apple_sign_in/ios"
+  appodeal_flutter:
+    :path: ".symlinks/plugins/appodeal_flutter/ios"
+  braintree_payment:
+    :path: ".symlinks/plugins/braintree_payment/ios"
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
+  firebase_analytics:
+    :path: ".symlinks/plugins/firebase_analytics/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_crashlytics:
+    :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  firebase_database:
+    :path: ".symlinks/plugins/firebase_database/ios"
+  firebase_dynamic_links:
+    :path: ".symlinks/plugins/firebase_dynamic_links/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
+  Flutter:
+    :path: Flutter
+  flutter_facebook_login:
+    :path: ".symlinks/plugins/flutter_facebook_login/ios"
+  flutter_image_compress:
+    :path: ".symlinks/plugins/flutter_image_compress/ios"
+  flutter_native_admob:
+    :path: ".symlinks/plugins/flutter_native_admob/ios"
+  flutter_native_image:
+    :path: ".symlinks/plugins/flutter_native_image/ios"
+  flutter_paystack:
+    :path: ".symlinks/plugins/flutter_paystack/ios"
+  flutter_webview_plugin:
+    :path: ".symlinks/plugins/flutter_webview_plugin/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  geocoder:
+    :path: ".symlinks/plugins/geocoder/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
+  google_sign_in:
+    :path: ".symlinks/plugins/google_sign_in/ios"
+  in_app_purchase:
+    :path: ".symlinks/plugins/in_app_purchase/ios"
+  launch_review:
+    :path: ".symlinks/plugins/launch_review/ios"
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  location_permissions:
+    :path: ".symlinks/plugins/location_permissions/ios"
+  multi_image_picker:
+    :path: ".symlinks/plugins/multi_image_picker/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
+  rate_my_app:
+    :path: ".symlinks/plugins/rate_my_app/ios"
+  razorpay_flutter:
+    :path: ".symlinks/plugins/razorpay_flutter/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  stripe_payment:
+    :path: ".symlinks/plugins/stripe_payment/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
+  video_player:
+    :path: ".symlinks/plugins/video_player/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
+
+SPEC CHECKSUMS:
+  AdColony: 526a7bfe223dea50b9193d215d4b6fcbfc1515d1
+  AmazonAd: 9adf416ea36ca2325ce2040c0cf124f071089904
+  APDAdColonyAdapter: 5fadfcc9baf33e8c4af8196213ad0e4215ae0f6b
+  APDAmazonAdsAdapter: 2827cb4c1330751d36b68d63a3757a1ab85f8240
+  APDAppLovinAdapter: f1e7305fb12fddd6353978a1c57ca9b82ba31a30
+  APDBidMachineAdapter: c3df6df2bdbc76e855c0a0554f98e69730eb8519
+  APDFacebookAudienceAdapter: 92366cec496be76e3b653e4ae177ebaeeb8c22b3
+  APDGoogleAdMobAdapter: 6af1ed0c8b7436f76671f060aaef93c9eea83540
+  APDIronSourceAdapter: ae5f7353870850c2d6ec1e2be95a7f145d59457f
+  APDMyTargetAdapter: 7c2773f3b7d6de5070481e041b33cc8be3e48462
+  APDOguryAdapter: 0683179e0e9834e452fb42bfac28f3dec64ff785
+  APDSmaatoAdapter: efc03bed5becbe3e7de735c5962de13561e2bb61
+  APDStartAppAdapter: 0f92276839e28512096b26c7f595e1b410c0f03b
+  APDUnityAdapter: d31bd443a5073424bdfca9eb0277852e89cdb9fb
+  APDVungleAdapter: 1df7a504d15e96ce528e59b2133f062884c7dd7c
+  APDYandexAdapter: 380185d551dd38f0ade57a16bc23c3ba5593be89
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
+  AppLovinSDK: 768397bbd5cb5ec1179ba32a17f06ff119ebcffe
+  Appodeal: 4b6d9cbc5fc200bf1f60822c56cf9260092c2db9
+  appodeal_flutter: ad57fa0e3d5ca02bd6f6bdda501279858b8c387c
+  BidMachine: 0deb8134d9f419d5928523e84e7acf255512e086
+  Braintree: 94a20907b70aeffb29c40380eec583d783a347b6
+  braintree_payment: d4a57a529b39a42c9b07b8e2d762ca9202309630
+  BraintreeDropIn: 073ef11637285efc5572b412079a34942c849ef9
+  BSGridCollectionViewLayout: 333dcb457a5a3bdd9212607ab5756553dcfe06cb
+  BSImagePicker: 07404254f2fcdaf5a2eb403c0f8c337267ce8738
+  BSImageView: a149459433a2687157d034c78e059d30ac7f2544
+  camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
+  CriteoPublisherSdk: b9fbe9b54d37e97416fa848c2a6e77a4b47abc87
+  Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
+  FBAudienceNetwork: 6cdcc40aa475e8045ab14398e181a3dc90a5014e
+  FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
+  FBSDKLoginKit: f1ea8026a58b52d30c9f2e6a58ca7d813619fb83
+  Firebase: 7cf5f9c67f03cb3b606d1d6535286e1080e57eb6
+  firebase_analytics: 9118044ffb98bee71d84733fc594f5134fe4bc1b
+  firebase_auth: 148f122f852361f9548e63e3dc1e84c888c751d1
+  firebase_core: 3134fe79d257d430f163b558caf52a10a87efe8a
+  firebase_crashlytics: 90224b1e8534bb61de9db7d786892ba582e49a9a
+  firebase_database: a45844f55a7881e37d1a5dc61cccc214731a4643
+  firebase_dynamic_links: 7aaa8cbd086b55de330e34912dd144687e7d5c47
+  firebase_messaging: 6061cbdfe4463502a0d4d7049820c25d1757a095
+  FirebaseAnalytics: 96634d356482d4f3af8fe459a0ebf19a99c71b75
+  FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
+  FirebaseAuth: 7047aec89c0b17ecd924a550c853f0c27ac6015e
+  FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
+  FirebaseCore: f42e5e5f382cdcf6b617ed737bf6c871a6947b17
+  FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
+  FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
+  FirebaseDatabase: 4e99c0c475d1ee0aa64ae2b53c93f80b7b60d7d9
+  FirebaseDynamicLinks: 417dc6dbb6013233c77558290d73296f429656a6
+  FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
+  FirebaseInstanceID: cef67c4967c7cecb56ea65d8acbb4834825c587b
+  FirebaseMessaging: 29543feb343b09546ab3aa04d008ee8595b43c44
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
+  flutter_image_compress: 082f8daaf6c1b0c9fe798251c750ef0ecd98d7ae
+  flutter_native_admob: 384f39f8b8dc0a96624c7cfa4cd255205e7c3da5
+  flutter_native_image: 9c0b7451838484458e5b0fae007b86a4c2d4bdfe
+  flutter_paystack: 50021637b71e7712780744f69d2843e71b65175d
+  flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
+  geolocator: 2d5da6891d865c0f1b4f851683eed890dd9c8bc1
+  Google-Mobile-Ads-SDK: af735e001ee534d9dd2ce0a87cd8c355b19844b5
+  google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
+  GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185
+  GoogleDataTransport: 672fb0ce96fe7f7f31d43672fca62ad2c9c86f7b
+  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
+  GoogleUserMessagingPlatform: b168e8c46cd8f92aa3e34b584c4ca78a411ce367
+  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
+  GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
+  IronSourceSDK: 01aab7263997553adcf753363fb6f6fe7d1edab6
+  launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
+  leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  location_permissions: 4a49d4e5bec5b653643e551ab77963cc99bb0e4a
+  Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
+  multi_image_picker: b256ba9de62ac1ec6be67bb03328d682e8f35663
+  myTargetSDK: e142b182317f4a0a376754619cfcc633150b827d
+  nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
+  OguryAds: feeea310861385799026e9292b2734b1324d8159
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
+  PureLayout: a4afb3d79dd958564ce33d22c89f407280d8e6a8
+  rate_my_app: 3b64dd0876bd286001595ee2e69193e757c4d77c
+  razorpay-pod: c0e9c4ae3ed168ab0f59be2acfb3ba8fd57eba57
+  razorpay_flutter: bf22a7c0e12d9f906b6a493f546ee9afe7f8b508
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  smaato-ios-sdk: 081e29d0f55e48d6d65f445e036899a5f97b9aca
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  StackConsentManager: 2e7c7512d4c1b5dddf248e7e9f78931d8d0142e8
+  StackIAB: ee8c5cba6fa0a468f2aa3feae7280c21e794ada9
+  StackModules: 5ab443dc76da218132768d2790a351e89590b804
+  StartAppSDK: d4680feb85ffb81d42b247f1a68affb56625ba7e
+  Stripe: 5914399ac5878056b985d56b409cb4bb1e7fc7e8
+  stripe_payment: ad86f099179edb7b9fe12b9b62ac3746d5e56802
+  TapjoySDK: ab02725a55e84c2fdd6fafc872cb00bd58e8adb2
+  UnityAds: 729ce6e485d5ae45df03ad13e440cde6967feee3
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+  VungleSDK-iOS: e9d4f16042b14a24a5bee290c1eb21452e9a81cf
+  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
+  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  YandexMobileAds: ba6d7eb5c15f1b6350db5ddd7e58ed694f31e43d
+  YandexMobileMetrica: 2ab55883ea552a4c4ea4516a3353ca0577a747cc
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.1

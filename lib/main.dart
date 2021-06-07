@@ -47,7 +47,7 @@ Future<void> main() async {
 
   Appodeal.setAppKeys(
     androidAppKey: PsConfig.androidAppodealApiKey,
-    // iosAppKey: '<your-appodeal-ios-key>',
+    iosAppKey: PsConfig.iosAppodealApiKey,
   );
 
   //Crashlytics
