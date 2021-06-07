@@ -374,12 +374,14 @@ class _DashboardNewState extends State<DashboardNew>
             FloatingActionButton.extended(
               onPressed: () async {
                 if (await Utils.checkInternetConnectivity()) {
+                  final Product product = Product();
+                  print('product id is ${product.id}');
                   Utils.navigateOnUserVerificationView(
                       _categoryProvider, context, () async {
                     final dynamic returnData = await Navigator.pushNamed(
                         context, RoutePaths.itemEntry,
-                        arguments: ItemEntryIntentHolder(
-                            flag: PsConst.ADD_NEW_ITEM, item: Product()));
+                        arguments:[ ItemEntryIntentHolder(
+                            flag: PsConst.ADD_NEW_ITEM, item: product),getMainCategoryId()]);
                     if (returnData == true) {
                       _recentProductProvider.resetProductList(
                           valueHolder.loginUserId,

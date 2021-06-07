@@ -10,9 +10,11 @@ class ItemEntryContainerView extends StatefulWidget {
   const ItemEntryContainerView({
     @required this.flag,
     @required this.item,
+    this.mainCategoryId
   });
   final String flag;
   final Product item;
+  final String mainCategoryId;
   @override
   ItemEntryContainerViewState createState() => ItemEntryContainerViewState();
 }
@@ -35,6 +37,7 @@ class ItemEntryContainerViewState extends State<ItemEntryContainerView>
 
   @override
   Widget build(BuildContext context) {
+    print('itemEntryContainer item id is ${widget.item.id}');
     Future<bool> _requestPop() {
       animationController.reverse().then<dynamic>(
         (void data) {
@@ -72,6 +75,7 @@ class ItemEntryContainerViewState extends State<ItemEntryContainerView>
           animationController: animationController,
           flag: widget.flag,
           item: widget.item,
+          mainCategoryId : widget.mainCategoryId
         ),
       ),
     );

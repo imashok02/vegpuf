@@ -23,6 +23,7 @@ class ItemEntryProvider extends PsProvider {
       if (resource != null && resource.data != null) {
         _itemResource = resource;
         item = resource.data;
+        print('resource data item id is ${resource.data.id}');
       }
 
       if (resource.status != PsStatus.BLOCK_LOADING &&
@@ -86,7 +87,7 @@ class ItemEntryProvider extends PsProvider {
     isLoading = true;
 
     isConnectedToInternet = await Utils.checkInternetConnectivity();
-
+    print('postItemEntry item id is ${jsonMap}');
     _itemResource = await _repo.postItemEntry(
         jsonMap, isConnectedToInternet, PsStatus.PROGRESS_LOADING);
 
@@ -95,6 +96,7 @@ class ItemEntryProvider extends PsProvider {
 
   Future<dynamic> getItemFromDB(String itemId) async {
     isLoading = true;
+    print('getItemFromDB itemId is $itemId');
 
     await _repo.getItemFromDB(
         itemId, itemListStream, PsStatus.PROGRESS_LOADING);

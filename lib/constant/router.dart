@@ -491,7 +491,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '${RoutePaths.searchCategory}':
       return MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => CategoryFilterListView());
+          builder: (BuildContext context) {
+            final String mainCategoryId = settings.arguments;
+            return CategoryFilterListView(mainCategoryId: mainCategoryId,);
+          } );
 
     case '${RoutePaths.searchSubCategory}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
@@ -534,18 +537,26 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       });
     case '${RoutePaths.itemEntry}':
       return MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-        final Object args = settings.arguments;
+        final List<Object> args = settings.arguments;
         final ItemEntryIntentHolder itemEntryIntentHolder =
-            args ?? ItemEntryIntentHolder;
+            args[0] ?? ItemEntryIntentHolder;
+        print('itemEntryIntentHolder item id is ${itemEntryIntentHolder.item.id}');
+        final String mainCategoryId = args[1];
         return ItemEntryContainerView(
           flag: itemEntryIntentHolder.flag,
           item: itemEntryIntentHolder.item,
+          mainCategoryId:  mainCategoryId
         );
       });
 
     case '${RoutePaths.itemType}':
       return MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => TypeListView());
+          builder: (BuildContext context) {
+            final String mainCategoryId = settings.arguments;
+            return TypeListView(
+              mainCategoryId: mainCategoryId,
+            );
+          } );
 
     case '${RoutePaths.itemCondition}':
       return MaterialPageRoute<dynamic>(

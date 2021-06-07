@@ -312,6 +312,7 @@ abstract class PsDao<T extends PsObject<T>> {
       result = localObj;
       break;
     }
+    print('result in getOne is $result');
 
     return PsResource<T>(status, '', result);
   }

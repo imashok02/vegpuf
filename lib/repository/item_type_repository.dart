@@ -38,18 +38,17 @@ class ItemTypeRepository extends PsRepository {
       int limit,
       int offset,
       PsStatus status,
-      {bool isLoadFromServer = true}) async {
-
+      {bool isLoadFromServer = true,
+      String mainCategoryId}) async {
     itemTypeListStream.sink.add(await _itemTypeDao.getAll(status: status));
 
     final PsResource<List<ItemType>> _resource =
-        await _psApiService.getItemTypeList(limit, offset);
+        await _psApiService.getItemTypeList(limit, offset,mainCategoryId: mainCategoryId);
 
     if (_resource.status == PsStatus.SUCCESS) {
       await _itemTypeDao.deleteAll();
       await _itemTypeDao.insertAll(_primaryKey, _resource.data);
-      
-    }else{
+    } else {
       if (_resource.errorCode == PsConst.ERROR_CODE_10001) {
         await _itemTypeDao.deleteAll();
       }

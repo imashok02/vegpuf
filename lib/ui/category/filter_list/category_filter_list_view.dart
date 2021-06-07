@@ -18,6 +18,12 @@ import 'package:shimmer/shimmer.dart';
 import '../item/category_search_list_item.dart';
 
 class CategoryFilterListView extends StatefulWidget {
+
+  const CategoryFilterListView({this.mainCategoryId});
+
+  final String mainCategoryId;
+
+
   @override
   State<StatefulWidget> createState() {
     return _CategoryFilterListViewState();
@@ -92,7 +98,7 @@ class _CategoryFilterListViewState extends State<CategoryFilterListView>
                 psValueHolder: Provider.of<PsValueHolder>(context));
           },
           onProviderReady: (CategoryProvider provider) {
-            provider.loadCategoryList();
+            provider.loadCategoryList(mainCatId: widget.mainCategoryId);
             _categoryProvider = provider;
           },
           builder:

@@ -53,7 +53,7 @@ class ItemEntryParameterHolder extends PsHolder<ItemEntryParameterHolder> {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{};
-
+  print('toMap function item id is $id');
     map['cat_id'] = catId;
     map['sub_cat_id'] = subCatId;
     map['item_type_id'] = itemTypeId;
