@@ -595,7 +595,7 @@ class PsApiService extends PsApi {
 
   Future<PsResource<List<CategoryModel>>> getCategories(String key) async {
     String url = '${PsUrl.categories_url}/$key';
-    print('url for getCategories is $url');
+    // print('url for getCategories is $url');
     return await getServerCall(CategoryModel(), url);
   }
 

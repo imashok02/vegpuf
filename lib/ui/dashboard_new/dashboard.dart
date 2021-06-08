@@ -58,7 +58,6 @@ class _DashboardNewState extends State<DashboardNew>
   void initState() {
     super.initState();
     _initAnimations();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       mainCategoryProvider =
           Provider.of<MainCategoryProvider>(context, listen: false);
@@ -113,6 +112,31 @@ class _DashboardNewState extends State<DashboardNew>
         vsync: this,
         length: provider.servicesList.length,
         initialIndex: _innerTabIndex[2]);
+
+    _tabControllerFirst.addListener(() {
+      print('_tabControllerFirst.index ${_tabControllerFirst.index}');
+      final int index = _tabControllerFirst.index;
+      if (_innerTabIndex[0] != index) {
+        _innerTabIndex[0] = index;
+        setState(() {});
+      }
+    });
+    _tabControllerSecond.addListener(() {
+      print('_tabControllerSecond.index ${_tabControllerSecond.index}');
+      final int index = _tabControllerSecond.index;
+      if (_innerTabIndex[1] != index) {
+        _innerTabIndex[1] = index;
+        setState(() {});
+      }
+    });
+    _tabControllerThird.addListener(() {
+      print('_tabControllerThird.index ${_tabControllerThird.index}');
+      final int index = _tabControllerThird.index;
+      if (_innerTabIndex[2] != index) {
+        _innerTabIndex[2] = index;
+        setState(() {});
+      }
+    });
   }
 
   void _initAnimations() {
@@ -380,8 +404,11 @@ class _DashboardNewState extends State<DashboardNew>
                       _categoryProvider, context, () async {
                     final dynamic returnData = await Navigator.pushNamed(
                         context, RoutePaths.itemEntry,
-                        arguments:[ ItemEntryIntentHolder(
-                            flag: PsConst.ADD_NEW_ITEM, item: product),getMainCategoryId()]);
+                        arguments: [
+                          ItemEntryIntentHolder(
+                              flag: PsConst.ADD_NEW_ITEM, item: product),
+                          getMainCategoryId()
+                        ]);
                     if (returnData == true) {
                       _recentProductProvider.resetProductList(
                           valueHolder.loginUserId,
@@ -496,7 +523,7 @@ class _DashboardNewState extends State<DashboardNew>
         body: TabBarView(
           controller: tabController,
           children: List<Widget>.generate(tabController.length, (int index) {
-            print('_buildNestedScrollView $text');
+            // print('_buildNestedScrollView $text');
             return RefreshIndicator(
               onRefresh: () async {
                 final String loginUserId = Utils.checkUserLoginId(valueHolder);
@@ -544,7 +571,6 @@ class _DashboardNewState extends State<DashboardNew>
                               addAutomaticKeepAlives: false,
                               shrinkWrap: true,
                               itemBuilder: (_, int index) {
-                                print('GRID VIEW INDEX: $index');
                                 if (provider.productList.data.length > 4 &&
                                     index ==
                                         provider.productList.data.length - 1) {
@@ -581,7 +607,6 @@ class _DashboardNewState extends State<DashboardNew>
   }
 
   Widget _buildItem(int index, Product product) {
-    print('product TITLE: ${product.title}');
     return InkWell(
 //      onTap: onTap,
       child: Card(
