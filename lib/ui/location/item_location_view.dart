@@ -274,30 +274,26 @@ class _ItemLocationListViewWidgetState
             right: 20,
             child: FloatingActionButton(
               onPressed: () async {
+                print('started');
+
                 final List<Address> addressList = await _getAddress(
                     _currentPosition.latitude, _currentPosition.longitude);
-                await _provider.replaceItemLocationData(
-                    addressList.first.postalCode,
-                    addressList.first.subAdminArea,
-                    _currentPosition.latitude.toString(),
-                    _currentPosition.latitude.toString());
+                print('json is  ${_provider.latestLocationParameterHolder.toMap()['map']}');
+                _provider.latestLocationParameterHolder.map = addressList.first.toMap();
 
-                if (_provider.psValueHolder.locactionName != null &&
-                    _provider.psValueHolder.locactionName.isNotEmpty) {
-                  Fluttertoast.showToast(
-                      msg: 'Location set to ${addressList.first.subAdminArea}',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blueGrey,
-                      textColor: Colors.white);
-                  Navigator.pop(context);
-                } else {
-                  Navigator.pushReplacementNamed(context, RoutePaths.home);
-                }
+                debugPrint('json is  ${_provider.latestLocationParameterHolder.map}');
+                print('json is  ${Map<String,dynamic>.from(addressList.first.toMap())}');
+                print('addressList ${addressList.first.toMap()}');
+
+                await _provider.resetItemLocationList(
+                    _provider.latestLocationParameterHolder.toMap(),
+                    _provider.psValueHolder.loginUserId);
+
+                // Navigator.pushReplacementNamed(context, RoutePaths.home);
               },
-              backgroundColor: const Color(0xFFA92428),
+              backgroundColor: Colors.blue,
               child: const Icon(Icons.my_location),
+
             )),
       ],
     );
@@ -332,6 +328,7 @@ class _ItemLocationListViewWidgetState
   }
 
   Future<List<Address>> _getAddress(double lat, double lang) async {
+    print('lat is $lat and long is $lang');
     final Coordinates coordinates = Coordinates(lat, lang);
     final List<Address> add =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);

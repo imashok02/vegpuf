@@ -85,6 +85,8 @@ class ItemLocationProvider extends PsProvider {
 
   Future<void> resetItemLocationList(Map<dynamic, dynamic> jsonMap,
       String loginUserId,) async {
+    print('jsonMap data for resetItemLocationList is ${jsonMap}');
+
     isConnectedToInternet = await Utils.checkInternetConnectivity();
     isLoading = true;
 

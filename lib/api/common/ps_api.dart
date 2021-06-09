@@ -77,10 +77,12 @@ abstract class PsApi {
     final Client client = http.Client();
     try {
       print('json n postData $jsonMap');
+      print('below json n postData ${jsonMap.runtimeType}');
       final Response response = await client
           .post('${PsConfig.ps_app_url}$url',
               headers: <String, String>{'content-type': 'application/json'},
-              body: const JsonEncoder().convert(jsonMap))
+              body: const JsonEncoder().convert(jsonMap)
+      )
           .catchError((dynamic e) {
         print('** Error Post Data');
         print(e.error);
