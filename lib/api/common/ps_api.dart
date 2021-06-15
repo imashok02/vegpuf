@@ -76,8 +76,11 @@ abstract class PsApi {
       T obj, String url, Map<dynamic, dynamic> jsonMap) async {
     final Client client = http.Client();
     try {
+      print('string url is ${PsConfig.ps_app_url}$url');
       print('json n postData $jsonMap');
       print('below json n postData ${jsonMap.runtimeType}');
+      var temp = JsonEncoder().convert(jsonMap);
+      print('temp is $temp');
       final Response response = await client
           .post('${PsConfig.ps_app_url}$url',
               headers: <String, String>{'content-type': 'application/json'},
@@ -105,6 +108,7 @@ abstract class PsApi {
         }
       } else {
         return PsResource<R>(PsStatus.ERROR, psApiResponse.errorMessage, null);
+        print('failed');
       }
     } catch (e) {
       print(e.toString());

@@ -279,17 +279,41 @@ class _ItemLocationListViewWidgetState
                 final List<Address> addressList = await _getAddress(
                     _currentPosition.latitude, _currentPosition.longitude);
                 print('json is  ${_provider.latestLocationParameterHolder.toMap()['map']}');
-                _provider.latestLocationParameterHolder.map = addressList.first.toMap();
+                if(addressList.isNotEmpty) {
+                  Map tempMap = <String,dynamic>{
+                    'coordinates' : {
+                      'latitude' : addressList.first.coordinates.latitude,
+                      'longitude' : addressList.first.coordinates.longitude,
+                    },
+                    'addressLine' : addressList.first.addressLine,
+                    'countryCode' : addressList.first.countryCode,
+                    'featureName' : addressList.first.featureName,
+                    'postalCode' : addressList.first.postalCode,
+                    'locality' : addressList.first.locality,
+                    'subLocality' : addressList.first.subLocality,
+                    'adminArea' : addressList.first.adminArea,
+                    'subAdminArea' : addressList.first.subAdminArea,
+                    'thoroughfare' : addressList.first.thoroughfare,
+                    'subThoroughfare' : addressList.first.subThoroughfare
+                  };
 
-                debugPrint('json is  ${_provider.latestLocationParameterHolder.map}');
-                print('json is  ${Map<String,dynamic>.from(addressList.first.toMap())}');
-                print('addressList ${addressList.first.toMap()}');
+                  _provider.latestLocationParameterHolder.currentLocationDataMap = tempMap;
 
-                await _provider.resetItemLocationList(
-                    _provider.latestLocationParameterHolder.toMap(),
-                    _provider.psValueHolder.loginUserId);
+                  debugPrint('json is  ${_provider.latestLocationParameterHolder.toMap()}');
 
-                // Navigator.pushReplacementNamed(context, RoutePaths.home);
+
+                  await _provider.resetItemLocationList(
+                      _provider.latestLocationParameterHolder.toMap(),
+                      _provider.psValueHolder.loginUserId);
+                  print('login user id : ${_provider.psValueHolder.loginUserId}');
+
+                  // Navigator.pushReplacementNamed(context, RoutePaths.home);
+                }
+               else {
+
+                }
+
+
               },
               backgroundColor: Colors.blue,
               child: const Icon(Icons.my_location),

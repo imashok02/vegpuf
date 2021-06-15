@@ -631,6 +631,7 @@ class PsApiService extends PsApi {
       String loginUserId,
       int limit,
       int offset) async {
+    print('limit is $limit, offset is $offset , loginUserid is $loginUserId');
     final String url =
         '${PsUrl.ps_item_location_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset/login_user_id/$loginUserId';
 
