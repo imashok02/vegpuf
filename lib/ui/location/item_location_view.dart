@@ -279,7 +279,7 @@ class _ItemLocationListViewWidgetState
                 final List<Address> addressList = await _getAddress(
                     _currentPosition.latitude, _currentPosition.longitude);
                 print('json is  ${_provider.latestLocationParameterHolder.toMap()['map']}');
-                if(addressList.isNotEmpty) {
+                if(addressList.isNotEmpty ) {
                   Map tempMap = <String,dynamic>{
                     'coordinates' : {
                       'latitude' : addressList.first.coordinates.latitude,
@@ -310,7 +310,7 @@ class _ItemLocationListViewWidgetState
                   // Navigator.pushReplacementNamed(context, RoutePaths.home);
                 }
                else {
-
+                  print('addressList is empty');
                 }
 
 
