@@ -31,7 +31,6 @@ class MainCategoryProvider extends ChangeNotifier {
           await repo.getMainCategory(true, PsStatus.SUCCESS);
 
       if (list.status == PsStatus.SUCCESS && list.data.isNotEmpty) {
-        print('loadThings: ${list.data.toString()}');
         thingsList = list.data;
       }
     } else {

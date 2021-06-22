@@ -263,7 +263,7 @@ class _ItemLocationListViewWidgetState
                 onRefresh: () {
                   return _provider.resetItemLocationList(
                       _provider.latestLocationParameterHolder.toMap(),
-                      _provider.psValueHolder.loginUserId);
+                      Utils.checkUserLoginId(_provider.psValueHolder));
                 },
               ),
             )
@@ -276,24 +276,31 @@ class _ItemLocationListViewWidgetState
               onPressed: () async {
                 final List<Address> addressList = await _getAddress(
                     _currentPosition.latitude, _currentPosition.longitude);
-                await _provider.replaceItemLocationData(
-                    addressList.first.postalCode,
-                    addressList.first.subAdminArea,
-                    _currentPosition.latitude.toString(),
-                    _currentPosition.latitude.toString());
+                if (addressList.isNotEmpty) {
+                  final Map<String, dynamic> tempMap = <String, dynamic>{
+                    'coordinates': {
+                      'latitude': addressList.first.coordinates.latitude,
+                      'longitude': addressList.first.coordinates.longitude,
+                    },
+                    'addressLine': addressList.first.addressLine,
+                    'countryCode': addressList.first.countryCode,
+                    'featureName': addressList.first.featureName,
+                    'postalCode': addressList.first.postalCode,
+                    'locality': addressList.first.locality,
+                    'subLocality': addressList.first.subLocality,
+                    'adminArea': addressList.first.adminArea,
+                    'subAdminArea': addressList.first.subAdminArea,
+                    'thoroughfare': addressList.first.thoroughfare,
+                    'subThoroughfare': addressList.first.subThoroughfare
+                  };
 
-                if (_provider.psValueHolder.locactionName != null &&
-                    _provider.psValueHolder.locactionName.isNotEmpty) {
-                  Fluttertoast.showToast(
-                      msg: 'Location set to ${addressList.first.subAdminArea}',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blueGrey,
-                      textColor: Colors.white);
-                  Navigator.pop(context);
+                  _provider.latestLocationParameterHolder
+                      .currentLocationDataMap = tempMap;
+                  await _provider.resetItemLocationList(
+                      _provider.latestLocationParameterHolder.toMap(),
+                      Utils.checkUserLoginId(_provider.psValueHolder));
                 } else {
-                  Navigator.pushReplacementNamed(context, RoutePaths.home);
+                  print('addressList is empty');
                 }
               },
               backgroundColor: const Color(0xFFA92428),
@@ -301,7 +308,6 @@ class _ItemLocationListViewWidgetState
             )),
       ],
     );
-    print('Widget ${_widget.hashCode}');
     return _widget;
   }
 
@@ -335,7 +341,6 @@ class _ItemLocationListViewWidgetState
     final Coordinates coordinates = Coordinates(lat, lang);
     final List<Address> add =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    print(' ADDRESS: ${add.first.toMap()}');
     return add;
   }
 }

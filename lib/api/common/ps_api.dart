@@ -69,14 +69,16 @@ abstract class PsApi {
     }
   }
 
-
-
-
   Future<PsResource<R>> postData<T extends PsObject<dynamic>, R>(
       T obj, String url, Map<dynamic, dynamic> jsonMap) async {
     final Client client = http.Client();
     try {
-      print('json n postData $jsonMap');
+      log('API start ************************************************************');
+      log('URL: ${PsConfig.ps_app_url}$url');
+      log('jsonMap: $jsonMap');
+
+      final String encodedMap = const JsonEncoder().convert(jsonMap);
+      log('encodedMap: $encodedMap');
       final Response response = await client
           .post('${PsConfig.ps_app_url}$url',
               headers: <String, String>{'content-type': 'application/json'},
@@ -86,10 +88,12 @@ abstract class PsApi {
         print(e.error);
       });
 
+      log('API end ************************************************************');
+
       final PsApiResponse psApiResponse = PsApiResponse(response);
 
       if (psApiResponse.isSuccessful()) {
-        log('return json: ${response.body}');
+        log('Returned JSON: ${response.body}');
         final dynamic hashMap = json.decode(response.body);
 
         if (!(hashMap is Map)) {

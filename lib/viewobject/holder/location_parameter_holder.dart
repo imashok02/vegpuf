@@ -7,17 +7,21 @@ class LocationParameterHolder extends PsHolder<dynamic> {
     keyword = '';
     orderBy = PsConst.FILTERING__ADDED_DATE;
     orderType = PsConst.FILTERING__DESC;
+    currentLocationDataMap = <String,dynamic>{};
+
   }
 
   String keyword;
   String orderBy;
   String orderType;
+  Map<String,dynamic> currentLocationDataMap;
 
   LocationParameterHolder getDefaultParameterHolder() {
     
     keyword = '';
     orderBy = PsConst.FILTERING__ORDERING;
     orderType = PsConst.FILTERING__DESC;
+    currentLocationDataMap = <String,dynamic>{};
 
     return this;
   }
@@ -26,6 +30,7 @@ class LocationParameterHolder extends PsHolder<dynamic> {
     keyword = '';
     orderBy = PsConst.FILTERING__ADDED_DATE;
     orderType = PsConst.FILTERING__DESC;
+    currentLocationDataMap = <String,dynamic>{};
 
     return this;
   }
@@ -37,6 +42,7 @@ class LocationParameterHolder extends PsHolder<dynamic> {
     map['keyword'] = keyword;
     map['order_by'] = orderBy;
     map['order_type'] = orderType;
+    map['curr_location'] = currentLocationDataMap;
 
     return map;
   }
@@ -46,6 +52,7 @@ class LocationParameterHolder extends PsHolder<dynamic> {
     keyword = '';
     orderBy = PsConst.FILTERING__ADDED_DATE;
     orderType = PsConst.FILTERING__DESC;
+    currentLocationDataMap = <String,dynamic>{};
 
     return this;
   }

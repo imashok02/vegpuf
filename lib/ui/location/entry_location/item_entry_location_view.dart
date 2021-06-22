@@ -46,8 +46,8 @@ class ItemEntryLocationViewState extends State<ItemEntryLocationView>
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _itemLocationProvider.nextItemLocationList(
-          _itemLocationProvider.latestLocationParameterHolder.toMap(),
-          _itemLocationProvider.psValueHolder.loginUserId);
+            _itemLocationProvider.latestLocationParameterHolder.toMap(),
+            Utils.checkUserLoginId(_itemLocationProvider.psValueHolder));
       }
     });
 
@@ -92,9 +92,11 @@ class ItemEntryLocationViewState extends State<ItemEntryLocationView>
                 repo: repo1, psValueHolder: valueHolder);
           },
           onProviderReady: (ItemLocationProvider provider) {
-            provider.latestLocationParameterHolder.keyword = searchNameController.text;
-            provider.loadItemLocationList(provider.latestLocationParameterHolder.toMap(),
-            Utils.checkUserLoginId(provider.psValueHolder));
+            provider.latestLocationParameterHolder.keyword =
+                searchNameController.text;
+            provider.loadItemLocationList(
+                provider.latestLocationParameterHolder.toMap(),
+                Utils.checkUserLoginId(provider.psValueHolder));
             _itemLocationProvider = provider;
           },
           builder: (BuildContext context, ItemLocationProvider provider,
@@ -158,7 +160,8 @@ class ItemEntryLocationViewState extends State<ItemEntryLocationView>
                     }),
                 onRefresh: () {
                   return provider.resetItemLocationList(
-                    provider.latestLocationParameterHolder.toMap(),provider.psValueHolder.loginUserId);
+                      provider.latestLocationParameterHolder.toMap(),
+                      Utils.checkUserLoginId(provider.psValueHolder));
                 },
               )),
               PSProgressIndicator(provider.itemLocationList.status)
