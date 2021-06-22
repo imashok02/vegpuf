@@ -69,32 +69,31 @@ abstract class PsApi {
     }
   }
 
-
-
-
   Future<PsResource<R>> postData<T extends PsObject<dynamic>, R>(
       T obj, String url, Map<dynamic, dynamic> jsonMap) async {
     final Client client = http.Client();
     try {
-      print('string url is ${PsConfig.ps_app_url}$url');
-      print('json n postData $jsonMap');
-      print('below json n postData ${jsonMap.runtimeType}');
-      var temp = JsonEncoder().convert(jsonMap);
-      print('temp is $temp');
+      log('API start ************************************************************');
+      log('URL: ${PsConfig.ps_app_url}$url');
+      log('jsonMap: $jsonMap');
+
+      final String encodedMap = const JsonEncoder().convert(jsonMap);
+      log('encodedMap: $encodedMap');
       final Response response = await client
           .post('${PsConfig.ps_app_url}$url',
               headers: <String, String>{'content-type': 'application/json'},
-              body: const JsonEncoder().convert(jsonMap)
-      )
+              body: const JsonEncoder().convert(jsonMap))
           .catchError((dynamic e) {
         print('** Error Post Data');
         print(e.error);
       });
 
+      log('API end ************************************************************');
+
       final PsApiResponse psApiResponse = PsApiResponse(response);
 
       if (psApiResponse.isSuccessful()) {
-        log('return json: ${response.body}');
+        log('Returned JSON: ${response.body}');
         final dynamic hashMap = json.decode(response.body);
 
         if (!(hashMap is Map)) {
@@ -108,7 +107,6 @@ abstract class PsApi {
         }
       } else {
         return PsResource<R>(PsStatus.ERROR, psApiResponse.errorMessage, null);
-        print('failed');
       }
     } catch (e) {
       print(e.toString());

@@ -283,17 +283,17 @@ class PsApiService extends PsApi {
   ///
   /// Item Type
   ///
-  Future<PsResource<List<ItemType>>> getItemTypeList(
-      int limit, int offset, {String mainCategoryId}) async {
-     String url ;
-        if(mainCategoryId == null) {
-          url = '${PsUrl.ps_item_type_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
-          print('url fo getItemTypeList is  $url');
-        }
-        else {
-          url = '${PsUrl.categories_url}/$mainCategoryId';
-          print('url fo getItemTypeList is  $url');
-        }
+  Future<PsResource<List<ItemType>>> getItemTypeList(int limit, int offset,
+      {String mainCategoryId}) async {
+    String url;
+    if (mainCategoryId == null) {
+      url =
+          '${PsUrl.ps_item_type_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset';
+      print('url fo getItemTypeList is  $url');
+    } else {
+      url = '${PsUrl.categories_url}/$mainCategoryId';
+      print('url fo getItemTypeList is  $url');
+    }
 
     return await getServerCall<ItemType, List<ItemType>>(ItemType(), url);
   }
@@ -631,7 +631,6 @@ class PsApiService extends PsApi {
       String loginUserId,
       int limit,
       int offset) async {
-    print('limit is $limit, offset is $offset , loginUserid is $loginUserId');
     final String url =
         '${PsUrl.ps_item_location_url}/api_key/${PsConfig.ps_api_key}/limit/$limit/offset/$offset/login_user_id/$loginUserId';
 

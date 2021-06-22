@@ -48,13 +48,15 @@ class ItemLocationProvider extends PsProvider {
 
   ItemLocationRepository _repo;
   PsValueHolder psValueHolder;
-  LocationParameterHolder latestLocationParameterHolder = LocationParameterHolder().getDefaultParameterHolder();
+  LocationParameterHolder latestLocationParameterHolder =
+      LocationParameterHolder().getDefaultParameterHolder();
   PsResource<List<ItemLocation>> _itemLocationList =
       PsResource<List<ItemLocation>>(PsStatus.NOACTION, '', <ItemLocation>[]);
 
   PsResource<List<ItemLocation>> get itemLocationList => _itemLocationList;
   StreamSubscription<PsResource<List<ItemLocation>>> subscription;
   StreamController<PsResource<List<ItemLocation>>> itemLocationListStream;
+
   @override
   void dispose() {
     subscription.cancel();
@@ -63,37 +65,57 @@ class ItemLocationProvider extends PsProvider {
     super.dispose();
   }
 
-  Future<dynamic> loadItemLocationList(Map<dynamic, dynamic> jsonMap,
-      String loginUserId) async {
+  Future<dynamic> loadItemLocationList(
+      Map<dynamic, dynamic> jsonMap, String loginUserId) async {
     isLoading = true;
 
     isConnectedToInternet = await Utils.checkInternetConnectivity();
-    await _repo.getAllItemLocationList(itemLocationListStream,
-        isConnectedToInternet,jsonMap,loginUserId, limit, offset, PsStatus.PROGRESS_LOADING);
+    await _repo.getAllItemLocationList(
+        itemLocationListStream,
+        isConnectedToInternet,
+        jsonMap,
+        loginUserId,
+        limit,
+        offset,
+        PsStatus.PROGRESS_LOADING);
   }
 
-  Future<dynamic> nextItemLocationList(Map<dynamic, dynamic> jsonMap,
-      String loginUserId,) async {
+  Future<dynamic> nextItemLocationList(
+    Map<dynamic, dynamic> jsonMap,
+    String loginUserId,
+  ) async {
     isConnectedToInternet = await Utils.checkInternetConnectivity();
 
     if (!isLoading && !isReachMaxData) {
       super.isLoading = true;
-      await _repo.getNextPageItemLocationList(itemLocationListStream,
-          isConnectedToInternet,jsonMap,loginUserId, limit, offset, PsStatus.PROGRESS_LOADING);
+      await _repo.getNextPageItemLocationList(
+          itemLocationListStream,
+          isConnectedToInternet,
+          jsonMap,
+          loginUserId,
+          limit,
+          offset,
+          PsStatus.PROGRESS_LOADING);
     }
   }
 
-  Future<void> resetItemLocationList(Map<dynamic, dynamic> jsonMap,
-      String loginUserId,) async {
-    print('jsonMap data for resetItemLocationList is ${jsonMap}');
-
+  Future<void> resetItemLocationList(
+    Map<dynamic, dynamic> jsonMap,
+    String loginUserId,
+  ) async {
     isConnectedToInternet = await Utils.checkInternetConnectivity();
     isLoading = true;
 
     updateOffset(0);
 
-    await _repo.getAllItemLocationList(itemLocationListStream,
-        isConnectedToInternet,jsonMap,loginUserId, limit, offset, PsStatus.PROGRESS_LOADING);
+    await _repo.getAllItemLocationList(
+        itemLocationListStream,
+        isConnectedToInternet,
+        jsonMap,
+        loginUserId,
+        limit,
+        offset,
+        PsStatus.PROGRESS_LOADING);
 
     isLoading = false;
   }

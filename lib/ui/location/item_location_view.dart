@@ -263,7 +263,7 @@ class _ItemLocationListViewWidgetState
                 onRefresh: () {
                   return _provider.resetItemLocationList(
                       _provider.latestLocationParameterHolder.toMap(),
-                      _provider.psValueHolder.loginUserId);
+                      Utils.checkUserLoginId(_provider.psValueHolder));
                 },
               ),
             )
@@ -274,54 +274,40 @@ class _ItemLocationListViewWidgetState
             right: 20,
             child: FloatingActionButton(
               onPressed: () async {
-                print('started');
-
                 final List<Address> addressList = await _getAddress(
                     _currentPosition.latitude, _currentPosition.longitude);
-                print('json is  ${_provider.latestLocationParameterHolder.toMap()['map']}');
-                if(addressList.isNotEmpty ) {
-                  Map tempMap = <String,dynamic>{
-                    'coordinates' : {
-                      'latitude' : addressList.first.coordinates.latitude,
-                      'longitude' : addressList.first.coordinates.longitude,
+                if (addressList.isNotEmpty) {
+                  final Map<String, dynamic> tempMap = <String, dynamic>{
+                    'coordinates': {
+                      'latitude': addressList.first.coordinates.latitude,
+                      'longitude': addressList.first.coordinates.longitude,
                     },
-                    'addressLine' : addressList.first.addressLine,
-                    'countryCode' : addressList.first.countryCode,
-                    'featureName' : addressList.first.featureName,
-                    'postalCode' : addressList.first.postalCode,
-                    'locality' : addressList.first.locality,
-                    'subLocality' : addressList.first.subLocality,
-                    'adminArea' : addressList.first.adminArea,
-                    'subAdminArea' : addressList.first.subAdminArea,
-                    'thoroughfare' : addressList.first.thoroughfare,
-                    'subThoroughfare' : addressList.first.subThoroughfare
+                    'addressLine': addressList.first.addressLine,
+                    'countryCode': addressList.first.countryCode,
+                    'featureName': addressList.first.featureName,
+                    'postalCode': addressList.first.postalCode,
+                    'locality': addressList.first.locality,
+                    'subLocality': addressList.first.subLocality,
+                    'adminArea': addressList.first.adminArea,
+                    'subAdminArea': addressList.first.subAdminArea,
+                    'thoroughfare': addressList.first.thoroughfare,
+                    'subThoroughfare': addressList.first.subThoroughfare
                   };
 
-                  _provider.latestLocationParameterHolder.currentLocationDataMap = tempMap;
-
-                  debugPrint('json is  ${_provider.latestLocationParameterHolder.toMap()}');
-
-
+                  _provider.latestLocationParameterHolder
+                      .currentLocationDataMap = tempMap;
                   await _provider.resetItemLocationList(
                       _provider.latestLocationParameterHolder.toMap(),
-                      _provider.psValueHolder.loginUserId);
-                  print('login user id : ${_provider.psValueHolder.loginUserId}');
-
-                  // Navigator.pushReplacementNamed(context, RoutePaths.home);
-                }
-               else {
+                      Utils.checkUserLoginId(_provider.psValueHolder));
+                } else {
                   print('addressList is empty');
                 }
-
-
               },
-              backgroundColor: Colors.blue,
+              backgroundColor: const Color(0xFFA92428),
               child: const Icon(Icons.my_location),
-
             )),
       ],
     );
-    print('Widget ${_widget.hashCode}');
     return _widget;
   }
 
@@ -352,11 +338,9 @@ class _ItemLocationListViewWidgetState
   }
 
   Future<List<Address>> _getAddress(double lat, double lang) async {
-    print('lat is $lat and long is $lang');
     final Coordinates coordinates = Coordinates(lat, lang);
     final List<Address> add =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    print(' ADDRESS: ${add.first.toMap()}');
     return add;
   }
 }
